@@ -1,3 +1,5 @@
+> **中文讀者請看這裡**：完整中文說明在 [`README.zh.md`](README.zh.md)。如果你不會用終端機、沒寫過程式、或只是想做出一個產品，請先讀中文版。
+
 # good-techstack
 
 Your product idea. One command. Shipped.

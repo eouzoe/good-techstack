@@ -1,3 +1,5 @@
+> **English readers**: full technical documentation at [`README.md`](README.md). For developers, start with [`docs/getting-started.md`](docs/getting-started.md).
+
 # good-techstack
 
 你的產品點子。一行指令。上線。
