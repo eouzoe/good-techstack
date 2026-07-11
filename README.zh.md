@@ -146,6 +146,12 @@ curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/g
 
 ---
 
+## 卡住了？
+
+到 [github.com/eouzoe/good-techstack/issues/3](https://github.com/eouzoe/good-techstack/issues/3) 告訴我們你在什麼系統上、發生了什麼事。不用格式、不用術語，直接寫就好。
+
+---
+
 ## 給開發者
 
 完整技術文件在 `docs/`。從 `docs/getting-started.md` 開始。

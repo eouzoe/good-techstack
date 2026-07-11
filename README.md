@@ -120,6 +120,12 @@ You only need two things: **a computer with internet** and **a product idea**.
 
 ---
 
+## Got stuck?
+
+Open an issue at [github.com/eouzoe/good-techstack/issues/3](https://github.com/eouzoe/good-techstack/issues/3) — tell us what system you are on and what happened. No jargon, no forms, just describe your situation.
+
+---
+
 ## For developers
 
 The full technical reference is in `docs/`. Start with `docs/getting-started.md`.
