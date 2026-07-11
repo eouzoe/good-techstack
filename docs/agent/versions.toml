@@ -1,0 +1,146 @@
+# versions.toml — 版本唯一來源
+# keywords 欄位供 rg 搜尋用（例：rg "bun" docs/agent/versions.toml）
+# 更新任一版本時，同時更新對應 docs/reference/*.md 與 docs/getting-started.md
+
+[runtime.bun]
+version = "1.3.14"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["runtime", "javascript", "typescript"]
+note = "Anthropic 收購 (2025-12). Rust 重寫完成 (2026-07-08)."
+
+[runtime.node]
+version = "22"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["runtime", "ci", "cloudflare"]
+note = "CI 專用. Cloudflare 僅官方支援 Node.js."
+
+[language.typescript]
+version = "7.0.2"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["language", "types", "compiler"]
+note = "7.1 dev builds 進行中. 側載 6.0 以保持 typescript-eslint 相容."
+
+[framework.api.hono]
+version = "4.12.28"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["http", "api", "web-standards", "workers"]
+
+[framework.api.orpc]
+version_stable = "1.14.7"
+version_beta = "2.0.0-beta.15"
+status = "dual-track"
+updated = "2026-07-10"
+keywords = ["rpc", "contract", "typesafe"]
+
+[framework.frontend.tanstack-start]
+version = "1.168.27"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["react", "ssr", "rsc", "rsbuild"]
+
+[framework.frontend.react]
+version = "19.2.7"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["ui", "react"]
+
+[framework.auth.better-auth]
+version_stable = "1.6.23"
+version_rc = "1.7.0-rc.1"
+status = "dual-track"
+updated = "2026-07-10"
+keywords = ["auth", "session", "oauth"]
+note = "Vercel 收購 (2026-07-07). MCP plugin 推出."
+
+[orm.drizzle]
+version = "0.45.2"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["orm", "sqlite", "d1", "database"]
+note = "v1.0.0-rc.4 pre-release."
+
+[schema.zod]
+version = "4.4+"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["schema", "validation", "types", "zod"]
+
+[tooling.lint.oxlint]
+version = "1.73.0"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["linter", "rust", "type-aware"]
+
+[tooling.format.oxfmt]
+version = "0.58.0"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["formatter", "rust"]
+
+[tooling.build.rspack]
+version = "2.1.3"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["bundler", "rust", "webpack-compat"]
+
+[tooling.build.rsbuild]
+version = "2.1.5"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["build", "rspack", "config"]
+
+[tooling.test.vitest-pool-workers]
+version = "0.18.4"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["test", "workerd", "integration"]
+
+[tooling.test.vitest]
+version = "4.1.10"
+status = "stable"
+updated = "2026-07-10"
+keywords = ["test", "runner"]
+
+[infra.cloudflare]
+note = "Workers/D1/R2/KV/Queues/DO/Email/Turnstile/Web Analytics. Free tier."
+updated = "2026-07-10"
+keywords = ["cloudflare", "edge", "serverless"]
+
+[infra.nix]
+updated = "2026-07-10"
+keywords = ["dev-environment", "reproducible", "flake"]
+note = "flake.nix 鎖 Bun 1.3.14 / Node 22 / oxlint 1.73 / oxfmt 0.58 / workerd"
+
+[infra.mcp.cloudflare-api]
+version = "remote"
+url = "https://mcp.cloudflare.com/mcp"
+updated = "2026-07-10"
+note = "完整 Cloudflare API (2500+ endpoints), search+execute mode"
+
+[infra.mcp.cloudflare-docs]
+version = "remote"
+url = "https://docs.mcp.cloudflare.com/mcp"
+updated = "2026-07-10"
+note = "Cloudflare 產品文件語義搜尋"
+
+[infra.mcp.cloudflare-bindings]
+version = "remote"
+url = "https://bindings.mcp.cloudflare.com/mcp"
+updated = "2026-07-10"
+note = "Workers bindings (D1/R2/KV/AI/DO) 配置協助"
+
+[infra.mcp.cloudflare-builds]
+version = "remote"
+url = "https://builds.mcp.cloudflare.com/mcp"
+updated = "2026-07-10"
+note = "Workers Builds 管理與洞察"
+
+[infra.mcp.cloudflare-observability]
+version = "remote"
+url = "https://observability.mcp.cloudflare.com/mcp"
+updated = "2026-07-10"
+note = "除錯 logs 與 analytics"

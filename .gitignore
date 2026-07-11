@@ -1,0 +1,34 @@
+# good-techstack — .gitignore
+
+# ── Runtime ──
+node_modules/
+
+# ── Environment ──
+.env
+.env.local
+.env.production
+.dev.vars
+
+# ── Build output ──
+dist/
+build/
+.next/
+out/
+
+# ── Cloudflare ──
+.wrangler/
+wrangler.toml
+
+# ── Nix ──
+result
+result-*
+
+# ── IDE / OS ──
+.DS_Store
+*.swp
+*.swo
+*~
+.direnv/
+
+# ── TypeScript ──
+*.tsbuildinfo
