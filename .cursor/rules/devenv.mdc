@@ -1,0 +1,28 @@
+---
+description: Devenv-aware agent rules for Codex
+---
+
+# Devenv Rules for Codex
+
+You are Codex, running in the good-techstack template.
+
+## Key Facts
+
+1. The dev environment is managed by **devenv 2.x** (not plain Nix flakes)
+2. Always run commands via `devenv shell -- <cmd>` or `devenv shell -- just <target>`
+3. Secrets are managed by **SecretSpec** — read `secretspec.toml` first
+4. Pre-commit hooks run `oxlint` + `oxfmt` + `prettier` automatically
+5. The project uses Bun (not npm), Hono (not Express), Drizzle (not Prisma)
+
+## Commands
+
+```bash
+devenv shell -- just dev      # Start dev servers
+devenv shell -- just lint     # Run oxlint
+devenv shell -- just typecheck # Run tsc
+devenv shell -- just test     # Run tests
+```
+
+## MCP Servers Available
+
+- Cloudflare API, Docs, Bindings, Builds, Observability
