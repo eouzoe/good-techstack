@@ -7,7 +7,7 @@ Good-techstack is an opinionated full-stack template for shipping products fast.
 ## Quick Start
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/USER/good-techstack/main/scripts/start.sh | bash
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | bash
 ```
 
 This downloads the stack and an AI agent, then guides you through setup, product discovery, code generation, and deployment.

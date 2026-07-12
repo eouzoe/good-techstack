@@ -113,7 +113,7 @@ keywords = ["cloudflare", "edge", "serverless"]
 [infra.nix]
 updated = "2026-07-10"
 keywords = ["dev-environment", "reproducible", "flake"]
-note = "flake.nix 鎖 Bun 1.3.14 / Node 22 / oxlint 1.73 / oxfmt 0.58 / workerd"
+note = "flake.nix 鎖 Bun 1.3.14 / Node 22 / oxlint 1.73 / oxfmt 0.58"
 
 [infra.mcp.cloudflare-api]
 version = "remote"
