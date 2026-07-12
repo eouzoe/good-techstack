@@ -1,0 +1,7 @@
+{
+  "name": "good-techstack",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"]
+}
