@@ -111,9 +111,16 @@ updated = "2026-07-10"
 keywords = ["cloudflare", "edge", "serverless"]
 
 [infra.nix]
-updated = "2026-07-10"
-keywords = ["dev-environment", "reproducible", "flake"]
-note = "flake.nix 鎖 Bun 1.3.14 / Node 22 / oxlint 1.73 / oxfmt 0.58"
+updated = "2026-07-12"
+keywords = ["dev-environment", "reproducible", "flake", "devenv"]
+note = "flake.nix + devenv. 雙鎖 flake.lock + devenv.lock. Bun 1.3.14 / Node 22 / oxlint 1.73."
+
+[infra.devenv]
+version = "2.1.2"
+status = "stable"
+updated = "2026-07-12"
+keywords = ["dev-environment", "mcp", "nix", "shell"]
+note = "Rust rewrite. Built-in MCP server: agent queries packages/options. Bun module. Processes. CI integration."
 
 [infra.mcp.cloudflare-api]
 version = "remote"
