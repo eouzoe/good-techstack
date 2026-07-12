@@ -88,7 +88,7 @@ user@computer:~$
 在 WSL 視窗裡，輸入這行指令，然後按 `Enter`：
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | bash
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
 ```
 
 它會開始下載需要的東西。
@@ -132,17 +132,17 @@ curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/g
 
 ## 這組工具包含了什麼
 
-| 項目 | 說明 |
-|------|------|
-| 跑程式的引擎 | Bun — 跑得很快 |
-| 後端框架 | Hono + oRPC — 讓前後端資料互通 |
-| 資料庫 | Cloudflare D1 — 免管理的資料庫 |
-| 登入系統 | better-auth — 信箱註冊、第三方登入，都包了 |
-| 前端框架 | TanStack Start — 快速的前端畫面 |
-| 界面元件 | shadcn/ui — 好看又好用的元件庫 |
-| 程式碼檢查 | oxlint — 自動檢查程式有沒有寫錯 |
-| 部署平台 | Cloudflare Workers — 有使用者之前都免費 |
-| 開發環境 | Nix — 所有人的環境都一樣，不會出現「我電腦可以跑」的問題 |
+| 項目         | 說明                                                                  |
+| ------------ | --------------------------------------------------------------------- |
+| 跑程式的引擎 | Bun — 跑得很快                                                        |
+| 後端框架     | Hono + oRPC — 讓前後端資料互通                                        |
+| 資料庫       | Cloudflare D1 — 免管理的資料庫                                        |
+| 登入系統     | better-auth — 信箱註冊、第三方登入，都包了                            |
+| 前端框架     | TanStack Start — 快速的前端畫面                                       |
+| 界面元件     | shadcn/ui — 好看又好用的元件庫                                        |
+| 程式碼檢查   | oxlint — 自動檢查程式有沒有寫錯                                       |
+| 部署平台     | Cloudflare Workers — 有使用者之前都免費                               |
+| 開發環境     | Devenv 2.x + Nix — 所有人的環境都一樣，不會出現「我電腦可以跑」的問題 |
 
 ---
 

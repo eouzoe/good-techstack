@@ -14,7 +14,7 @@ Do not introduce a second schema language (TypeBox, Valibot, ArkType, etc.).
 
 ### 2. Bun first, Node only in CI
 
-Daily development uses Bun. Node.js is used only in CI (Cloudflare officially supports only Node.js). The dual-shell strategy is in `flake.nix`: `devShells.default` (Bun) vs `devShells.ci` (Node).
+Daily development uses Bun. Node.js is used only in CI (Cloudflare officially supports only Node.js). The `check` CI job installs Bun via `oven-sh/setup-bun` directly; the `devenv-test` job runs the full devenv environment. `flake.nix` now only defines buildable `packages` outputs.
 
 ### 3. Cloudflare native, do not bypass
 
@@ -44,48 +44,59 @@ Nix flakes lock toolchain versions and hashes. Bun lockfile locks JavaScript dep
 
 ## Key Decisions
 
-| Decision | Choice | Rejected |
-|----------|--------|----------|
-| Runtime | Bun (dev) + Node (CI) | Node-only, Deno |
-| HTTP framework | Hono | Express, Fastify, Elysia |
-| RPC | oRPC (contract-first) | tRPC, Hono RPC |
-| ORM | Drizzle | Prisma, Kysely |
-| Auth | better-auth | Lucia, Auth.js |
-| Schema | Zod | Valibot, ArkType, TypeBox |
-| Linter | oxlint | ESLint, Biome |
-| Formatter | oxfmt | Prettier, Biome |
-| Bundler | Rsbuild 2 (Rspack 2) | Vite, Webpack |
-| CSS | Tailwind CSS 4 | Vanilla CSS, CSS modules |
-| Components | shadcn/ui (Base UI) | Radix, MUI |
-| Deployment | Cloudflare Workers | Vercel, Railway, Fly |
-| Environment | Nix flake | Docker, asdf, mise |
-| Monorepo | Bun workspace | Turborepo, Nx, pnpm workspaces |
+| Decision       | Choice                 | Rejected                       |
+| -------------- | ---------------------- | ------------------------------ |
+| Runtime        | Bun (dev) + Node (CI)  | Node-only, Deno                |
+| HTTP framework | Hono                   | Express, Fastify, Elysia       |
+| RPC            | oRPC (contract-first)  | tRPC, Hono RPC                 |
+| ORM            | Drizzle                | Prisma, Kysely                 |
+| Auth           | better-auth            | Lucia, Auth.js                 |
+| Schema         | Zod                    | Valibot, ArkType, TypeBox      |
+| Linter         | oxlint                 | ESLint, Biome                  |
+| Formatter      | oxfmt                  | Prettier, Biome                |
+| Bundler        | Rsbuild 2 (Rspack 2)   | Vite, Webpack                  |
+| CSS            | Tailwind CSS 4         | Vanilla CSS, CSS modules       |
+| Components     | shadcn/ui (Base UI)    | Radix, MUI                     |
+| Deployment     | Cloudflare Workers     | Vercel, Railway, Fly           |
+| Environment    | Devenv 2.x + flake.nix | Docker, asdf, mise, flake-only |
+| Monorepo       | Bun workspace          | Turborepo, Nx, pnpm workspaces |
 
 ---
 
 ## What Not to Do
 
-| Don't | Why | Do instead |
-|-------|-----|------------|
-| Add Prisma | ~5MB bundle, Workers support is beta | Drizzle ORM (10KB, D1-native) |
-| Add ESLint, Prettier, or Biome | oxlint is 50-100x faster | oxlint + oxfmt |
-| Add Turborepo, Nx, or pnpm workspaces | Bun workspace is fast enough | Bun workspace |
-| Add Redis or BullMQ | Workers has no Redis | KV + Queues + DO |
-| Use raw SQL (except edge cases) | Bypasses type-safe chain | Drizzle query builder |
-| Use `process.env` | Workers use `env.XXX` | Hono `c.env.XXX` |
-| Add Express or Fastify | Not Web Standards | Hono |
-| Introduce a second schema library | Breaks Zod single-source-of-truth | Zod only |
-| Add tRPC | oRPC has broader type safety | oRPC |
-| Use npm, pnpm, or yarn | Bun is the default | `bun add` |
-| Write API tokens into code or commits | Security vulnerability | `~/.cloudflare/mcp-token` |
+| Don't                                 | Why                                     | Do instead                          |
+| ------------------------------------- | --------------------------------------- | ----------------------------------- |
+| Add Prisma                            | ~5MB bundle, Workers support is beta    | Drizzle ORM (10KB, D1-native)       |
+| Add ESLint, Prettier, or Biome        | oxlint is 50-100x faster                | oxlint + oxfmt                      |
+| Add Turborepo, Nx, or pnpm workspaces | Bun workspace is fast enough            | Bun workspace                       |
+| Add Redis or BullMQ                   | Workers has no Redis                    | KV + Queues + DO                    |
+| Use raw SQL (except edge cases)       | Bypasses type-safe chain                | Drizzle query builder               |
+| Use `process.env`                     | Workers use `env.XXX`                   | Hono `c.env.XXX`                    |
+| Use `.env` files                      | No audit, no provider flexibility       | SecretSpec (`secretspec.toml`)      |
+| Use `make` or `task` for task running | Make is verbose, Task is another Go dep | Justfile (single binary, zero deps) |
+| Add Express or Fastify                | Not Web Standards                       | Hono                                |
+| Introduce a second schema library     | Breaks Zod single-source-of-truth       | Zod only                            |
+| Add tRPC                              | oRPC has broader type safety            | oRPC                                |
+| Use npm, pnpm, or yarn                | Bun is the default                      | `bun add`                           |
+| Write API tokens into code or commits | Security vulnerability                  | `~/.cloudflare/mcp-token`           |
+
+### Just vs devenv scripts
+
+Justfile and `devenv scripts.*` coexist with clear boundaries:
+
+- **Justfile**: for end users at the terminal. `just dev`, `just lint`, `just deploy`. Invoked via `devenv shell -- just <target>`.
+- **devenv scripts**: for the AI agent's internal use. Agent reads `scripts` block in `devenv.nix` and calls them directly as commands.
+
+Both call the same underlying tools (bun, oxlint, wrangler). They differ only in interface: one keyboard, one agent.
 
 ### Grey area
 
-| Situation | Consider | Note |
-|-----------|----------|------|
-| Bundle size is critical | Zod Mini (`zod/mini`) | 2.1kb vs 5.9kb |
-| Expo native | Expo + Expo Router | Shares oRPC contracts |
-| Type-aware linting | oxlint `--type-aware` | Alpha stage |
+| Situation               | Consider              | Note                  |
+| ----------------------- | --------------------- | --------------------- |
+| Bundle size is critical | Zod Mini (`zod/mini`) | 2.1kb vs 5.9kb        |
+| Expo native             | Expo + Expo Router    | Shares oRPC contracts |
+| Type-aware linting      | oxlint `--type-aware` | Alpha stage           |
 
 ---
 

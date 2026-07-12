@@ -12,11 +12,11 @@ Good-techstack is in its early stages. All contributions are welcome.
 
 Before opening a PR, check that your change passes the CI gate:
 
-```
-oxlint --type-aware
-tsc --noEmit
-bun test
-vitest run
+```bash
+just lint          # oxlint --type-aware
+just typecheck     # tsc --noEmit
+just test          # bun test
+devenv shell -- vitest run
 ```
 
 ## Code style
@@ -47,9 +47,9 @@ Write a script that reads `docs/agent/versions.toml` and compares each documente
 
 ---
 
-**Verify curl|bash on a clean machine**
+**Verify curl|sh on a clean machine**
 
-Set up a clean environment (fresh WSL, VM, or Docker), run the curl|bash command, and document everything that breaks or confuses you. Open issues for each problem.
+Set up a clean environment (fresh WSL, VM, or Docker), run the curl|sh command, and document everything that breaks or confuses you. Open issues for each problem.
 
 **Files:** No code changes. Report findings as GitHub issues.
 
@@ -59,17 +59,17 @@ Set up a clean environment (fresh WSL, VM, or Docker), run the curl|bash command
 
 **GitHub Actions CI pipeline**
 
-Create `.github/workflows/ci.yml` that runs lint → type-check → unit test → integration test on every PR.
+Improve `.github/workflows/ci.yml` so it runs the two-layer gate (Layer 1: lint → type-check → unit test → integration test; Layer 2: `devenv test`) on every PR.
 
 **Files:** `.github/workflows/ci.yml`
 
 ---
 
-**Docker development environment**
+**Devenv development environment**
 
-Create a Docker Compose setup for developers who do not use Nix.
+Document the `devenv` workflow for developers who do not use plain Nix. Cover `devenv shell`, `devenv process up`, `just` targets, and git-hooks.
 
-**Files:** `Dockerfile`, `docker-compose.yml`, update `docs/guide/development.md`
+**Files:** `devenv.nix`, `Justfile`, update `docs/guide/development.md`
 
 ---
 
@@ -86,15 +86,18 @@ Test the bootstrap prompt with each supported agent (Claude Code, opencode, Code
 Some contributions span the entire stack and cannot be reduced to a single issue. These are documented in [`docs/guide/contribution-areas.md`](docs/guide/contribution-areas.md).
 
 **Platform compatibility:**
+
 - **macOS**: verify and fix the entire stack (start.sh, Bun, Nix, Wrangler, Playwright) on both Intel and Apple Silicon
 - **Windows**: test native Windows support (Bun, Wrangler, Playwright) and document WSL1 vs WSL2 differences
 - **Linux distributions**: test on Fedora, Arch, Alpine, NixOS and document distribution-specific issues
 
 **Ongoing maintenance:**
+
 - Monthly version audit: check all documented versions against latest, update `versions.toml` and reference docs
 - Translate documentation from English to Chinese
 
 **Infrastructure:**
+
 - Expand E2E test coverage (registration, login, OAuth, CRUD, form validation)
 - Add property-based testing with fast-check
 - Editor setup guides (VS Code, Neovim, JetBrains)
