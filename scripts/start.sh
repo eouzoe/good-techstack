@@ -40,7 +40,7 @@ detect_agent() {
 }
 
 start_agent() {
-  local prompt_file="docs/config/agent-bootstrap-prompt.md"
+  local prompt_file="docs/agent/bootstrap-prompt.md"
   local prompt
   prompt=$(cat "$prompt_file")
 
