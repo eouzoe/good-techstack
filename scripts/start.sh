@@ -5,7 +5,7 @@
 #   curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | bash
 set -euo pipefail
 
-REPO_OWNER="${REPO_OWNER:-user}"
+REPO_OWNER="${REPO_OWNER:-eouzoe}"
 APP_NAME="${1:-my-app}"
 
 echo ""
