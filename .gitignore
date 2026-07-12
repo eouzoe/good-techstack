@@ -17,7 +17,6 @@ out/
 
 # ── Cloudflare ──
 .wrangler/
-wrangler.toml
 
 # ── Nix ──
 result
