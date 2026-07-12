@@ -1,0 +1,17 @@
+# good-techstack — wrangler.toml
+# The agent updates database_id and vars after provisioning.
+
+name = "good-techstack-backend"
+main = "src/index.ts"
+compatibility_date = "2026-07-12"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "backend-db"
+database_id = ""
+migrations_dir = "migrations"
+
+[vars]
+BETTER_AUTH_URL = ""
+BETTER_AUTH_SECRET = ""
