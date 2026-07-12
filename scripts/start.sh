@@ -77,15 +77,11 @@ if [ -z "$AGENT" ]; then
     3) echo "  → Install Codex CLI: https://github.com/openai/codex" ;;
     4) echo "  → Install Cursor: https://cursor.com" ;;
     *)
-      echo "  → Downloading opencode..."
-      case "$(uname -s)" in
-        Linux)  DOWNLOAD_URL="https://github.com/anthropics/claude-code/releases/latest/download/claude-code-linux-$(uname -m).tar.gz" ;;
-        Darwin) DOWNLOAD_URL="https://github.com/anthropics/claude-code/releases/latest/download/claude-code-macos-$(uname -m).tar.gz" ;;
-      esac
-      curl -fsSL "$DOWNLOAD_URL" | tar xz -C /tmp
-      AGENT_BIN="/tmp/opencode"
+      echo "  → Installing opencode..."
+      curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
+      export PATH="$HOME/.opencode/bin:$PATH"
       AGENT="opencode"
-      echo "  → Downloaded. Starting..."
+      echo "  → Installed. Starting..."
       start_agent "$AGENT"
       ;;
   esac
