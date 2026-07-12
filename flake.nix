@@ -36,7 +36,6 @@
           nodejs_22
           oxlint
           oxfmt
-          workerd
           wrangler
           nodePackages.typescript
           nodePackages.typescript-language-server
@@ -50,7 +49,6 @@
           echo "│  bun:      $(bun --version)                   │"
           echo "│  node:     $(node --version)                  │"
           echo "│  oxlint:   $(oxlint --version 2>/dev/null || echo 'N/A')                │"
-          echo "│  workerd:  $(workerd --version 2>/dev/null || echo 'N/A')           │"
           echo "│  wrangler: $(wrangler --version 2>/dev/null || echo 'N/A') │"
           echo "└─────────────────────────────────────┘"
           if [ -f apps/backend/bun.lock ]; then
