@@ -7,21 +7,44 @@ on:
     branches: [main]
 
 jobs:
-  check:
+  # Validate the project's own dev-environment configuration.
+  # (The lint / typecheck / test matrix is what spawned projects run via `just`.)
+  verify-environment:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: cachix/install-nix-action@v31
+
+      - uses: cachix/cachix-action@v16
         with:
-          bun-version: 1.3.14
+          name: devenv
 
-      - run: bun install --frozen-lockfile
+      - name: Install devenv
+        run: nix profile add nixpkgs#devenv
 
-      - run: bunx oxlint --type-aware
+      - name: devenv environment evaluates
+        run: devenv shell -- which bun oxlint oxfmt tsc prettier wrangler node
 
-      - run: bunx tsc --noEmit
+      - name: flake packages build
+        run: nix build .#bun
 
-      - run: bun test
+      - name: Agent / config files present
+        run: |
+          test -f CLAUDE.md && echo "CLAUDE.md OK"
+          test -f AGENTS.md && echo "AGENTS.md OK"
+          test -f Justfile && echo "Justfile OK"
+          test -f secretspec.toml && echo "secretspec.toml OK"
 
-      - run: bunx vitest run
+      - name: Lock files present and parse
+        run: |
+          python3 - <<'PY'
+          import json
+          fl = json.load(open('flake.lock'))
+          dl = json.load(open('devenv.lock'))
+          assert 'nixpkgs' in fl['nodes'], "flake.lock missing nixpkgs input"
+          assert any('devenv' in k for k in dl.get('nodes', {})), "devenv.lock missing devenv input"
+          print("lock files OK: flake.nixpkgs=%s devenv.lock=%s" % (
+            fl['nodes']['nixpkgs']['locked']['rev'][:8],
+            [k for k in dl['nodes'] if 'devenv' in k][0][:8]))
+          PY
