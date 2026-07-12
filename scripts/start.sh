@@ -1,104 +1,53 @@
-#!/usr/bin/env bash
-# good-techstack — from zero to a running AI agent that builds your product
-# Security flags follow rustup conventions (--proto '=https' --tlsv1.2)
-# Usage:
-#   curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | bash
-set -euo pipefail
+#!/usr/bin/env sh
+# good-techstack — one-command bootstrap
+# Usage: curl -sSfL <this script> | sh
+set -eu
 
 REPO_OWNER="${REPO_OWNER:-eouzoe}"
 APP_NAME="${1:-my-app}"
+
+# 0. prerequisites
+command -v curl >/dev/null 2>&1 || { echo "error: curl is required"; exit 1; }
+command -v tar  >/dev/null 2>&1 || { echo "error: tar is required";  exit 1; }
 
 echo ""
 echo "  good-techstack"
 echo "  One command to start. A conversation to build."
 echo ""
 
-# ── Prerequisites ──
-command -v curl >/dev/null 2>&1 || { echo "  curl is required"; exit 1; }
-command -v tar  >/dev/null 2>&1 || { echo "  tar is required";  exit 1; }
+# 1-2. download good-techstack
+echo "  -> Downloading good-techstack ..."
+curl -fsSL "https://github.com/${REPO_OWNER}/good-techstack/archive/refs/heads/main.tar.gz" -o /tmp/gts.tar.gz
+tar xzf /tmp/gts.tar.gz
+rm -f /tmp/gts.tar.gz
+mv good-techstack-main "${APP_NAME}"
+cd "${APP_NAME}"
 
-# ── Download good-techstack ──
-echo "  → Downloading good-techstack..."
-curl -fsSL "https://github.com/$REPO_OWNER/good-techstack/archive/main.tar.gz" | tar xz
-mv good-techstack-main "$APP_NAME"
-cd "$APP_NAME"
-
-# ── Install Nix (background) ──
-if ! command -v nix &>/dev/null; then
-  echo "  → Installing Nix (background)..."
-  curl -fsSL https://install.determinate.systems/nix | sh -s -- install --no-confirm &
-  NIX_PID=$!
+# 3. install Nix (official installer; non-interactive pipe form)
+if ! command -v nix >/dev/null 2>&1; then
+  echo "  -> Installing Nix (this may prompt for your password) ..."
+  curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install
+  export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
+  if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  fi
 fi
 
-# ── AI agent ──
-detect_agent() {
-  if command -v claude &>/dev/null; then echo "claude"; return 0; fi
-  if command -v opencode &>/dev/null; then echo "opencode"; return 0; fi
-  if command -v codex &>/dev/null; then echo "codex"; return 0; fi
-  if command -v cursor &>/dev/null; then echo "cursor"; return 0; fi
-  echo ""
-}
+# 4. early-install devenv (it auto-pulls zsh + just via devenv.nix;
+#    libghostty wires up the zsh shell integration — no manual hook needed)
+echo "  -> Installing devenv ..."
+nix profile install nixpkgs#devenv
 
-start_agent() {
-  local prompt_file="docs/agent/bootstrap-prompt.md"
-  local prompt
-  prompt=$(cat "$prompt_file")
+# ensure the nix profile bin (where `devenv` now lives) is on PATH,
+# whether nix was just installed above or already present
+export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
 
-  case "$1" in
-    claude)   exec claude --print "$prompt" . ;;
-    opencode) exec opencode --prompt "$prompt" . ;;
-    codex)    exec codex --prompt "$prompt" . ;;
-    cursor)   echo "  → Open $APP_NAME in Cursor manually."
-              echo "    Cursor will read the bootstrap prompt automatically."
-              echo "    cd $APP_NAME && cursor ."
-              exit 0 ;;
-  esac
-}
+# 5. trust this project dir (devenv refuses untrusted dirs), then enter the
+#    devenv shell (zsh via libghostty) and bootstrap — traced from here
+echo "  -> Bootstrapping environment (traced) ..."
+devenv allow
+devenv --trace-to pretty:stderr shell -- just bootstrap
 
-AGENT=$(detect_agent)
-
-if [ -z "$AGENT" ]; then
-  echo ""
-  echo "  No AI agent detected."
-  echo "  good-techstack needs one to build your product."
-  echo ""
-  echo "  Options:"
-  echo "    1) opencode   — free, works immediately, select any model"
-  echo "    2) claude     — Claude Code by Anthropic"
-  echo "    3) codex      — OpenAI Codex CLI"
-  echo "    4) cursor     — Cursor editor (open manually)"
-  echo ""
-  echo -n "  Which one? [1/2/3/4] (default: 1): "
-  read -r choice
-  choice="${choice:-1}"
-
-  case "$choice" in
-    2) echo "  → Install Claude Code: https://docs.anthropic.com/en/docs/claude-code" ;;
-    3) echo "  → Install Codex CLI: https://github.com/openai/codex" ;;
-    4) echo "  → Install Cursor: https://cursor.com" ;;
-    *)
-      echo "  → Installing opencode..."
-      curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
-      export PATH="$HOME/.opencode/bin:$PATH"
-      AGENT="opencode"
-      echo "  → Installed. Starting..."
-      start_agent "$AGENT"
-      ;;
-  esac
-  echo "  → Run the script again after installing."
-  exit 0
-fi
-
-# ── Wait for Nix (background) ──
-if [ -n "${NIX_PID:-}" ]; then
-  echo "  → Waiting for Nix..."
-  wait "$NIX_PID" 2>/dev/null || true
-  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh 2>/dev/null || true
-fi
-
-# ── Start agent ──
 echo ""
-echo "  good-techstack is ready."
-echo "  Starting $AGENT..."
-echo ""
-start_agent "$AGENT"
+echo "  Done. Your environment is ready."
+echo "  Now set your secrets and start your AI agent — see the boxed steps in README.md."
