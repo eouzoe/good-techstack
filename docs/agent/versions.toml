@@ -111,9 +111,16 @@ updated = "2026-07-10"
 keywords = ["cloudflare", "edge", "serverless"]
 
 [infra.nix]
-updated = "2026-07-10"
+version = "2.34.8"
+updated = "2026-07-12"
 keywords = ["dev-environment", "reproducible", "flake"]
 note = "flake.nix 鎖 Bun 1.3.14 / Node 22 / oxlint 1.73 / oxfmt 0.58"
+
+[infra.devenv]
+version = "2.1.2"
+updated = "2026-07-12"
+keywords = ["dev-environment", "devenv", "mcp", "agent"]
+note = "Standalone CLI + eval cache + nix-bindings-rust C API. 原生 process manager 取代 process-compose. `devenv hook` 取代 direnv."
 
 [infra.mcp.cloudflare-api]
 version = "remote"
@@ -144,3 +151,13 @@ version = "remote"
 url = "https://observability.mcp.cloudflare.com/mcp"
 updated = "2026-07-10"
 note = "除錯 logs 與 analytics"
+
+[infra.mcp.devenv]
+version = "2.1.2"
+updated = "2026-07-12"
+note = "8 tools: search_packages, search_options, list_processes, get_process_status, get_process_logs, restart_process, start_process, stop_process. agent 用於查詢 devenv 套件/選項並管理進程"
+
+[infra.secretspec]
+version = "0.14.0"
+updated = "2026-07-12"
+note = "11 providers, audit log, SDK 支援。取代 .env 檔案。"

@@ -51,7 +51,7 @@
 ## 6. 文件更新紀律
 
 - 改檔案前：讀 `docs/getting-started.md` 了解上下文。
-- 改完後：更新 `docs/agent/versions.toml` 的版本號，然後寫入 `docs/changelog.md`。
+- 改完後：更新 `docs/agent/versions.toml` 的版本號，然後寫入 `CHANGELOG/`。建立 `CHANGELOG/YYYY-MM-DD-slug.md`。
 - 不要修改此專案外的檔案。
 
 ## 7. 安全
@@ -59,3 +59,5 @@
 - 不要在任何地方輸出 API token、金鑰或密碼。
 - 使用檔案變數語法 `{file:~/.cloudflare/mcp-token}` 來引用 token，絕不使用實際值。
 - CI secrets 透過 GitHub Secrets 注入，不要寫在程式碼或文件中。
+- 讀取或寫入任何 secret 前：先讀 `secretspec.toml` 確認 key 是否存在。
+- 使用 `secretspec run -- <cmd>` 將 secret 注入到指令中。不要透過 `--env` 參數傳遞 secret。

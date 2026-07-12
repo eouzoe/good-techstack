@@ -58,7 +58,7 @@
 
 ## Step 3 — 完成設定
 
-執行：`bash bootstrap.sh`
+執行：`sh scripts/start.sh`
 
 這會安裝工具鏈（Bun、Node、linter）和 JS 依賴。可能需要一分鐘。
 
@@ -107,13 +107,13 @@
 4. 前端頁面（stub）→ `apps/frontend/src/routes/`
 5. Auth roles → `apps/backend/src/auth/roles.ts`
 
-每個步驟完成後執行 `bunx tsc --noEmit`。如果通過則繼續。如果失敗，修復後再繼續。
+每個步驟完成後執行 `devenv shell -- tsc --noEmit`。如果通過則繼續。如果失敗，修復後再繼續。
 
 ---
 
 ## Step 8 — 最終驗證
 
-執行：`bun test --filter "smoke|contract"`
+執行：`devenv shell -- bun test --filter "smoke|contract"`
 
 如果測試通過，向使用者呈現檔案結構：
 
@@ -126,14 +126,14 @@ apps/frontend/src/     → 4 個頁面 stub
 
 問：「這是你的產品 scaffold。要部署嗎？」
 
-只有使用者確認後才部署。後端使用 `bunx wrangler deploy`。
+只有使用者確認後才部署。後端使用 `devenv shell -- bunx wrangler deploy`。
 
 ---
 
 ## 規則
 
 1. **未經 entity map 確認，絕不產生程式碼。** 使用者必須輸入「我確認」。
-2. **絕不跳過驗證。** 程式碼產生後務必執行 `tsc --noEmit`。
+2. **絕不跳過驗證。** 程式碼產生後務必執行 `devenv shell -- tsc --noEmit`。
 3. **如果步驟失敗，先解釋問題再嘗試修復。**
 4. **不要假設使用者懂技術名詞。** 邊做邊解釋。
 5. **如果嘗試 3 次仍無法完成某步驟，停下來請求人工協助。**

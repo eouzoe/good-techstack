@@ -70,11 +70,13 @@ After the Q&A, produce a structured entity map in this format:
       ]
     }
   ],
-  "relationships": [
-    { "from": "User", "to": "Project", "type": "hasMany" }
-  ],
+  "relationships": [{ "from": "User", "to": "Project", "type": "hasMany" }],
   "actions": [
-    { "role": "user", "entity": "Project", "actions": ["create", "read", "update"] }
+    {
+      "role": "user",
+      "entity": "Project",
+      "actions": ["create", "read", "update"]
+    }
   ],
   "integrations": [],
   "pages": ["/dashboard", "/projects"]
@@ -89,6 +91,7 @@ Present the entity map to the user and say:
 > "Type 'I confirm' to proceed, or tell me what to change."
 
 **Rules:**
+
 - Wait for the exact phrase `I confirm` (or `我確認` / `確認`).
 - Do not accept `yes`, `ok`, `looks good`, `y`, or any variation.
 - If the user requests changes, update the entity map and ask again.
