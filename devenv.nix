@@ -102,6 +102,7 @@
     '';
   };
   enterShell = ''
+    [ -d node_modules ] || bun install
     echo "┌─────────────────────────────────────┐"
     echo "│  good-techstack dev environment      │"
     echo "│  bun:      $(bun --version)                   │"
