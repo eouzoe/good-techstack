@@ -24,17 +24,34 @@ just typecheck     # tsc --noEmit
 
 ---
 
+## Version maintenance (click-link-report)
+
+All tool/library versions live in **one file**: [`docs/agent/versions.toml`](docs/agent/versions.toml). It is the single source of truth. `package.json`, `devenv.nix`, and `flake.nix` carry the real pins; reference docs mirror them for readers.
+
+We keep versions fresh through **human review**, not bots. The full process, per-package official source links, and the exact PR format are in **[Issue #2](https://github.com/eouzoe/good-techstack/issues/2)**.
+
+Contributor checklist (that's all we ask):
+
+1. Open `docs/agent/versions.toml`.
+2. Open the `source` link for the package you want to check (official npm/GitHub page).
+3. If a newer version exists, open **one atomic PR** that only bumps that entry's `version` and sets `updated = <today>`, pasting the source link + new version in the body.
+4. No installs, no builds, no `package.json` edits. Maintainers test and merge.
+
+One package per PR.
+
+---
+
 ## Good First Issues
 
 These are tasks suitable for first-time contributors. They require minimal context and have clear success criteria. Check the [GitHub issues](https://github.com/eouzoe/good-techstack/issues) for the latest list.
 
 ### Beginner
 
-**Version consistency checker**
+**Report an outdated version (no code required)**
 
-Write a script that reads `docs/agent/versions.toml` and compares each documented version against the latest published version. Can be run manually or as a weekly GitHub Action.
+Pick any package in `docs/agent/versions.toml`, open its `source` link, and if a newer version is published, open a one-line PR bumping that entry. Full steps + PR template: [Issue #2](https://github.com/eouzoe/good-techstack/issues/2).
 
-**Files:** `scripts/check-versions.ts`, `.github/workflows/version-check.yml`
+**Files:** `docs/agent/versions.toml` (one entry)
 
 ---
 
