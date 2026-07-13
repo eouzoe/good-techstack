@@ -39,6 +39,7 @@
     lint.exec = "oxlint --type-aware";
     typecheck.exec = "cd apps/backend && bunx wrangler types && bunx tsc --noEmit";
     test.exec = "bun test";
+    "check-versions".exec = "bun scripts/check-versions.mjs";
   };
 
   processes = {
