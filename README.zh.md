@@ -157,6 +157,7 @@ curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/g
 完整技術文件在 `docs/`。從 `docs/getting-started.md` 開始。
 
 - [開發指南](docs/guide/) — 開發流程、部署、測試
+- [版本檢查](docs/guide/version-check.zh.md) — 如何檢查依賴是否過時
 - [技術參考](docs/reference/) — 各層深入分析、TypeScript、設計決策
 - [AI 助手](docs/agent/) — 助手規則、啟動、建立商業邏輯
 - [貢獻指南](CONTRIBUTING.md)

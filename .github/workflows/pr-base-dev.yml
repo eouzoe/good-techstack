@@ -1,0 +1,23 @@
+name: PR base must be dev
+
+# Ensures every pull request targets the `dev` branch.
+# `dev` is where all active development lands; `main` is release-only.
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  base:
+    runs-on: ubuntu-latest
+    if: github.base_ref != 'dev'
+    steps:
+      - name: Comment and fail
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          echo "::error::This repository only accepts pull requests targeting the 'dev' branch."
+          gh pr comment "$PR" --body 'This repository only accepts pull requests that target the `dev` branch. `main` is release-only. Please change the base branch of this PR to `dev`.'
