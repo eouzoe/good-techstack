@@ -1,17 +1,29 @@
 { pkgs, config, lib, ... }:
 
+let
+  arch = if pkgs.stdenv.hostPlatform.isAarch64 then "aarch64" else "x64";
+  bun_1_3_14 = pkgs.runCommandNoCC "bun-1.3.14" {
+    src = pkgs.fetchurl {
+      url = "https://github.com/oven-sh/bun/releases/download/bun-v1.3.14/bun-linux-${arch}.zip";
+      sha256 = if pkgs.stdenv.hostPlatform.isAarch64
+        then "a27ffb63a8310375836e0d6f668ae17fa8d8d18b88c37c821c65331973a19a3b"
+        else "951ee2aee855f08595aeec6225226a298d3fea83a3dcd6465c09cbccdf7e848f";
+    };
+    nativeBuildInputs = [ pkgs.unzip ];
+  } ''
+    unzip -j $src 'bun-linux-${arch}/bun' -d $out/bin
+    chmod +x $out/bin/bun
+  '';
+in
 {
-  # No custom overlays — Bun is provided by the native module below.
-  # Previously: a manual stdenv.mkDerivation overlay that conflicted
-  # with languages.javascript.bun.enable, broke bun PATH in enterShell,
-  # and forced Nix to evaluate 2172 files + download build deps (gcc,
-  # python3, perl) unnecessarily.
+  # No custom overlays — Bun is defined as a standalone package via
+  # runCommandNoCC above (no gcc/python3/perl build deps).
+  # Previously a stdenv.mkDerivation overlay conflicted with the js
+  # module and polluted PATH in enterShell.
 
   languages.javascript.bun.enable = true;
+  languages.javascript.bun.package = bun_1_3_14;
   languages.javascript.bun.install.enable = true;
-  # languages.javascript.bun.package defaults to pkgs.bun from
-  # nixpkgs-unstable (currently 1.3.13).  Bump nixpkgs input in
-  # devenv.yaml instead of adding an overlay.
 
   packages = with pkgs; [
     bun
@@ -24,7 +36,7 @@
     git curl jq
     nushell
   ];
-  # Removed: nodejs_22            (handled by js module → nodejs-slim)
+  # Removed: nodejs_22            (js module → nodejs-slim)
   #          typescript            (bunx tsc)
   #          typescript-language-server  (js LSP module)
 
