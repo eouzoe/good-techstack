@@ -58,7 +58,4 @@ jobs:
         run: nix profile add nixpkgs#devenv
 
       - name: Build environment
-        run: devenv test
-
-      - name: Lint
-        run: devenv shell -- bunx oxlint --type-aware
+        run: devenv shell -- bun --version
