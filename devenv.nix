@@ -3,6 +3,7 @@
   languages.javascript.bun.install.enable = true;
 
   packages = with pkgs; [
+    bun
     zsh
     just
     oxlint
