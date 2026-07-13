@@ -148,6 +148,7 @@ Open an issue at [github.com/eouzoe/good-techstack/issues/3](https://github.com/
 The full technical reference is in `docs/`. Start with `docs/getting-started.md`.
 
 - [Guide](docs/guide/) — development, deployment, testing
+- [Version checking](docs/guide/version-check.md) — how to check for outdated dependencies
 - [Reference](docs/reference/) — per-layer deep dives (runtime, API, DB, auth, frontend, schema, infra, TypeScript)
 - [Design decisions](docs/reference/design-decisions.md) — why we chose what we chose
 - [Agent](docs/agent/) — AI agent rules, bootstrap, scaffolding, MCP reference
