@@ -38,7 +38,7 @@ No unnecessary abstraction layers. No unnecessary dependencies (Turborepo, Nx: n
 
 ### 8. Supply chain awareness
 
-Nix flakes lock toolchain versions and hashes. Bun lockfile locks JavaScript dependencies. Every test layer locks behavioural correctness.
+Nix flakes + devenv lock toolchain versions and hashes (`flake.lock` + `devenv.lock`). Bun lockfile locks JavaScript dependencies (`bun.lock`). Every test layer locks behavioural correctness.
 
 ---
 
@@ -58,7 +58,7 @@ Nix flakes lock toolchain versions and hashes. Bun lockfile locks JavaScript dep
 | CSS | Tailwind CSS 4 | Vanilla CSS, CSS modules |
 | Components | shadcn/ui (Base UI) | Radix, MUI |
 | Deployment | Cloudflare Workers | Vercel, Railway, Fly |
-| Environment | Nix flake | Docker, asdf, mise |
+| Environment | Nix flake + devenv | Docker, asdf, mise |
 | Monorepo | Bun workspace | Turborepo, Nx, pnpm workspaces |
 
 ---
@@ -70,6 +70,7 @@ Nix flakes lock toolchain versions and hashes. Bun lockfile locks JavaScript dep
 | Add Prisma | ~5MB bundle, Workers support is beta | Drizzle ORM (10KB, D1-native) |
 | Add ESLint, Prettier, or Biome | oxlint is 50-100x faster | oxlint + oxfmt |
 | Add Turborepo, Nx, or pnpm workspaces | Bun workspace is fast enough | Bun workspace |
+| Add justfile | Overlaps with `bun run --workspace` at current scale. Revisit at 5+ workspaces. | Shell scripts + Bun scripts |
 | Add Redis or BullMQ | Workers has no Redis | KV + Queues + DO |
 | Use raw SQL (except edge cases) | Bypasses type-safe chain | Drizzle query builder |
 | Use `process.env` | Workers use `env.XXX` | Hono `c.env.XXX` |
