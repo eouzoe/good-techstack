@@ -4,6 +4,7 @@
 
   packages = with pkgs; [
     bun
+    nodejs_26
     zsh
     just
     oxlint
@@ -16,6 +17,9 @@
   # Removed: nodejs_22            (js module → nodejs-slim)
   #          typescript            (bunx tsc)
   #          typescript-language-server  (js LSP module)
+  # Node is pinned to nodejs_26 via the packages list (the nodejs submodule does
+  # not honour languages.javascript.package) so the runtime version is tracked
+  # instead of arriving via a transitive dep.
 
   cachix.pull = [ "devenv" ];
 
