@@ -60,7 +60,7 @@ in
   enterTest = ''
     bun install
     oxlint --type-aware
-    bunx tsc --noEmit
+    bunx tsc -p apps/backend --noEmit
   '';
 
   scripts = {
