@@ -24,16 +24,16 @@ keywords = ["language", "types", "compiler"]
 note = "7.1 dev builds 進行中. 側載 6.0 以保持 typescript-eslint 相容."
 
 [framework.api.hono]
-version = "4.12.28"
+version = "4.12.30"
 status = "stable"
-updated = "2026-07-10"
+updated = "2026-07-13"
 keywords = ["http", "api", "web-standards", "workers"]
 
 [framework.api.orpc]
-version_stable = "1.14.7"
-version_beta = "2.0.0-beta.15"
+version_stable = "1.14.8"
+version_beta = "2.0.0-beta.16"
 status = "dual-track"
-updated = "2026-07-10"
+updated = "2026-07-13"
 keywords = ["rpc", "contract", "typesafe"]
 
 [framework.frontend.tanstack-start]
@@ -64,9 +64,9 @@ keywords = ["orm", "sqlite", "d1", "database"]
 note = "v1.0.0-rc.4 pre-release."
 
 [schema.zod]
-version = "4.4+"
+version = "4.4.3"
 status = "stable"
-updated = "2026-07-10"
+updated = "2026-07-13"
 keywords = ["schema", "validation", "types", "zod"]
 
 [tooling.lint.oxlint]
