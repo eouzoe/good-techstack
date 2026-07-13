@@ -40,6 +40,7 @@ in
     typescript-language-server
     prettier
     git curl jq
+    nushell
   ];
 
   # devenv's own binary cache — devenv handles the substituter + key.
