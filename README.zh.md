@@ -158,6 +158,7 @@ curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/g
 
 - [開發指南](docs/guide/) — 開發流程、部署、測試
 - [版本檢查](docs/guide/version-check.zh.md) — 如何檢查依賴是否過時
+- [本機環境檢查](docs/guide/env-check.zh.md) — 確認你的電腦與鎖定版本一致（Linux）
 - [技術參考](docs/reference/) — 各層深入分析、TypeScript、設計決策
 - [AI 助手](docs/agent/) — 助手規則、啟動、建立商業邏輯
 - [貢獻指南](CONTRIBUTING.md)
