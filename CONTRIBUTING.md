@@ -13,10 +13,7 @@ Good-techstack is in its early stages. All contributions are welcome.
 Before opening a PR, check that your change passes the CI gate:
 
 ```bash
-just lint          # oxlint --type-aware
 just typecheck     # tsc --noEmit
-just test          # bun test
-devenv shell -- vitest run
 ```
 
 ## Code style
@@ -24,12 +21,6 @@ devenv shell -- vitest run
 - No unnecessary comments. Code should be self-documenting.
 - Follow the patterns in `docs/reference/`.
 - All new features must include tests.
-
-## Documentation style
-
-- British English for all English documentation.
-- Chinese documentation uses Traditional Chinese (zh-TW).
-- Use plain, direct language. No marketing fluff.
 
 ---
 
