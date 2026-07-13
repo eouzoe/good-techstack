@@ -1,9 +1,9 @@
-import { betterAuth } from 'better-auth'
+import { betterAuth } from "better-auth";
 
 export function createAuth(env: {
-  DB: D1Database
-  BETTER_AUTH_URL: string
-  BETTER_AUTH_SECRET: string
+  DB: D1Database;
+  BETTER_AUTH_URL: string;
+  BETTER_AUTH_SECRET: string;
 }) {
   return betterAuth({
     database: env.DB,
@@ -12,5 +12,5 @@ export function createAuth(env: {
     emailAndPassword: {
       enabled: true,
     },
-  })
+  });
 }

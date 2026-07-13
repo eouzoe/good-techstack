@@ -31,7 +31,7 @@ cd "${APP_NAME}"
 # 3. install Nix (official installer; non-interactive pipe form)
 if ! command -v nix >/dev/null 2>&1; then
   echo "  -> Installing Nix (this may prompt for your password) ..."
-  curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install
+  curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install --no-confirm
   export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
   if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh

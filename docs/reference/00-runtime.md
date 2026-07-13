@@ -13,11 +13,11 @@
 
 ## Bun 1.3 features
 
-| Version | Notable |
-|---------|---------|
-| 1.3.0 | `Bun.serve()` HTTP/3, Image API, warm install 7x |
-| 1.3.10 | REPL Zig rewrite, Windows ARM64, TC39 decorator |
-| 1.3.12 | `Bun.WebView`, `Bun.cron()`, Markdown-to-ANSI |
+| Version | Notable                                          |
+| ------- | ------------------------------------------------ |
+| 1.3.0   | `Bun.serve()` HTTP/3, Image API, warm install 7x |
+| 1.3.10  | REPL Zig rewrite, Windows ARM64, TC39 decorator  |
+| 1.3.12  | `Bun.WebView`, `Bun.cron()`, Markdown-to-ANSI    |
 
 ## Bun Workspace (monorepo)
 
@@ -34,11 +34,11 @@ Not choosing Turborepo or Nx: Bun workspace + `bun test` is fast enough. Extra c
 
 ## Bun + wrangler compatibility
 
-| Scenario | Result |
-|----------|--------|
+| Scenario               | Result                                                   |
+| ---------------------- | -------------------------------------------------------- |
 | `bunx wrangler deploy` | Works on Linux and Mac. Windows has an issue (bun#10464) |
-| `bunx wrangler dev` | Mostly usable. DO hang fixed (bun#16240) |
-| CI/CD | Use Node.js |
+| `bunx wrangler dev`    | Mostly usable. DO hang fixed (bun#16240)                 |
+| CI/CD                  | Use Node.js                                              |
 
 Sources: bun#10464, bun#16240, workers-sdk#9699
 

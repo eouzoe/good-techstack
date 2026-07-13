@@ -5,7 +5,7 @@ alias d := dev
 
 # 啟動所有 dev server（backend + frontend）
 dev:
-    devenv process up
+    devenv processes up
 
 # 執行 oxlint
 lint:
