@@ -9,18 +9,23 @@ APP_NAME="${1:-my-app}"
 # 0. prerequisites
 command -v curl >/dev/null 2>&1 || { echo "error: curl is required"; exit 1; }
 command -v tar  >/dev/null 2>&1 || { echo "error: tar is required";  exit 1; }
+command -v mktemp >/dev/null 2>&1 || { echo "error: mktemp is required"; exit 1; }
 
 echo ""
 echo "  good-techstack"
 echo "  One command to start. A conversation to build."
 echo ""
 
-# 1-2. download good-techstack
+# 1-2. download good-techstack into a safe temp dir
+GTS_TMP=$(mktemp -d /tmp/gts.XXXXXXXX) || { echo "error: failed to create temp dir"; exit 1; }
+trap 'rm -rf "$GTS_TMP"' EXIT
+
 echo "  -> Downloading good-techstack ..."
-curl -fsSL "https://github.com/${REPO_OWNER}/good-techstack/archive/refs/heads/main.tar.gz" -o /tmp/gts.tar.gz
-tar xzf /tmp/gts.tar.gz
-rm -f /tmp/gts.tar.gz
-mv good-techstack-main "${APP_NAME}"
+curl -fsSL "https://github.com/${REPO_OWNER}/good-techstack/archive/refs/heads/main.tar.gz" \
+  -o "$GTS_TMP/repo.tar.gz"
+
+mkdir -p "${APP_NAME}"
+tar xzf "$GTS_TMP/repo.tar.gz" --strip-components=1 -C "${APP_NAME}"
 cd "${APP_NAME}"
 
 # 3. install Nix (official installer; non-interactive pipe form)
@@ -36,7 +41,7 @@ fi
 # 4. early-install devenv (it auto-pulls zsh + just via devenv.nix;
 #    libghostty wires up the zsh shell integration — no manual hook needed)
 echo "  -> Installing devenv ..."
-nix profile install nixpkgs#devenv
+nix profile add nixpkgs#devenv
 
 # ensure the nix profile bin (where `devenv` now lives) is on PATH,
 # whether nix was just installed above or already present
