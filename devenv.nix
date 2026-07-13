@@ -59,12 +59,12 @@ in
   enterTest = ''
     bun install
     oxlint --type-aware
-    tsc --noEmit
+    bunx tsc --noEmit
   '';
 
   scripts = {
     lint.exec = "oxlint --type-aware";
-    typecheck.exec = "tsc --noEmit";
+    typecheck.exec = "bunx tsc --noEmit";
     test.exec = "bun test";
   };
 
@@ -74,7 +74,7 @@ in
       exec = "bunx wrangler dev";
       cwd = "./apps/backend";
       after = [ "db:migrate@succeeded" ];
-      ready.http.get = { port = 8787; path = "/"; };
+      ready.http.get = { port = 8787; path = "/health"; };
     };
     # long-running frontend dev server; waits for backend to be ready
     frontend = {

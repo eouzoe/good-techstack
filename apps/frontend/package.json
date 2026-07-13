@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bunx rsbuild dev",
-    "build": "bunx rsbuild build"
+    "dev": "rsbuild dev",
+    "build": "rsbuild build"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.168.27",
@@ -15,8 +15,10 @@
   },
   "devDependencies": {
     "@rsbuild/core": "^2.1.5",
-    "@rsbuild/plugin-react": "^2.1.5",
+    "@rsbuild/plugin-react": "^2.1.0",
+    "@types/node": "^22",
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "typescript": "^7.0.2"
   }
 }

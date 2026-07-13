@@ -33,3 +33,10 @@ result-*
 
 # ── TypeScript ──
 *.tsbuildinfo
+
+# ── Generated (TanStack Router) ──
+apps/frontend/src/routeTree.gen.ts
+.tanstack/
+
+# ── Agent instructions (not committed) ──
+AGENTS.md
