@@ -1,6 +1,17 @@
-{ pkgs, config, lib, ... }: {
+{ pkgs, config, lib, ... }:
+
+{
+  # No custom overlays — Bun is provided by the native module below.
+  # Previously: a manual stdenv.mkDerivation overlay that conflicted
+  # with languages.javascript.bun.enable, broke bun PATH in enterShell,
+  # and forced Nix to evaluate 2172 files + download build deps (gcc,
+  # python3, perl) unnecessarily.
+
   languages.javascript.bun.enable = true;
   languages.javascript.bun.install.enable = true;
+  # languages.javascript.bun.package defaults to pkgs.bun from
+  # nixpkgs-unstable (currently 1.3.13).  Bump nixpkgs input in
+  # devenv.yaml instead of adding an overlay.
 
   packages = with pkgs; [
     bun
@@ -13,7 +24,7 @@
     git curl jq
     nushell
   ];
-  # Removed: nodejs_22            (js module → nodejs-slim)
+  # Removed: nodejs_22            (handled by js module → nodejs-slim)
   #          typescript            (bunx tsc)
   #          typescript-language-server  (js LSP module)
 
