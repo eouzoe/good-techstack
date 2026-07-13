@@ -15,37 +15,37 @@ How to deploy to Cloudflare Workers.
 ### 1. Generate binding types
 
 ```bash
-bunx wrangler types
+devenv shell -- bunx wrangler types
 ```
 
 ### 2. Type check
 
 ```bash
-tsc --noEmit
+just typecheck        # devenv shell -- tsc --noEmit
 ```
 
 ### 3. Lint
 
 ```bash
-oxlint --type-aware
+just lint              # devenv shell -- oxlint --type-aware
 ```
 
 ### 4. Run integration tests
 
 ```bash
-vitest run
+devenv shell -- vitest run
 ```
 
 ### 5. Deploy
 
 ```bash
-bunx wrangler deploy
+just deploy             # devenv shell -- bunx wrangler deploy
 ```
 
 ### 6. Verify production
 
 ```bash
-bunx wrangler tail
+devenv shell -- bunx wrangler tail
 ```
 
 Use Cloudflare Observability MCP to check error rate and latency after deployment.

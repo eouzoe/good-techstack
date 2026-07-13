@@ -1,54 +1,77 @@
-import { os } from '@orpc/server'
-import { listItems, getItem, createItem, deleteItem, itemRouter } from './contract'
+import { eq, desc } from "drizzle-orm";
+import { os } from "@orpc/server";
+import { listItems, getItem, createItem, deleteItem, itemRouter } from "./contract";
+import { items } from "./db/schema";
+import type { Database } from "./db";
 
 function genId(): string {
-  return crypto.randomUUID()
+  return crypto.randomUUID();
 }
 
 function now(): string {
-  return new Date().toISOString()
+  return new Date().toISOString();
 }
 
-function mapRow(row: any) {
+function mapRow(row: typeof items.$inferSelect) {
   return {
     id: row.id,
-    userId: row.user_id,
+    userId: row.userId,
     title: row.title,
     content: row.content ?? undefined,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
-  }
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+  };
 }
+
+type Ctx = { db: Database; user?: { id: string } };
 
 export const itemHandler = os.router({
   listItems: listItems.handler(async ({ context }) => {
-    const { db, user } = context as { db: D1Database; user?: { id: string } }
-    if (!user) return []
-    const stmt = db.prepare('SELECT * FROM items WHERE user_id = ? ORDER BY created_at DESC')
-    const rows = stmt.all(user.id) as any[]
-    return rows.map(mapRow)
+    const { db, user } = context as Ctx;
+    if (!user) return [];
+    const rows = await db
+      .select()
+      .from(items)
+      .where(eq(items.userId, user.id))
+      .orderBy(desc(items.createdAt))
+      .all();
+    return rows.map(mapRow);
   }),
 
   getItem: getItem.handler(async ({ input, context }) => {
-    const { db } = context as { db: D1Database }
-    const stmt = db.prepare('SELECT * FROM items WHERE id = ?')
-    const row = stmt.first(input.id) as any | null
-    return row ? mapRow(row) : null
+    const { db } = context as Ctx;
+    const row = await db.select().from(items).where(eq(items.id, input.id)).limit(1).get();
+    return row ? mapRow(row) : null;
   }),
 
   createItem: createItem.handler(async ({ input, context }) => {
-    const { db, user } = context as { db: D1Database; user?: { id: string } }
-    if (!user) throw new Error('Unauthorized')
-    const id = genId()
-    const ts = now()
-    db.prepare(
-      'INSERT INTO items (id, user_id, title, content, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)'
-    ).run(id, user.id, input.title, input.content ?? null, ts, ts)
-    return { id, userId: user.id, title: input.title, content: input.content, createdAt: ts, updatedAt: ts }
+    const { db, user } = context as Ctx;
+    if (!user) throw new Error("Unauthorized");
+    const id = genId();
+    const ts = now();
+    await db
+      .insert(items)
+      .values({
+        id,
+        userId: user.id,
+        title: input.title,
+        content: input.content ?? null,
+        createdAt: ts,
+        updatedAt: ts,
+      })
+      .run();
+    return {
+      id,
+      userId: user.id,
+      title: input.title,
+      content: input.content,
+      createdAt: ts,
+      updatedAt: ts,
+    };
   }),
 
   deleteItem: deleteItem.handler(async ({ input, context }) => {
-    const { db } = context as { db: D1Database }
-    db.prepare('DELETE FROM items WHERE id = ?').run(input.id)
+    const { db } = context as Ctx;
+    await db.delete(items).where(eq(items.id, input.id)).run();
   }),
-})
+});

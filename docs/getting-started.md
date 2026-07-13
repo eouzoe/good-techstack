@@ -7,7 +7,7 @@ Good-techstack is an opinionated full-stack template for shipping products fast.
 ## Quick Start
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | bash
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
 ```
 
 This downloads the stack and an AI agent, then guides you through setup, product discovery, code generation, and deployment.
@@ -16,16 +16,16 @@ This downloads the stack and an AI agent, then guides you through setup, product
 
 ## Reading Guide
 
-| If you want to... | Start here |
-|---|---|
-| Understand the architecture and tech choices | `reference/design-decisions.md` |
-| Set up your local development environment | `guide/development.md` |
-| Deploy to production | `guide/deployment.md` |
-| Write and run tests | `guide/testing.md` |
+| If you want to...                                | Start here                            |
+| ------------------------------------------------ | ------------------------------------- |
+| Understand the architecture and tech choices     | `reference/design-decisions.md`       |
+| Set up your local development environment        | `guide/development.md`                |
+| Deploy to production                             | `guide/deployment.md`                 |
+| Write and run tests                              | `guide/testing.md`                    |
 | Understand a specific layer (Bun, API, DB, etc.) | `reference/` (pick the relevant file) |
-| Set up the AI agent | `agent/rules.md` |
-| Scaffold a new feature | `agent/scaffolding.md` |
-| Contribute to the project | `contributing.md` |
+| Set up the AI agent                              | `agent/rules.md`                      |
+| Scaffold a new feature                           | `agent/scaffolding.md`                |
+| Contribute to the project                        | `contributing.md`                     |
 
 ---
 
@@ -54,24 +54,24 @@ docs/
     scaffolding.md
     mcp-reference.md
   contributing.md
-  changelog.md
+  CHANGELOG/
 ```
 
 ---
 
 ## The Stack
 
-| Layer | Technology |
-|---|---|
-| Runtime | Bun |
-| API | Hono + oRPC |
-| Database | D1 (SQLite) + Drizzle ORM |
-| Auth | better-auth |
-| Frontend | TanStack Start (React) |
-| UI | shadcn/ui |
-| Schemas | Zod |
-| Linting | oxlint |
-| Infrastructure | Cloudflare Workers |
-| Environment | Nix |
+| Layer          | Technology                |
+| -------------- | ------------------------- |
+| Runtime        | Bun                       |
+| API            | Hono + oRPC               |
+| Database       | D1 (SQLite) + Drizzle ORM |
+| Auth           | better-auth               |
+| Frontend       | TanStack Start (React)    |
+| UI             | shadcn/ui                 |
+| Schemas        | Zod                       |
+| Linting        | oxlint                    |
+| Infrastructure | Cloudflare Workers        |
+| Environment    | Nix                       |
 
 All type-safe. All tested. All deployed to the edge.

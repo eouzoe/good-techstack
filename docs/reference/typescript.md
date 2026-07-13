@@ -27,16 +27,16 @@ These flags eliminate entire categories of runtime errors at compile time. Do no
 ### Prefer Zod inference over manual types
 
 ```typescript
-const UserSchema = z.object({ id: z.string(), name: z.string() })
-type User = z.infer<typeof UserSchema>  // ✓
+const UserSchema = z.object({ id: z.string(), name: z.string() });
+type User = z.infer<typeof UserSchema>; // ✓
 // type User = { id: string; name: string }  // ✗ manually maintained
 ```
 
 ### Use branded types for IDs
 
 ```typescript
-type UserId = string & { readonly __brand: 'UserId' }
-type PostId = string & { readonly __brand: 'PostId' }
+type UserId = string & { readonly __brand: "UserId" };
+type PostId = string & { readonly __brand: "PostId" };
 ```
 
 This prevents passing the wrong ID to a function at compile time.
@@ -44,15 +44,15 @@ This prevents passing the wrong ID to a function at compile time.
 ### Prefer `const` assertions for literals
 
 ```typescript
-const ROLES = ['admin', 'user'] as const
-type Role = (typeof ROLES)[number]
+const ROLES = ["admin", "user"] as const;
+type Role = (typeof ROLES)[number];
 ```
 
 ### Handle `unknown` explicitly
 
 ```typescript
 function safeParse(input: unknown): Result {
-  const parsed = UserSchema.safeParse(input)
+  const parsed = UserSchema.safeParse(input);
   // never cast with `as` when parsing external data
 }
 ```
@@ -77,7 +77,7 @@ This can cause unexpected output paths. Set it explicitly to `"src"`.
 
 ### `tsc` vs `bun` for type checking
 
-`bun` does not type-check. Use `tsc --noEmit` for type checking, `bun` for execution.
+`bun` does not type-check. Use `devenv shell -- tsc --noEmit` for type checking, `bun` for execution.
 
 ### No compiler API in the current TypeScript
 
@@ -91,4 +91,4 @@ Check the current TypeScript version:
 npm view typescript version
 ```
 
-If upgrading TypeScript, update `tsconfig.json` to account for any new defaults or removed flags. Verify with `tsc --noEmit` before committing.
+If upgrading TypeScript, update `tsconfig.json` to account for any new defaults or removed flags. Verify with `devenv shell -- tsc --noEmit` before committing.

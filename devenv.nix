@@ -30,26 +30,54 @@ in
   languages.javascript.bun.install.enable = true;
 
   packages = with pkgs; [
+    zsh
+    just
     nodejs_22
     oxlint
+    oxfmt
     wrangler
-    nodePackages.typescript
-    nodePackages.typescript-language-server
-    nodePackages.prettier
+    typescript
+    typescript-language-server
+    prettier
     git curl jq
+    nushell
   ];
 
-  dotenv.enable = true;
+  # devenv's own binary cache — devenv handles the substituter + key.
+  cachix.pull = [ "devenv" ];
+
+  git-hooks.hooks = {
+    oxlint.enable = true;
+    oxfmt.enable = true;
+    prettier.enable = true;
+  };
+
+  # secretspec.enable is read-only in devenv — it auto-activates (true)
+  # when secretspec.toml secrets are loaded by the devenv CLI.
+  # NEVER set it manually (read-only + conflicts with the module default).
+  dotenv.enable = false;
+
+  enterTest = ''
+    bun install
+    oxlint --type-aware
+    bunx tsc --noEmit
+  '';
 
   scripts = {
-    lint.exec = "bunx oxlint";
+    lint.exec = "oxlint --type-aware";
     typecheck.exec = "bunx tsc --noEmit";
     test.exec = "bun test";
   };
 
   processes = {
-    backend.exec = "bun run --cwd apps/backend dev";
-    frontend.exec = "bun run --cwd apps/frontend dev";
+    backend = {
+      exec = "bunx wrangler dev";
+      cwd = "./apps/backend";
+    };
+    frontend = {
+      exec = "bunx rsbuild dev";
+      cwd = "./apps/frontend";
+    };
   };
 
   claude.code.mcpServers = {
@@ -63,6 +91,44 @@ in
     };
   };
 
+  claude.code.commands = {
+    dev = {
+      cmd = "devenv shell -- just dev";
+      description = "Start all development servers";
+    };
+    lint = {
+      cmd = "devenv shell -- just lint";
+      description = "Run oxlint on the codebase";
+    };
+    typecheck = {
+      cmd = "devenv shell -- just typecheck";
+      description = "Run TypeScript type checking";
+    };
+    test = {
+      cmd = "devenv shell -- just test";
+      description = "Run the test suite";
+    };
+  };
+
+  claude.code.agents = {
+    infra = {
+      description = "Infrastructure and deployment specialist";
+      mcpServers = [
+        "cloudflare-api"
+        "cloudflare-bindings"
+        "cloudflare-observability"
+      ];
+    };
+  };
+
+  claude.code.hooks = {
+    preRead = ''
+      echo "[devenv hook] Reading config from $DEVENV_ROOT"
+    '';
+    preCommand = ''
+      echo "[devenv hook] Running inside devenv environment"
+    '';
+  };
   enterShell = ''
     echo "┌─────────────────────────────────────┐"
     echo "│  good-techstack dev environment      │"

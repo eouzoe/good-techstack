@@ -58,7 +58,7 @@ Guide them to create an API token:
 
 ## Step 3 — Finish setup
 
-Run: `bash bootstrap.sh`
+Run: `sh scripts/start.sh`
 
 This installs the toolchain (Bun, Node, linter) and JS dependencies. It may take a minute.
 
@@ -107,13 +107,13 @@ Follow the scaffold protocol's Phase 3 exactly. Generate files in this order:
 4. Frontend pages (stubs) → `apps/frontend/src/routes/`
 5. Auth roles → `apps/backend/src/auth/roles.ts`
 
-After each step, run `bunx tsc --noEmit`. If it passes, continue. If it fails, fix before proceeding.
+After each step, run `devenv shell -- tsc --noEmit`. If it passes, continue. If it fails, fix before proceeding.
 
 ---
 
 ## Step 8 — Final verification
 
-Run: `bun test --filter "smoke|contract"`
+Run: `devenv shell -- bun test --filter "smoke|contract"`
 
 If tests pass, present the file tree to the user:
 
@@ -126,14 +126,14 @@ apps/frontend/src/     → 4 page stubs
 
 Ask: "This is your product scaffold. Shall I deploy it?"
 
-Only deploy if the user confirms. Use `bunx wrangler deploy` for the backend.
+Only deploy if the user confirms. Use `devenv shell -- bunx wrangler deploy` for the backend.
 
 ---
 
 ## Rules
 
 1. **Never generate code without entity map confirmation.** The user must type "I confirm" first.
-2. **Never skip verification.** Always run `tsc --noEmit` after code generation.
+2. **Never skip verification.** Always run `devenv shell -- tsc --noEmit` after code generation.
 3. **If a step fails, explain the problem before trying to fix it.**
 4. **Do not assume the user knows technical terms.** Explain as you go.
 5. **If you cannot complete a step after 3 attempts, stop and ask for human help.**

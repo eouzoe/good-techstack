@@ -51,7 +51,7 @@ If you are starting without the bootstrap prompt (user already has the stack):
 ## 6. Documentation update discipline
 
 - Before changing a file: read `docs/getting-started.md` for context.
-- After changing: update the version number in `docs/agent/versions.toml`, then write to `docs/changelog.md`.
+- After changing: update the version number in `docs/agent/versions.toml`, then write to `CHANGELOG/`. Create `CHANGELOG/YYYY-MM-DD-slug.md`.
 - Do not modify files outside this project for synchronisation purposes.
 
 ## 7. Security
@@ -59,3 +59,5 @@ If you are starting without the bootstrap prompt (user already has the stack):
 - Never output API tokens, keys, or passwords anywhere.
 - Reference tokens using the file variable syntax `{file:~/.cloudflare/mcp-token}`, never by value.
 - CI secrets are injected through GitHub Secrets. Do not write them in code or documentation.
+- Before reading or writing any secret: read `secretspec.toml` first to confirm the key exists.
+- Use `secretspec run -- <cmd>` to inject secrets into a command. Do not pass secrets via `--env` flags.

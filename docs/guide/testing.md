@@ -6,8 +6,8 @@ How to write and run tests in this project.
 
 ## Pre-execution Checklist
 
-- [ ] `nix develop` has been run (toolchain is consistent)
-- [ ] `bun install` is up to date
+- [ ] `devenv shell` has been entered (toolchain is consistent)
+- [ ] `devenv shell -- bun install` is up to date
 - [ ] Current working directory is the project root
 
 ## Test Layers
@@ -17,7 +17,7 @@ How to write and run tests in this project.
 Schemas compile, bindings are reachable, application boots.
 
 ```bash
-bun test --filter "smoke"
+devenv shell -- bun test --filter "smoke"
 ```
 
 ### L2: Unit — `bun test` (`*.unit.test.ts`)
@@ -25,7 +25,7 @@ bun test --filter "smoke"
 Pure function correctness, business logic edge cases.
 
 ```bash
-bun test --filter "unit"
+devenv shell -- bun test --filter "unit"
 ```
 
 ### L3: Contract — `bun test` (`*.contract.test.ts`)
@@ -33,7 +33,7 @@ bun test --filter "unit"
 oRPC contract input/output consistency, Zod schema compile checks.
 
 ```bash
-bun test --filter "contract"
+devenv shell -- bun test --filter "contract"
 ```
 
 ### L4: Property — `bun test` (`*.property.test.ts`)
@@ -41,7 +41,7 @@ bun test --filter "contract"
 fast-check fuzzing, serialise/deserialise round-trips.
 
 ```bash
-bun test --filter "property"
+devenv shell -- bun test --filter "property"
 ```
 
 ### L5: Integration — `vitest run` (`*.integration.test.ts`)
@@ -49,7 +49,7 @@ bun test --filter "property"
 D1, R2, KV, DO binding correctness running on workerd.
 
 ```bash
-vitest run
+devenv shell -- vitest run
 ```
 
 ### L6: E2E — `playwright` (`e2e/*.spec.ts`)
@@ -58,13 +58,13 @@ Happy path (register → create resource → logout), auth flow, security header
 
 ```bash
 # Terminal 1: start the dev server
-bunx wrangler dev --persist-to .wrangler/state &
+devenv shell -- bunx wrangler dev --persist-to .wrangler/state &
 
 # Wait for the server to be ready
 sleep 5
 
 # Terminal 2: run E2E tests
-bunx playwright test
+devenv shell -- bunx playwright test
 ```
 
 ### L7: Production verification
@@ -72,7 +72,7 @@ bunx playwright test
 Monitor error rate and p99 latency after deployment.
 
 ```bash
-bunx wrangler tail
+devenv shell -- bunx wrangler tail
 ```
 
 ## CI Gate
@@ -80,19 +80,19 @@ bunx wrangler tail
 Pull requests must pass:
 
 ```
-oxlint --type-aware
-  → tsc --noEmit
-  → bun test (unit | contract | property)
-  → vitest run (integration)
+just lint             # oxlint --type-aware
+  → just typecheck     # tsc --noEmit
+  → just test         # bun test (unit | contract | property)
+  → devenv shell -- vitest run (integration)
   → Pass → merge
 ```
 
 ## Coverage Targets
 
-| Layer | Target |
-|-------|--------|
-| API routes | 100% (≥1 contract test per route) |
-| DB queries | ≥1 integration test per query |
-| Zod schemas | ≥1 smoke + ≥1 property test |
-| Auth flow | 3 tests (register, login, logout) |
-| Middleware | ≥1 unit test per middleware |
+| Layer       | Target                            |
+| ----------- | --------------------------------- |
+| API routes  | 100% (≥1 contract test per route) |
+| DB queries  | ≥1 integration test per query     |
+| Zod schemas | ≥1 smoke + ≥1 property test       |
+| Auth flow   | 3 tests (register, login, logout) |
+| Middleware  | ≥1 unit test per middleware       |

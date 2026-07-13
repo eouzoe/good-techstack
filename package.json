@@ -3,5 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "workspaces": ["apps/*", "packages/*"]
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
 }

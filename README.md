@@ -5,7 +5,7 @@
 Your product idea. One command. Shipped.
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | bash
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
 ```
 
 ---
@@ -66,17 +66,17 @@ This is what happens when the agent understands the full stack.
 
 ## What you get
 
-| What | You get |
-|------|---------|
-| Runtime | Bun — fast enough that cold starts are not a thing |
-| API | Hono + oRPC — type-safe from frontend to database |
-| Database | D1 — SQLite at the edge, zero management |
-| Auth | better-auth — email, OAuth, SSO, all included |
-| Frontend | TanStack Start — React, fast, type-safe |
-| UI | shadcn/ui — components that look good and work |
-| Linter | oxlint — hundreds of rules, finishes before you notice |
-| Deployment | Cloudflare Workers — free until you grow |
-| Environment | Nix — one command, identical setup for everyone |
+| What        | You get                                                      |
+| ----------- | ------------------------------------------------------------ |
+| Runtime     | Bun — fast enough that cold starts are not a thing           |
+| API         | Hono + oRPC — type-safe from frontend to database            |
+| Database    | D1 — SQLite at the edge, zero management                     |
+| Auth        | better-auth — email, OAuth, SSO, all included                |
+| Frontend    | TanStack Start — React, fast, type-safe                      |
+| UI          | shadcn/ui — components that look good and work               |
+| Linter      | oxlint — hundreds of rules, finishes before you notice       |
+| Deployment  | Cloudflare Workers — free until you grow                     |
+| Environment | Devenv 2.x + Nix — one command, identical setup for everyone |
 
 All tested. All type-safe. All deployed to the edge.
 
@@ -103,18 +103,35 @@ You write your business logic. The stack handles the rest.
 ## Start
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | bash
+curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
 ```
 
-This command:
+This one command does the heavy lifting:
 
-1. Downloads good-techstack and an AI agent (if you do not have one)
-2. Starts the agent
-3. The agent guides you through Cloudflare account creation
-4. Sets up the development environment
-5. Discovers your product idea through conversation
-6. Generates the code — schemas, database, API, frontend
-7. Deploys it
+1. Downloads good-techstack
+2. Installs Nix (if missing)
+3. Installs devenv — which auto-pulls `zsh` + `just` for you via libghostty
+4. Bootstraps the development environment (traced from the first devenv call)
+
+Then finish with the steps below — copy the whole block and run it:
+
+```bash
+# 1. Trust this project so `devenv shell` activates without prompts
+devenv allow
+
+# 2. SecretSpec — install the CLI once, then set every key from secretspec.toml
+curl -fsSL https://secretspec.dev/install.sh | sh
+devenv shell -- secretspec init
+devenv shell -- secretspec secret set DATABASE_URL "postgres://..."
+devenv shell -- secretspec secret set SESSION_SECRET "..."
+
+# 3. Start your AI agent (Claude Code / Codex / OpenCode)
+devenv shell -- claude --print "$(cat docs/agent/bootstrap-prompt.md)" .
+# devenv shell -- codex  --prompt "$(cat docs/agent/bootstrap-prompt.md)" .
+# devenv shell -- opencode --prompt "$(cat docs/agent/bootstrap-prompt.md)" .
+```
+
+(Optional) For auto-activation on `cd` into the project, add `eval "$(devenv hook zsh)"` to your `~/.zshrc` (or `bash`/`fish`/`nu`). devenv replaces direnv — no `.envrc` needed.
 
 You only need two things: **a computer with internet** and **a product idea**.
 

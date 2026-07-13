@@ -7,48 +7,48 @@ Daily development workflow, commands, and conventions.
 ## Prerequisites
 
 ```bash
-nix develop       # Enter the Nix development shell
-bun install        # Install JavaScript dependencies
+devenv shell        # Enter the development environment
+devenv shell -- bun install   # Install JavaScript dependencies
 ```
 
 ## Dev Server
 
 ```bash
-bun run dev        # Start the HMR development server
+just dev             # Start backend + frontend dev servers
 ```
 
 ## Type Checking
 
 ```bash
-tsc --noEmit       # TypeScript type checking (bun does not type-check)
+just typecheck      # devenv shell -- tsc --noEmit
 ```
 
 ## Linting
 
 ```bash
-oxlint --type-aware
+just lint            # devenv shell -- oxlint --type-aware
 ```
 
 ## Testing
 
 ```bash
-bun test                # Unit, contract, and property tests
-bun test --watch        # TDD mode
-vitest run              # Integration tests (workerd)
-bunx playwright test    # E2E tests (requires wrangler dev)
+just test            # devenv shell -- bun test
+devenv shell -- bun test --watch   # TDD mode
+devenv shell -- vitest run         # Integration tests (workerd)
+devenv shell -- bunx playwright test   # E2E tests (requires wrangler dev)
 ```
 
 ## Database
 
 ```bash
-bunx wrangler d1 migrations create <name>    # Create a new migration
-bunx wrangler d1 migrations apply <name>     # Apply migrations locally
+devenv shell -- bunx wrangler d1 migrations create <name>    # Create a new migration
+devenv shell -- bunx wrangler d1 migrations apply <name>     # Apply migrations locally
 ```
 
 ## Binding Types
 
 ```bash
-bunx wrangler types     # Generate TypeScript types for Cloudflare bindings
+devenv shell -- bunx wrangler types     # Generate TypeScript types for Cloudflare bindings
 ```
 
 ## Full CI Gate
@@ -56,8 +56,8 @@ bunx wrangler types     # Generate TypeScript types for Cloudflare bindings
 Before pushing, run the same checks CI will run:
 
 ```bash
-oxlint --type-aware
-tsc --noEmit
-bun test
-vitest run
+just lint             # oxlint --type-aware
+just typecheck        # tsc --noEmit
+just test             # bun test
+devenv shell -- vitest run
 ```
