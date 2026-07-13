@@ -24,17 +24,35 @@ just typecheck     # tsc --noEmit
 
 ---
 
+## Version maintenance
+
+All tool and library versions live in the lockfiles, not in a hand-written list. To check for outdated dependencies:
+
+```bash
+just check-versions
+```
+
+This compares every direct dependency (declared in a `package.json`) against the latest version on npm. Full detail — including the version-less package list and how to check non-npm packages (node, devenv, nix, secretspec) — is in [`docs/guide/version-check.md`](docs/guide/version-check.md). The Traditional Chinese version is [`docs/guide/version-check.zh.md`](docs/guide/version-check.zh.md).
+
+If a dependency is outdated, report it (see the good first issue below). A maintainer bumps the version, syncs `bun.lock` / `flake.lock`, runs the tests, and merges. You do not need to build or test anything.
+
+---
+
 ## Good First Issues
 
 These are tasks suitable for first-time contributors. They require minimal context and have clear success criteria. Check the [GitHub issues](https://github.com/eouzoe/good-techstack/issues) for the latest list.
 
 ### Beginner
 
-**Version consistency checker**
+**Report an outdated dependency (no code required)**
 
-Write a script that reads `docs/agent/versions.toml` and compares each documented version against the latest published version. Can be run manually or as a weekly GitHub Action.
+Run `just check-versions`. If it reports an outdated **DIRECT** dependency, or you notice a non-npm package has a newer release, open an issue that says which package, the latest version, and the link you checked. Full steps and the package list: [`docs/guide/version-check.md`](docs/guide/version-check.md) (中文: [`docs/guide/version-check.zh.md`](docs/guide/version-check.zh.md)). Maintainers handle the bump and the tests.
 
-**Files:** `scripts/check-versions.ts`, `.github/workflows/version-check.yml`
+**Version consistency checker (improve the existing script)**
+
+A script already exists at `scripts/check-versions.mjs` and runs via `just check-versions`. Improve it — for example, add a weekly GitHub Action (`.github/workflows/version-check.yml`) that runs it and opens an issue when something is outdated.
+
+**Files:** `scripts/check-versions.mjs`, `.github/workflows/version-check.yml`
 
 ---
 
@@ -84,7 +102,7 @@ Some contributions span the entire stack and cannot be reduced to a single issue
 
 **Ongoing maintenance:**
 
-- Monthly version audit: check all documented versions against latest, update `versions.toml` and reference docs
+- Monthly version audit: run `just check-versions`, then sync `bun.lock` / `flake.lock` and update reference docs
 - Translate documentation from English to Chinese
 
 **Infrastructure:**
