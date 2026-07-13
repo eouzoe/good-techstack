@@ -1,49 +1,44 @@
 { pkgs, config, lib, ... }:
 
 let
-  isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
+  arch = if pkgs.stdenv.hostPlatform.isAarch64 then "aarch64" else "x64";
+  bun_1_3_14 = pkgs.runCommandNoCC "bun-1.3.14" {
+    src = pkgs.fetchurl {
+      url = "https://github.com/oven-sh/bun/releases/download/bun-v1.3.14/bun-linux-${arch}.zip";
+      sha256 = if pkgs.stdenv.hostPlatform.isAarch64
+        then "a27ffb63a8310375836e0d6f668ae17fa8d8d18b88c37c821c65331973a19a3b"
+        else "951ee2aee855f08595aeec6225226a298d3fea83a3dcd6465c09cbccdf7e848f";
+    };
+    nativeBuildInputs = [ pkgs.unzip ];
+  } ''
+    unzip -j $src 'bun-linux-${arch}/bun' -d $out/bin
+    chmod +x $out/bin/bun
+  '';
 in
 {
-  overlays = [
-    (final: prev: {
-      bun = prev.stdenv.mkDerivation {
-        pname = "bun";
-        version = "1.3.14";
-        src = prev.fetchurl {
-          url = "https://github.com/oven-sh/bun/releases/download/bun-v1.3.14/bun-linux-${if prev.stdenv.hostPlatform.isAarch64 then "aarch64" else "x64"}.zip";
-          sha256 = if prev.stdenv.hostPlatform.isAarch64
-            then "a27ffb63a8310375836e0d6f668ae17fa8d8d18b88c37c821c65331973a19a3b"
-            else "951ee2aee855f08595aeec6225226a298d3fea83a3dcd6465c09cbccdf7e848f";
-        };
-        nativeBuildInputs = [ prev.unzip ];
-        installPhase = ''
-          mkdir -p $out/bin
-          cp bun-linux-*/bun $out/bin/bun
-          chmod +x $out/bin/bun
-        '';
-        meta.mainProgram = "bun";
-      };
-    })
-  ];
+  # No custom overlays — Bun is defined as a standalone package via
+  # runCommandNoCC above (no gcc/python3/perl build deps).
+  # Previously a stdenv.mkDerivation overlay conflicted with the js
+  # module and polluted PATH in enterShell.
 
   languages.javascript.bun.enable = true;
+  languages.javascript.bun.package = bun_1_3_14;
   languages.javascript.bun.install.enable = true;
 
   packages = with pkgs; [
     zsh
     just
-    nodejs_22
     oxlint
     oxfmt
     wrangler
-    typescript
-    typescript-language-server
     prettier
     git curl jq
     nushell
   ];
+  # Removed: nodejs_22            (js module → nodejs-slim)
+  #          typescript            (bunx tsc)
+  #          typescript-language-server  (js LSP module)
 
-  # devenv's own binary cache — devenv handles the substituter + key.
   cachix.pull = [ "devenv" ];
 
   git-hooks.hooks = {
@@ -52,20 +47,19 @@ in
     prettier.enable = true;
   };
 
-  # secretspec.enable is read-only in devenv — it auto-activates (true)
-  # when secretspec.toml secrets are loaded by the devenv CLI.
-  # NEVER set it manually (read-only + conflicts with the module default).
   dotenv.enable = false;
 
   enterTest = ''
     bun install
+    (cd apps/backend && bunx wrangler types)
     oxlint --type-aware
     bunx tsc -p apps/backend --noEmit
   '';
 
   scripts = {
+    "generate-types".exec = "cd apps/backend && bunx wrangler types";
     lint.exec = "oxlint --type-aware";
-    typecheck.exec = "bunx tsc --noEmit";
+    typecheck.exec = "cd apps/backend && bunx wrangler types && bunx tsc --noEmit";
     test.exec = "bun test";
   };
 
