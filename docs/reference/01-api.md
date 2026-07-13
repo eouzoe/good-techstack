@@ -11,19 +11,19 @@
 Bun detects the `fetch` export automatically and calls `Bun.serve()`:
 
 ```ts
-import { Hono } from 'hono'
-const app = new Hono()
-app.get('/', (c) => c.text('Hello'))
-export default app
+import { Hono } from "hono";
+const app = new Hono();
+app.get("/", (c) => c.text("Hello"));
+export default app;
 ```
 
 ### Routers
 
-| Router | Speed | Use case |
-|--------|:-----:|----------|
-| RegExpRouter | Fastest | Static route set |
-| LinearRouter | Second | Per-request initialisation (ISR) |
-| SmartRouter | Auto | Default, picks the best |
+| Router       |  Speed  | Use case                         |
+| ------------ | :-----: | -------------------------------- |
+| RegExpRouter | Fastest | Static route set                 |
+| LinearRouter | Second  | Per-request initialisation (ISR) |
+| SmartRouter  |  Auto   | Default, picks the best          |
 
 ## oRPC — Contract-first RPC
 
@@ -43,12 +43,12 @@ export default app
 const getPost = os
   .use(dbProvider)
   .use(requireAuth)
-  .route({ method: 'GET', path: '/post/{id}' })
+  .route({ method: "GET", path: "/post/{id}" })
   .input(z.object({ id: z.string() }))
   .errors({ NOT_FOUND: { data: z.object({ id: z.string() }) } })
   .handler(async ({ input, context }) => {
     // context.user is typed
-  })
+  });
 ```
 
 ## Official docs

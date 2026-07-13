@@ -25,13 +25,13 @@ Non-breaking, additive to v1.x.
 ### Rsbuild configuration
 
 ```ts
-import { defineConfig } from '@rsbuild/core'
-import { pluginReact } from '@rsbuild/plugin-react'
-import { tanstackStart } from '@tanstack/react-start/plugin/rsbuild'
+import { defineConfig } from "@rsbuild/core";
+import { pluginReact } from "@rsbuild/plugin-react";
+import { tanstackStart } from "@tanstack/react-start/plugin/rsbuild";
 
 export default defineConfig({
   plugins: [pluginReact(), tanstackStart()],
-})
+});
 ```
 
 ## shadcn/ui (Base UI)
