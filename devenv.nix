@@ -70,25 +70,14 @@ in
   };
 
   processes = {
-    # long-running backend dev server; waits for D1 migrations to succeed
     backend = {
       exec = "bunx wrangler dev";
       cwd = "./apps/backend";
-      after = [ "db:migrate@succeeded" ];
-      ready.http.get = { port = 8787; path = "/health"; };
     };
-    # long-running frontend dev server; waits for backend to be ready
     frontend = {
       exec = "bunx rsbuild dev";
       cwd = "./apps/frontend";
-      after = [ "devenv:processes:backend" ];
     };
-  };
-
-  # one-shot init: apply D1 migrations, then exit 0 (better-auth needs tables)
-  tasks."db:migrate" = {
-    exec = "bunx wrangler d1 migrations apply backend-db --local";
-    cwd = "./apps/backend";
   };
 
   claude.code.mcpServers = {
@@ -140,7 +129,6 @@ in
       echo "[devenv hook] Running inside devenv environment"
     '';
   };
-
   enterShell = ''
     echo "┌─────────────────────────────────────┐"
     echo "│  good-techstack dev environment      │"

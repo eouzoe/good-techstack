@@ -38,7 +38,7 @@ No unnecessary abstraction layers. No unnecessary dependencies (Turborepo, Nx: n
 
 ### 8. Supply chain awareness
 
-Nix flakes lock toolchain versions and hashes. Bun lockfile locks JavaScript dependencies. Every test layer locks behavioural correctness.
+Nix flakes + devenv lock toolchain versions and hashes (`flake.lock` + `devenv.lock`). Bun lockfile locks JavaScript dependencies (`bun.lock`). Every test layer locks behavioural correctness.
 
 ---
 
@@ -65,30 +65,20 @@ Nix flakes lock toolchain versions and hashes. Bun lockfile locks JavaScript dep
 
 ## What Not to Do
 
-| Don't                                 | Why                                     | Do instead                          |
-| ------------------------------------- | --------------------------------------- | ----------------------------------- |
-| Add Prisma                            | ~5MB bundle, Workers support is beta    | Drizzle ORM (10KB, D1-native)       |
-| Add ESLint, Prettier, or Biome        | oxlint is 50-100x faster                | oxlint + oxfmt                      |
-| Add Turborepo, Nx, or pnpm workspaces | Bun workspace is fast enough            | Bun workspace                       |
-| Add Redis or BullMQ                   | Workers has no Redis                    | KV + Queues + DO                    |
-| Use raw SQL (except edge cases)       | Bypasses type-safe chain                | Drizzle query builder               |
-| Use `process.env`                     | Workers use `env.XXX`                   | Hono `c.env.XXX`                    |
-| Use `.env` files                      | No audit, no provider flexibility       | SecretSpec (`secretspec.toml`)      |
-| Use `make` or `task` for task running | Make is verbose, Task is another Go dep | Justfile (single binary, zero deps) |
-| Add Express or Fastify                | Not Web Standards                       | Hono                                |
-| Introduce a second schema library     | Breaks Zod single-source-of-truth       | Zod only                            |
-| Add tRPC                              | oRPC has broader type safety            | oRPC                                |
-| Use npm, pnpm, or yarn                | Bun is the default                      | `bun add`                           |
-| Write API tokens into code or commits | Security vulnerability                  | `~/.cloudflare/mcp-token`           |
-
-### Just vs devenv scripts
-
-Justfile and `devenv scripts.*` coexist with clear boundaries:
-
-- **Justfile**: for end users at the terminal. `just dev`, `just lint`, `just deploy`. Invoked via `devenv shell -- just <target>`.
-- **devenv scripts**: for the AI agent's internal use. Agent reads `scripts` block in `devenv.nix` and calls them directly as commands.
-
-Both call the same underlying tools (bun, oxlint, wrangler). They differ only in interface: one keyboard, one agent.
+| Don't                                 | Why                                  | Do instead                     |
+| ------------------------------------- | ------------------------------------ | ------------------------------ |
+| Add Prisma                            | ~5MB bundle, Workers support is beta | Drizzle ORM (10KB, D1-native)  |
+| Add ESLint, Prettier, or Biome        | oxlint is 50-100x faster             | oxlint + oxfmt                 |
+| Add Turborepo, Nx, or pnpm workspaces | Bun workspace is fast enough         | Bun workspace                  |
+| Add Redis or BullMQ                   | Workers has no Redis                 | KV + Queues + DO               |
+| Use raw SQL (except edge cases)       | Bypasses type-safe chain             | Drizzle query builder          |
+| Use `process.env`                     | Workers use `env.XXX`                | Hono `c.env.XXX`               |
+| Use `.env` files                      | No audit, no provider flexibility    | SecretSpec (`secretspec.toml`) |
+| Add Express or Fastify                | Not Web Standards                    | Hono                           |
+| Introduce a second schema library     | Breaks Zod single-source-of-truth    | Zod only                       |
+| Add tRPC                              | oRPC has broader type safety         | oRPC                           |
+| Use npm, pnpm, or yarn                | Bun is the default                   | `bun add`                      |
+| Write API tokens into code or commits | Security vulnerability               | `~/.cloudflare/mcp-token`      |
 
 ### Grey area
 
