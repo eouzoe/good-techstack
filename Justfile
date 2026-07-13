@@ -56,3 +56,7 @@ update:
 # 比對直接依賴與 npm 最新版本（詳見 docs/guide/version-check）
 check-versions:
     bun scripts/check-versions.mjs
+
+# 查驗本機工具鏈是否與專案鎖定版本一致（詳見 docs/guide/env-check，限 Linux）
+check-env:
+    bun scripts/check-env.mjs
