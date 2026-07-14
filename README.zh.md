@@ -55,43 +55,42 @@ cmd
 
 ---
 
-## 第二步：安裝 WSL（Windows 的 Linux 子系統）
+## 第二步：安裝 NixOS-WSL（Windows 的 Linux 子系統）
 
-在黑色視窗裡，輸入這行指令，然後按 `Enter`：
+在黑色視窗裡，輸入這行指令，然後按 `Enter`（會下載約 550 MB，需要一些時間）：
 
 ```
-wsl --install
+curl -L -o %TEMP%\n.wsl "https://github.com/nix-community/NixOS-WSL/releases/latest/download/nixos.wsl" && wsl --install --from-file %TEMP%\n.wsl
 ```
 
-它會開始下載安裝 Linux 系統。這個過程需要一些時間，你可以去喝杯水。
-
-**安裝完成後，重新啟動你的電腦。**
+它會幫你裝好 NixOS-WSL。如果系統提示要重新啟動，重開後再重跑一次這行就好。
 
 ---
 
-## 第三步：啟動 WSL
+## 第三步：打開 NixOS-WSL
 
-重開機之後，按下 `Win` 鍵，在搜尋欄輸入 `wsl`，然後按 `Enter`。
+按下 `Win` 鍵，在搜尋欄輸入 `NixOS`，然後按 `Enter`。
+（或是在終端機輸入 `wsl -d NixOS`。）
 
 你會看到一個新的黑色視窗，裡面有類似這樣的文字：
 
 ```
-user@computer:~$
+nixos@computer:~$
 ```
 
-這表示你現在在 Linux 環境裡了。
+這表示你現在在 NixOS-WSL 環境裡了。
 
 ---
 
 ## 第四步：輸入這行指令
 
-在 WSL 視窗裡，輸入這行指令，然後按 `Enter`：
+在 NixOS-WSL 視窗裡，輸入這行指令，然後按 `Enter`：
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
+curl -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
 ```
 
-它會開始下載需要的東西。
+它會開始下載需要的東西，並把開發環境準備好。
 
 ---
 
