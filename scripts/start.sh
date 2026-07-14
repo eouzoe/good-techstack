@@ -1,12 +1,43 @@
 #!/usr/bin/env sh
 # good-techstack — one-command bootstrap
-# Usage: curl -sSfL <this script> | sh
+# Usage: curl -fsSL <this script> | sh
+#
+# Supported: Windows (via NixOS-WSL) and Linux. macOS is not supported.
+# On Windows, run the Command Prompt block from README.md first, then this
+# inside the NixOS-WSL terminal. Native Linux works but is weakly supported.
 set -eu
 
 REPO_OWNER="${REPO_OWNER:-eouzoe}"
 APP_NAME="${1:-my-app}"
 
-# 0. prerequisites
+# 0. OS detection (kept at the very top; no nix check here)
+OS="$(uname -s 2>/dev/null || echo unknown)"
+case "$OS" in
+  Linux*)
+    if grep -qi microsoft /proc/version 2>/dev/null; then
+      ENV="wsl"
+    else
+      ENV="linux"
+    fi
+    ;;
+  Darwin*)
+    echo "error: macOS is not supported yet."
+    exit 1
+    ;;
+  *)
+    # Windows / other host shell (Git Bash, etc.) — cannot bootstrap from here.
+    echo "error: please run this inside NixOS-WSL (Windows) or Linux."
+    echo "  Windows: open Command Prompt as Administrator and follow the"
+    echo "  quick-start in README.md, then re-run this inside the WSL terminal."
+    exit 1
+    ;;
+esac
+
+if [ "$ENV" = "linux" ]; then
+  echo "warning: native Linux is weakly supported — if it breaks, we may not fix it."
+  echo "  For the best experience use NixOS-WSL on Windows or a NixOS machine."
+fi
+
 command -v curl >/dev/null 2>&1 || { echo "error: curl is required"; exit 1; }
 command -v tar  >/dev/null 2>&1 || { echo "error: tar is required";  exit 1; }
 command -v mktemp >/dev/null 2>&1 || { echo "error: mktemp is required"; exit 1; }
@@ -28,24 +59,23 @@ mkdir -p "${APP_NAME}"
 tar xzf "$GTS_TMP/repo.tar.gz" --strip-components=1 -C "${APP_NAME}"
 cd "${APP_NAME}"
 
-# 3. install Nix (official installer; non-interactive pipe form)
+# 3. install Nix if missing (official installer; no rootless detection — the
+#    installer handles rootless/multi-user itself). NixOS-WSL already has it.
 if ! command -v nix >/dev/null 2>&1; then
-  echo "  -> Installing Nix (this may prompt for your password) ..."
-  curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install --no-confirm
+  echo "  -> Installing Nix ..."
+  curl -fsSL https://install.nixos.org/nix-installer | sh -s -- install --no-confirm
   export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
   if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   fi
 fi
 
-# 4. early-install devenv (it auto-pulls zsh + just via devenv.nix;
-#    libghostty wires up the zsh shell integration — no manual hook needed)
+# 4. ensure devenv (idempotent)
 echo "  -> Installing devenv ..."
-nix profile add nixpkgs#devenv
-
-# ensure the nix profile bin (where `devenv` now lives) is on PATH,
-# whether nix was just installed above or already present
 export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
+if ! nix profile list 2>/dev/null | grep -q devenv; then
+  nix profile add nixpkgs#devenv
+fi
 
 # 5. trust this project dir (devenv refuses untrusted dirs), then enter the
 #    devenv shell (zsh via libghostty) and bootstrap — traced from here
