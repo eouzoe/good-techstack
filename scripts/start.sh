@@ -4,7 +4,7 @@
 #
 # Supported: Windows (via NixOS-WSL) and Linux. macOS is not supported.
 # On Windows, run the Command Prompt block from README.md first, then this
-# inside the NixOS-WSL terminal. Native Linux is supported too.
+# inside the NixOS-WSL terminal. Native Linux works but is weakly supported.
 set -eu
 
 REPO_OWNER="${REPO_OWNER:-eouzoe}"
