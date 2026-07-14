@@ -14,11 +14,7 @@ APP_NAME="${1:-my-app}"
 OS="$(uname -s 2>/dev/null || echo unknown)"
 case "$OS" in
   Linux*)
-    if grep -qi microsoft /proc/version 2>/dev/null; then
-      ENV="wsl"
-    else
-      ENV="linux"
-    fi
+    # Native Linux and WSL (incl. NixOS-WSL) run the same flow below.
     ;;
   Darwin*)
     echo "error: macOS is not supported yet."
@@ -32,11 +28,6 @@ case "$OS" in
     exit 1
     ;;
 esac
-
-if [ "$ENV" = "linux" ]; then
-  echo "warning: native Linux is weakly supported — if it breaks, we may not fix it."
-  echo "  For the best experience use NixOS-WSL on Windows or a NixOS machine."
-fi
 
 command -v curl >/dev/null 2>&1 || { echo "error: curl is required"; exit 1; }
 command -v tar  >/dev/null 2>&1 || { echo "error: tar is required";  exit 1; }
