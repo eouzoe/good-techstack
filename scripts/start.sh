@@ -15,16 +15,11 @@ OS="$(uname -s 2>/dev/null || echo unknown)"
 case "$OS" in
   Linux*)
     # Native Linux and WSL (incl. NixOS-WSL) run the same flow below.
+    # Windows users only reach this point after the README cmd block has
+    # installed and opened NixOS-WSL, so no Windows-side detection is needed.
     ;;
   Darwin*)
     echo "error: macOS is not supported yet."
-    exit 1
-    ;;
-  *)
-    # Windows / other host shell (Git Bash, etc.) — cannot bootstrap from here.
-    echo "error: please run this inside NixOS-WSL (Windows) or Linux."
-    echo "  Windows: open Command Prompt as Administrator and follow the"
-    echo "  quick-start in README.md, then re-run this inside the WSL terminal."
     exit 1
     ;;
 esac
