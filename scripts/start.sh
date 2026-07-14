@@ -56,12 +56,10 @@ if ! command -v nix >/dev/null 2>&1; then
   fi
 fi
 
-# 4. ensure devenv (idempotent)
+# 4. ensure devenv (idempotent — nix profile add is safe to re-run)
 echo "  -> Installing devenv ..."
 export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
-if ! nix profile list 2>/dev/null | grep -q devenv; then
-  nix profile add nixpkgs#devenv
-fi
+nix profile add nixpkgs#devenv
 
 # 5. trust this project dir (devenv refuses untrusted dirs), then enter the
 #    devenv shell (zsh via libghostty) and bootstrap — traced from here
