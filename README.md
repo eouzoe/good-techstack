@@ -20,7 +20,7 @@ Then, inside the NixOS-WSL terminal, run the command below.
 curl -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
 ```
 
-> macOS is not supported. Native Linux works but is weakly supported — for the smoothest experience use NixOS-WSL on Windows or a NixOS machine.
+> macOS is not supported yet. For the smoothest experience on Windows use NixOS-WSL; native Linux is supported too.
 
 ---
 
