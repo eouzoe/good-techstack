@@ -4,9 +4,23 @@
 
 Your product idea. One command. Shipped.
 
-```bash
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
+## Quick start
+
+**Windows** — open **Command Prompt as Administrator** and run this once (downloads NixOS-WSL, ~550 MB, then opens it):
+
+```cmd
+curl -L -o %TEMP%\n.wsl "https://github.com/nix-community/NixOS-WSL/releases/latest/download/nixos.wsl" && wsl --install --from-file %TEMP%\n.wsl
 ```
+
+Then, inside the NixOS-WSL terminal, run the command below.
+
+**Linux / NixOS-WSL**:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
+```
+
+> macOS is not supported. Native Linux works but is weakly supported — for the smoothest experience use NixOS-WSL on Windows or a NixOS machine.
 
 ---
 
@@ -103,13 +117,15 @@ You write your business logic. The stack handles the rest.
 ## Start
 
 ```bash
-curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
+curl -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
 ```
+
+> **Windows:** run the Command Prompt block in [Quick start](#quick-start) first to install NixOS-WSL, then run the command above inside the NixOS-WSL terminal.
 
 This one command does the heavy lifting:
 
 1. Downloads good-techstack
-2. Installs Nix (if missing)
+2. Installs Nix if missing (NixOS-WSL already provides it)
 3. Installs devenv — which auto-pulls `zsh` + `just` for you via libghostty
 4. Bootstraps the development environment (traced from the first devenv call)
 
