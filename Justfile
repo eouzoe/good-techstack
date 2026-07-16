@@ -11,9 +11,9 @@ dev:
 lint:
     oxlint --type-aware
 
-# TypeScript 型別檢查
+# TypeScript 型別檢查（根目錄無 tsconfig，逐 workspace 檢查）
 typecheck:
-    tsc --noEmit
+    for d in apps/backend apps/frontend packages/shared; do tsc --noEmit -p "$d" || exit 1; done
 
 # 執行測試
 test:
