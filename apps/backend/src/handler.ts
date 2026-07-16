@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
 import { os } from "@orpc/server";
-import { listItems, getItem, createItem, deleteItem, itemRouter } from "./contract";
+import { listItems, getItem, createItem, deleteItem } from "./contract";
 import { items } from "./db/schema";
 import type { Database } from "./db";
 
