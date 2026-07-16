@@ -67,6 +67,20 @@ echo "  -> Bootstrapping environment (traced) ..."
 devenv allow
 devenv --trace-to pretty:stderr shell -- just bootstrap
 
+# 6. agent detection — tell the user which AI agent to launch. Detect which
+#    agent CLIs are available on the host; default guidance is opencode.
+AGENT_DETECTED=""
+for a in opencode claude codex; do
+  command -v "$a" >/dev/null 2>&1 && AGENT_DETECTED="$AGENT_DETECTED $a"
+done
+
 echo ""
 echo "  Done. Your environment is ready."
-echo "  Now set your secrets and start your AI agent — see the boxed steps in README.md."
+echo ""
+echo "  Next: start your AI agent (see the boxed steps in README.md)."
+if [ -n "$AGENT_DETECTED" ]; then
+  echo "  Detected agent CLI(s):$AGENT_DETECTED"
+  echo "  Default: opencode   ->  run: opencode"
+else
+  echo "  No agent CLI detected. Install one, e.g. 'npm i -g opencode', then run it."
+fi
