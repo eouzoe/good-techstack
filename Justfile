@@ -60,3 +60,26 @@ check-versions:
 # 查驗本機工具鏈是否與專案鎖定版本一致（詳見 docs/guide/env-check，限 Linux）
 check-env:
     bun scripts/check-env.mjs
+
+# 用 bootstrap 提示詞以無互動模式啟動 AI agent
+# 自動偵測 claude / codex / opencode（任一皆可），皆無則裝 OpenCode 後啟動
+# 不鎖模型：opencode 走預設 provider（anthropic/claude-opus-4-6）
+agent:
+    prompt="$(cat docs/agent/bootstrap-prompt.md)"
+    export PATH="$PATH:$HOME/.claude/bin:$HOME/.local/bin:$(npm bin -g 2>/dev/null):$(pnpm bin -g 2>/dev/null):$HOME/.bun/bin:$HOME/.local/share/mise/shims:$HOME/.nix-profile/bin:/nix/profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/opt/homebrew/bin:$HOME/.cargo/bin"
+    if   command -v claude      >/dev/null 2>&1; then agent=claude
+    elif command -v claude-code  >/dev/null 2>&1; then agent=claude
+    elif command -v codex        >/dev/null 2>&1; then agent=codex
+    elif command -v codex-cli    >/dev/null 2>&1; then agent=codex
+    elif command -v opencode     >/dev/null 2>&1; then agent=opencode
+    else
+        agent=opencode
+        echo "  -> 找不到 AI agent，正在安裝 OpenCode ..."
+        nix profile add nixpkgs#opencode
+    fi
+    echo "  -> 正在用 bootstrap 提示詞以無互動模式啟動 $agent ..."
+    case "$agent" in
+        claude)   claude -p "$prompt" ;;
+        codex)    codex exec --full-auto "$prompt" ;;
+        opencode) opencode run "$prompt" --auto ;;
+    esac
