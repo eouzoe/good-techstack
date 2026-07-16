@@ -22,10 +22,3 @@ export const getItem = os.input(z.object({ id: z.string() })).output(itemSchema.
 export const createItem = os.input(createItemSchema).output(itemSchema);
 
 export const deleteItem = os.input(z.object({ id: z.string() })).output(z.void());
-
-export const itemRouter = os.router({
-  listItems,
-  getItem,
-  createItem,
-  deleteItem,
-});
