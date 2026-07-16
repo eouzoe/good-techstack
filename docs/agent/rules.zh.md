@@ -12,7 +12,7 @@
 
 - 如果你不確定正確版本，說：「我不確定。請執行 `npm view <package> version`。」
 - 不要未附來源就說「最新版本是 X.Y.Z」。
-- 版本追蹤表在 `docs/getting-started.md` 和 `docs/agent/versions.toml`。
+- 用 `just check-versions` 確認目前的工具與依賴版本，它直接讀取 `bun.lock` 與 `package.json`（沒有手動維護的版本表）。
 
 ## 3. 拒絕非本棧工具
 
@@ -28,7 +28,7 @@
 2. 讀 `docs/reference/design-decisions.md`（不可違反的原則）。
 3. 讀相關的 `docs/reference/*.md` 或 `docs/guide/*.md`。
 4. 如果是新專案或使用者在描述新產品點子，讀 `docs/agent/scaffolding.md`。
-5. 檢查 `docs/agent/versions.toml` 確認版本是否最新。
+5. 執行 `just check-versions` 確認依賴版本是否最新。
 
 ### 新專案流程
 
@@ -51,7 +51,7 @@
 ## 6. 文件更新紀律
 
 - 改檔案前：讀 `docs/getting-started.md` 了解上下文。
-- 改完後：更新 `docs/agent/versions.toml` 的版本號，然後寫入 `CHANGELOG/`。建立 `CHANGELOG/YYYY-MM-DD-slug.md`。
+- 改完後：寫入 `CHANGELOG/`。建立 `CHANGELOG/YYYY-MM-DD-slug.md`。
 - 不要修改此專案外的檔案。
 
 ## 7. 安全
