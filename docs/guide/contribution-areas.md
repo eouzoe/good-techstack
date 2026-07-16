@@ -106,16 +106,15 @@ This is an ongoing responsibility, not a one-time task.
 
 **Version checker**
 
-- Write a script (`scripts/check-versions.ts`) that reads `docs/agent/versions.toml` and compares each tool's documented version against the latest published version.
+- Run `just check-versions` (or `bun scripts/check-versions.mjs`) to compare declared versions in `package.json` and `bun.lock` against the latest published versions.
 - The script should exit with code 1 if any documented version is outdated.
 - Set up a weekly GitHub Action to run the checker and open an issue if versions are out of date.
 
 **Monthly version audit**
 
 - Every 4-6 weeks, run the version checker and update:
-  - `docs/agent/versions.toml` with new versions
   - `docs/reference/*.md` if behaviour changed between versions
-  - `docs/getting-started.md` if the version table is affected
+  - `docs/getting-started.md` if the setup or prerequisites changed between versions
 - This is the kind of maintenance that does not require deep context. Anyone can do it.
 
 ---

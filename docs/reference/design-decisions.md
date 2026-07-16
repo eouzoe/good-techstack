@@ -30,7 +30,7 @@ Hono uses Web Standards API (`Request`, `Response`, `fetch`, `URL`). Shared logi
 
 ### 6. Documentation is the harness
 
-Every technical decision is recorded. An agent reads the relevant documentation before changing code, and updates it after. Version data lives in `versions.toml` as the single source of truth.
+Every technical decision is recorded. An agent reads the relevant documentation before changing code, and updates it after. Dependency versions are locked in `flake.lock`, `devenv.lock`, and `bun.lock`; check currency with `just check-versions` (see `docs/guide/version-check.md`).
 
 ### 7. Simplicity over everything
 
@@ -87,9 +87,3 @@ Nix flakes + devenv lock toolchain versions and hashes (`flake.lock` + `devenv.l
 | Bundle size is critical | Zod Mini (`zod/mini`) | 2.1kb vs 5.9kb        |
 | Expo native             | Expo + Expo Router    | Shares oRPC contracts |
 | Type-aware linting      | oxlint `--type-aware` | Alpha stage           |
-
----
-
-## Version Tracking
-
-Tool versions are tracked in `agent/versions.toml`. Before upgrading any dependency, verify the current version there and check the official registry for the latest.

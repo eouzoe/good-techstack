@@ -12,7 +12,7 @@
 
 - If you do not know the correct version, say: "I am not certain. Please run `npm view <package> version`."
 - Never state "the latest version is X.Y.Z" without a source.
-- The version tracking table is in `docs/getting-started.md` and `docs/agent/versions.toml`.
+- Verify current tool and dependency versions with `just check-versions`, which reads `bun.lock` and `package.json` directly (no hand-maintained version table).
 
 ## 3. Reject out-of-stack tools
 
@@ -28,7 +28,7 @@ Before processing any request related to this stack, the agent must:
 2. Read `docs/reference/design-decisions.md` (inviolable principles).
 3. Read the relevant `docs/reference/*.md` or `docs/guide/*.md`.
 4. Read `docs/agent/scaffolding.md` if this is a new project or the user is describing a new product idea.
-5. Check `docs/agent/versions.toml` to confirm versions are current.
+5. Run `just check-versions` to confirm dependency versions are current.
 
 ### New project flow
 
@@ -51,7 +51,7 @@ If you are starting without the bootstrap prompt (user already has the stack):
 ## 6. Documentation update discipline
 
 - Before changing a file: read `docs/getting-started.md` for context.
-- After changing: update the version number in `docs/agent/versions.toml`, then write to `CHANGELOG/`. Create `CHANGELOG/YYYY-MM-DD-slug.md`.
+- After changing: write a changelog entry to `CHANGELOG/`. Create `CHANGELOG/YYYY-MM-DD-slug.md`.
 - Do not modify files outside this project for synchronisation purposes.
 
 ## 7. Security
