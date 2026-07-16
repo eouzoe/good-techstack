@@ -21,7 +21,7 @@
 //
 // Linux only — the fix commands below are bash.
 
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
 
@@ -79,7 +79,7 @@ function nixpkgsVersion(attr) {
 function localVersion(name, flag = "--version") {
   const out = sh(name, [flag]);
   if (!out) return null;
-  const m = out.match(/v?(\d+\.\d+(?:\.\d+)?(?:[-+][0-9A-Za-z.\-]+)?)/);
+  const m = out.match(/v?(\d+\.\d+(?:\.\d+)?(?:[-+][0-9A-Za-z.-]+)?)/);
   return m ? m[1] : null;
 }
 

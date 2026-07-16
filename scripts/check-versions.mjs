@@ -80,7 +80,7 @@ function npmLatest(name) {
 
 console.log("Checking direct dependencies against npm...\n");
 let outdated = 0;
-for (const [name, range] of [...directDeps.entries()].sort()) {
+for (const [name, range] of [...directDeps.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
   const locked = resolved.get(name) ?? "(absent from bun.lock)";
   const latest = npmLatest(name);
   if (!latest) {
