@@ -62,7 +62,10 @@ export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
 nix profile add nixpkgs#devenv
 
 # 5. trust this project dir (devenv refuses untrusted dirs), then enter the
-#    devenv shell (zsh via libghostty) and bootstrap — traced from here
+#    devenv shell and bootstrap — traced from here.
+#    Trace 用 devenv 原生 --trace-to（pretty 到 stderr）。是否導出 OTLP 由
+#    使用者自行決定（設 DEVENV_TRACE_TO / OTEL_EXPORTER_OTLP_ENDPOINT 即可），
+#    這裡不硬塞 grpc 導出，只保證用最新 devenv 的 trace 機制、功能正常。
 echo "  -> Bootstrapping environment (traced) ..."
 devenv allow
 devenv --trace-to pretty:stderr shell -- just bootstrap
