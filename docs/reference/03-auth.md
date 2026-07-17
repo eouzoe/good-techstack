@@ -6,8 +6,6 @@
 
 ## Version
 
-- stable v1.6.23
-- RC v1.7.0-rc.1 (2026-07)
 - Adopted Auth.js (NextAuth) maintenance in 2025-09
 
 ## What it provides
