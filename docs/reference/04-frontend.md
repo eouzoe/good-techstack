@@ -6,8 +6,6 @@
 
 ## TanStack Start
 
-**Version**: v1.168.27
-
 ### SSR profiling
 
 Throughput improved ~5.5x in 2026.
@@ -43,8 +41,8 @@ Base UI is now the default engine for shadcn/ui (Radix is still maintained, migr
 
 ## Build tools
 
-- **Rspack 2.1.3**: Rust-native Webpack-compatible bundler
-- **Rsbuild 2.1.5**: Build tool on top of Rspack
+- **Rspack**: Rust-native Webpack-compatible bundler
+- **Rsbuild**: Build tool on top of Rspack
 
 ## Expo native (coexistence)
 

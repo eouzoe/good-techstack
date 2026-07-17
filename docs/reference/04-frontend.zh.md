@@ -6,8 +6,6 @@
 
 ## TanStack Start
 
-**Version**: v1.168.27
-
 ### 2026 重要進展
 
 - **SSR profiling**：throughput 提升 ~5.5x
@@ -41,8 +39,8 @@ export default defineConfig({
 
 ## 建置工具
 
-- **Rspack 2.1.3**：Rust 原生 Webpack 相容 bundler
-- **Rsbuild 2.1.5**：Rspack 上層建置工具
+- **Rspack**：Rust 原生 Webpack 相容 bundler
+- **Rsbuild**：Rspack 上層建置工具
 - **Rolldown**：VoidZero 的 Rust Rollup 替代，CF 收購後加速
 
 ## PWA → Expo Native（共存）
