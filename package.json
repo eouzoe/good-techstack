@@ -2,11 +2,11 @@
   "name": "good-techstack",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
+  "type": "module",
   "devDependencies": {
     "typescript": "^7.0.2"
   }
