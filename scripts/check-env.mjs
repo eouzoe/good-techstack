@@ -106,7 +106,7 @@ const tools = [
   { name: "oxfmt", nix: "oxfmt", fix: "devenv-shell" },
   { name: "wrangler", nix: "wrangler", fix: "devenv-shell" },
   { name: "prettier", nix: "prettier", fix: "devenv-shell" },
-  { name: "node", nix: "nodejs_22", fix: "devenv-shell", optional: true },
+  { name: "node", nix: "nodejs_26", fix: "devenv-shell", optional: true },
   { name: "drizzle-kit", bun: "drizzle-kit", fix: "bun-install" },
   { name: "devenv", devenv: true, fix: "devenv-bin" },
 ];
