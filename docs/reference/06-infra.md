@@ -94,7 +94,7 @@ The new Layer 2 CI job (`devenv-test`) runs `devenv test` for full environment v
 
 ## SecretSpec
 
-Secrets are managed by **SecretSpec** (v0.14.0) instead of `.env` files.
+Secrets are managed by **SecretSpec** instead of `.env` files.
 
 ```
 secretspec.toml          # Key definitions (committed to git)

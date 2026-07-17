@@ -94,7 +94,7 @@ Layer 1 CI job（`check`）直接執行 lint / typecheck / test。
 
 ## SecretSpec
 
-Secret 由 **SecretSpec** (v0.14.0) 管理，取代 `.env` 檔案。
+Secret 由 **SecretSpec** 管理，取代 `.env` 檔案。
 
 ```
 secretspec.toml          # Key 定義 (提交到 git)
