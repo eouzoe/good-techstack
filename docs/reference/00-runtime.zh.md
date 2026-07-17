@@ -2,7 +2,6 @@
 
 > depends_on: []
 > tags: [runtime, javascript, typescript, dev-tool]
-> 版本：1.3.14 stable (2026-07-06)
 > 最後更新：2026-07-10
 
 ## 核心優勢
