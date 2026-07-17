@@ -2,7 +2,6 @@
 
 > depends_on: []
 > tags: [schema, validation, types, zod]
-> 版本：v4.4+
 > 最後更新：2026-07-10
 
 ## 角色：不是 schema 庫，是型別鏈的共用語言
