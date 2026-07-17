@@ -49,10 +49,10 @@ PR → just lint          (oxlint --type-aware)
 
 ## oxlint + oxfmt
 
-| Tool   | Version | Role                    | Performance    |
-| ------ | ------- | ----------------------- | -------------- |
-| oxlint | 1.73.0  | Rust linter, 840+ rules | 50-100x ESLint |
-| oxfmt  | 0.58.0  | Rust formatter          | 30x Prettier   |
+| Tool   | Role                    | Performance    |
+| ------ | ----------------------- | -------------- |
+| oxlint | Rust linter, 840+ rules | 50-100x ESLint |
+| oxfmt  | Rust formatter          | 30x Prettier   |
 
 Type-aware linting via `tsgolint`: `oxlint --type-aware`. Supports 59/61 typescript-eslint type-aware rules.
 
