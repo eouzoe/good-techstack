@@ -6,8 +6,6 @@
 
 ## Hono — Web Standards HTTP framework
 
-**Version**: 4.12.28 stable
-
 Bun detects the `fetch` export automatically and calls `Bun.serve()`:
 
 ```ts
@@ -26,8 +24,6 @@ export default app;
 | SmartRouter  |  Auto   | Default, picks the best          |
 
 ## oRPC — Contract-first RPC
-
-**Version**: stable v1.14.7 / v2.0.0-beta.15 (dual-track)
 
 ### Why oRPC over Hono RPC / tRPC
 
