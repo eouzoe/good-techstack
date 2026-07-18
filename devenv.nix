@@ -32,10 +32,8 @@
   dotenv.enable = false;
 
   enterTest = ''
-    bun install
-    (cd apps/backend && bunx wrangler types)
-    oxlint --type-aware
-    bunx tsc -p apps/backend --noEmit
+    devenv tasks run --mode all \
+      deps:install deps:gen-types lint typecheck:backend typecheck:frontend
   '';
 
   scripts = {
@@ -58,7 +56,7 @@
     before = [ "devenv:enterShell" ];
   };
 
-  tasks."gen-types" = {
+  tasks."deps:gen-types" = {
     exec = "cd apps/backend && bunx wrangler types";
     execIfModified = [ "apps/backend/src/**" "apps/backend/wrangler.toml" ];
     after = [ "deps:install" ];
@@ -66,22 +64,24 @@
 
   tasks."typecheck:backend" = {
     exec = "cd apps/backend && bunx tsc --noEmit";
-    after = [ "gen-types" ];
+    after = [ "deps:gen-types" ];
   };
 
   tasks."typecheck:frontend" = {
     exec = "cd apps/frontend && bunx tsc --noEmit";
-    after = [ "gen-types" ];
+    after = [ "deps:gen-types" ];
   };
 
   processes = {
     backend = {
       exec = "bunx wrangler dev";
       cwd = "./apps/backend";
+      after = [ "deps:install" "deps:gen-types" ];
     };
     frontend = {
       exec = "bunx rsbuild dev";
       cwd = "./apps/frontend";
+      after = [ "deps:install" "deps:gen-types" ];
     };
   };
 
