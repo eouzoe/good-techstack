@@ -49,9 +49,9 @@ clean:
     rm -rf dist/ build/ .next/ out/ .wrangler/ node_modules/
     bun install
 
-# 更新 nix flake lock
+# 更新 devenv 鎖定（devenv.lock：nixpkgs 與 devenv 模組）
 update:
-    nix flake update
+    devenv update
 
 # 比對直接依賴與 npm 最新版本（詳見 docs/guide/version-check）
 check-versions:
