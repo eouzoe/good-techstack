@@ -58,13 +58,19 @@ function bunLockVersion(name) {
   return m ? m[1] : null;
 }
 
-// nixpkgs tool version. We evaluate the EXACT revision pinned in flake.lock
+// nixpkgs tool version. We evaluate the EXACT revision pinned in devenv.lock
 // (not the floating `nixpkgs` channel), so this matches what `devenv shell`
 // actually provides and works offline once that revision is in the store.
+//
+// devenv.lock is a flake-lock-format JSON with MANY nixpkgs nodes (each pulled
+// in by a different dependency). Only the one reachable from
+// nodes.root.inputs.nixpkgs is the toolchain nixpkgs — follow that pointer
+// rather than grabbing the first "nixpkgs" match, which would be wrong.
 function nixpkgsRev() {
-  const text = readFileSync(join(root, "flake.lock"), "utf8");
-  const m = text.match(/"nixpkgs":\s*\{[^}]*"rev":\s*"([0-9a-f]+)"/);
-  return m ? m[1] : null;
+  const lock = JSON.parse(readFileSync(join(root, "devenv.lock"), "utf8"));
+  const nodeName = lock?.nodes?.root?.inputs?.nixpkgs;
+  if (!nodeName) return null;
+  return lock?.nodes?.[nodeName]?.locked?.rev ?? null;
 }
 function nixpkgsVersion(attr) {
   const rev = nixpkgsRev();
