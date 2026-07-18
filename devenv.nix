@@ -47,6 +47,17 @@
     "check-env".exec = "bun scripts/check-env.mjs";
   };
 
+  tasks."deps:install" = {
+    exec = "bun install";
+    execIfModified = [
+      "bun.lock"
+      "package.json"
+      "apps/*/package.json"
+      "packages/*/package.json"
+    ];
+    before = [ "devenv:enterShell" ];
+  };
+
   processes = {
     backend = {
       exec = "bunx wrangler dev";
@@ -108,7 +119,6 @@
     '';
   };
   enterShell = ''
-    [ -d node_modules ] || bun install
     echo "┌─────────────────────────────────────┐"
     echo "│  good-techstack dev environment      │"
     echo "│  bun:      $(bun --version)                   │"
