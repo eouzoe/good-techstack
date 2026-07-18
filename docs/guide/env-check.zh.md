@@ -17,11 +17,11 @@ just check-env          # 或：bun scripts/check-env.mjs
 
 此腳本讀取專案自己的版本鎖定，再與你 `PATH` 上的版本比對：
 
-| 來源                    | 工具                                               |
-| ----------------------- | -------------------------------------------------- |
-| `flake.lock`（nixpkgs） | bun、node、oxlint、oxfmt、wrangler、prettier、just |
-| `devenv.yaml`           | devenv CLI（`ref=v2.1.2`）                         |
-| `bun.lock`              | npm CLI，例如 drizzle-kit                          |
+| 來源                     | 工具                                               |
+| ------------------------ | -------------------------------------------------- |
+| `devenv.lock`（nixpkgs） | bun、node、oxlint、oxfmt、wrangler、prettier、just |
+| `devenv.yaml`            | devenv CLI（`ref=v2.1.2`）                         |
+| `bun.lock`               | npm CLI，例如 drizzle-kit                          |
 
 ## 不一致表示「對齊」，而非「升級」
 

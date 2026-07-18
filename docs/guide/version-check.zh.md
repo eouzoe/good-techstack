@@ -9,7 +9,7 @@
 | 每個 npm 依賴                                       | `bun.lock`                                       | 由 bun 解析；用 `bun update` 刷新  |
 | 宣告的版本範圍                                      | `package.json`（root + `apps/*` + `packages/*`） | 手動編輯                           |
 | devenv CLI                                          | `devenv.yaml`（`ref=v2.1.2`）                    | 改 git ref，再執行 `devenv update` |
-| nixpkgs 工具（bun、node、oxlint、oxfmt、wrangler…） | `flake.lock`（nixpkgs commit）                   | 用 `nix flake update` 向前移動     |
+| nixpkgs 工具（bun、node、oxlint、oxfmt、wrangler…） | `devenv.lock`（nixpkgs commit）                  | 用 `devenv update` 向前移動        |
 | Nix daemon                                          | 單獨安裝                                         | 不在 repo 內追蹤                   |
 
 ## 如何檢查
@@ -83,6 +83,6 @@ npm 的**套件名**不一定等於工具名。永遠使用上面精確的識別
 - 你看到的最新版本
 - 你查閱的連結
 
-維護者會升級版本、同步 `bun.lock` / `flake.lock`、跑測試，然後合併。你不需要安裝、建置或測試任何東西。
+維護者會升級版本、同步 `bun.lock` / `devenv.lock`、跑測試，然後合併。你不需要安裝、建置或測試任何東西。
 
 完整流程請見 [issue #2](https://github.com/eouzoe/good-techstack/issues/2)。

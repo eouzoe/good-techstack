@@ -19,11 +19,11 @@ Linux only. The fix commands below are bash.
 The script reads the project's own pins and compares them with the versions on
 your `PATH`:
 
-| Source                 | Tools                                              |
-| ---------------------- | -------------------------------------------------- |
-| `flake.lock` (nixpkgs) | bun, node, oxlint, oxfmt, wrangler, prettier, just |
-| `devenv.yaml`          | devenv CLI (`ref=v2.1.2`)                          |
-| `bun.lock`             | npm CLIs such as drizzle-kit                       |
+| Source                  | Tools                                              |
+| ----------------------- | -------------------------------------------------- |
+| `devenv.lock` (nixpkgs) | bun, node, oxlint, oxfmt, wrangler, prettier, just |
+| `devenv.yaml`           | devenv CLI (`ref=v2.1.2`)                          |
+| `bun.lock`              | npm CLIs such as drizzle-kit                       |
 
 ## A mismatch means align, not upgrade
 

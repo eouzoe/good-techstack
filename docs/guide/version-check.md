@@ -12,7 +12,7 @@ compares them against what is published.
 | Every npm dependency                                  | `bun.lock`                                      | Resolved by bun; refresh with `bun update` |
 | Declared ranges                                       | `package.json` (root + `apps/*` + `packages/*`) | Edited by hand                             |
 | devenv CLI                                            | `devenv.yaml` (`ref=v2.1.2`)                    | Bump the git ref, then `devenv update`     |
-| nixpkgs tools (bun, node, oxlint, oxfmt, wrangler, …) | `flake.lock` (nixpkgs commit)                   | Move forward with `nix flake update`       |
+| nixpkgs tools (bun, node, oxlint, oxfmt, wrangler, …) | `devenv.lock` (nixpkgs commit)                  | Move forward with `devenv update`          |
 | Nix daemon                                            | installed separately                            | Not tracked in the repo                    |
 
 ## How to check
@@ -93,7 +93,7 @@ non-npm package has a newer release, open an issue (or a one-line PR) that says:
 - the latest version you saw,
 - the link you checked it at.
 
-A maintainer bumps the version, syncs `bun.lock` / `flake.lock`, runs the tests,
+A maintainer bumps the version, syncs `bun.lock` / `devenv.lock`, runs the tests,
 and merges. You do not need to install, build, or test anything.
 
 See [issue #2](https://github.com/eouzoe/good-techstack/issues/2) for the full
