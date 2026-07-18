@@ -51,13 +51,14 @@ Authentication: Bearer Token (`~/.cloudflare/mcp-token`), never expires.
 
 ### Management split
 
-| Layer              | Tool             | Scope                                                     |
-| ------------------ | ---------------- | --------------------------------------------------------- |
-| Environment        | **devenv** (2.x) | Shell activation, packages, processes, scripts, git hooks |
-| Package pinning    | **flake.nix**    | Buildable outputs (app, backend, frontend)                |
-| JS dependency tree | **Bun**          | `node_modules`, `bun.lock`                                |
+| Layer              | Tool                | Scope                                                                        |
+| ------------------ | ------------------- | ---------------------------------------------------------------------------- |
+| Environment        | **devenv** (2.1.2+) | Shell activation, packages, toolchain pinning, processes, scripts, git hooks |
+| JS dependency tree | **Bun**             | `node_modules`, `bun.lock`                                                   |
 
-Devenv runs on top of the same `nixpkgs` pinned in `flake.lock` — toolchain versions are shared.
+devenv is the single source of truth: `devenv.nix` declares the toolchain and
+`devenv.lock` pins the exact `nixpkgs` commit those tools come from. There is no
+separate flake — toolchain versions live entirely in `devenv.lock`.
 
 ### devenv features
 
@@ -73,7 +74,7 @@ Devenv runs on top of the same `nixpkgs` pinned in `flake.lock` — toolchain ve
 
 ### Before and after devenv
 
-| Aspect            | Before (flake only)                    | After (devenv + flake)                      |
+| Aspect            | Before (flake only)                    | After (devenv)                              |
 | ----------------- | -------------------------------------- | ------------------------------------------- |
 | Shell activation  | _Formerly_ `nix develop` (3.8s cached) | `devenv shell` (3.2s cached)                |
 | Secret management | `.env` (no audit)                      | `secretspec.toml` (audit log, 11 providers) |
@@ -126,6 +127,5 @@ Reference: https://secretspec.dev/quick-start/
 
 - Cloudflare Workers: https://developers.cloudflare.com/workers/
 - Cloudflare MCP: https://developers.cloudflare.com/agents/model-context-protocol/
-- Nix flakes: https://nixos.wiki/wiki/Flakes
 - Devenv: https://devenv.sh/reference/options/
 - SecretSpec: https://secretspec.dev/quick-start/

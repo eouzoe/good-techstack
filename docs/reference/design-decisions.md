@@ -14,7 +14,7 @@ Do not introduce a second schema language (TypeBox, Valibot, ArkType, etc.).
 
 ### 2. Bun first, Node only in CI
 
-Daily development uses Bun. Node.js is used only in CI (Cloudflare officially supports only Node.js). The `check` CI job installs Bun via `oven-sh/setup-bun` directly; the `devenv-test` job runs the full devenv environment. `flake.nix` now only defines buildable `packages` outputs.
+Daily development uses Bun. Node.js is used only in CI (Cloudflare officially supports only Node.js). The `check` CI job installs Bun via `oven-sh/setup-bun` directly; the `devenv-test` job runs the full devenv environment.
 
 ### 3. Cloudflare native, do not bypass
 
@@ -30,7 +30,7 @@ Hono uses Web Standards API (`Request`, `Response`, `fetch`, `URL`). Shared logi
 
 ### 6. Documentation is the harness
 
-Every technical decision is recorded. An agent reads the relevant documentation before changing code, and updates it after. Dependency versions are locked in `flake.lock`, `devenv.lock`, and `bun.lock`; check currency with `just check-versions` (see `docs/guide/version-check.md`).
+Every technical decision is recorded. An agent reads the relevant documentation before changing code, and updates it after. Dependency versions are locked in `devenv.lock` and `bun.lock`; check currency with `just check-versions` (see `docs/guide/version-check.md`).
 
 ### 7. Simplicity over everything
 
@@ -38,28 +38,28 @@ No unnecessary abstraction layers. No unnecessary dependencies (Turborepo, Nx: n
 
 ### 8. Supply chain awareness
 
-Nix flakes + devenv lock toolchain versions and hashes (`flake.lock` + `devenv.lock`). Bun lockfile locks JavaScript dependencies (`bun.lock`). Every test layer locks behavioural correctness.
+devenv locks toolchain versions and hashes (`devenv.lock` pins the exact `nixpkgs` commit). Bun lockfile locks JavaScript dependencies (`bun.lock`). Every test layer locks behavioural correctness.
 
 ---
 
 ## Key Decisions
 
-| Decision       | Choice                 | Rejected                       |
-| -------------- | ---------------------- | ------------------------------ |
-| Runtime        | Bun (dev) + Node (CI)  | Node-only, Deno                |
-| HTTP framework | Hono                   | Express, Fastify, Elysia       |
-| RPC            | oRPC (contract-first)  | tRPC, Hono RPC                 |
-| ORM            | Drizzle                | Prisma, Kysely                 |
-| Auth           | better-auth            | Lucia, Auth.js                 |
-| Schema         | Zod                    | Valibot, ArkType, TypeBox      |
-| Linter         | oxlint                 | ESLint, Biome                  |
-| Formatter      | oxfmt                  | Prettier, Biome                |
-| Bundler        | Rsbuild 2 (Rspack 2)   | Vite, Webpack                  |
-| CSS            | Tailwind CSS 4         | Vanilla CSS, CSS modules       |
-| Components     | shadcn/ui (Base UI)    | Radix, MUI                     |
-| Deployment     | Cloudflare Workers     | Vercel, Railway, Fly           |
-| Environment    | Devenv 2.x + flake.nix | Docker, asdf, mise, flake-only |
-| Monorepo       | Bun workspace          | Turborepo, Nx, pnpm workspaces |
+| Decision       | Choice                | Rejected                       |
+| -------------- | --------------------- | ------------------------------ |
+| Runtime        | Bun (dev) + Node (CI) | Node-only, Deno                |
+| HTTP framework | Hono                  | Express, Fastify, Elysia       |
+| RPC            | oRPC (contract-first) | tRPC, Hono RPC                 |
+| ORM            | Drizzle               | Prisma, Kysely                 |
+| Auth           | better-auth           | Lucia, Auth.js                 |
+| Schema         | Zod                   | Valibot, ArkType, TypeBox      |
+| Linter         | oxlint                | ESLint, Biome                  |
+| Formatter      | oxfmt                 | Prettier, Biome                |
+| Bundler        | Rsbuild 2 (Rspack 2)  | Vite, Webpack                  |
+| CSS            | Tailwind CSS 4        | Vanilla CSS, CSS modules       |
+| Components     | shadcn/ui (Base UI)   | Radix, MUI                     |
+| Deployment     | Cloudflare Workers    | Vercel, Railway, Fly           |
+| Environment    | Devenv 2.1.2+         | Docker, asdf, mise, flake-only |
+| Monorepo       | Bun workspace         | Turborepo, Nx, pnpm workspaces |
 
 ---
 
