@@ -58,6 +58,22 @@
     before = [ "devenv:enterShell" ];
   };
 
+  tasks."gen-types" = {
+    exec = "cd apps/backend && bunx wrangler types";
+    execIfModified = [ "apps/backend/src/**" "apps/backend/wrangler.toml" ];
+    after = [ "deps:install" ];
+  };
+
+  tasks."typecheck:backend" = {
+    exec = "cd apps/backend && bunx tsc --noEmit";
+    after = [ "gen-types" ];
+  };
+
+  tasks."typecheck:frontend" = {
+    exec = "cd apps/frontend && bunx tsc --noEmit";
+    after = [ "gen-types" ];
+  };
+
   processes = {
     backend = {
       exec = "bunx wrangler dev";
