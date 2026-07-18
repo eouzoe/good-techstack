@@ -34,7 +34,7 @@ just check-versions
 
 This compares every direct dependency (declared in a `package.json`) against the latest version on npm. Full detail — including the version-less package list and how to check non-npm packages (node, devenv, nix, secretspec) — is in [`docs/guide/version-check.md`](docs/guide/version-check.md). The Traditional Chinese version is [`docs/guide/version-check.zh.md`](docs/guide/version-check.zh.md).
 
-If a dependency is outdated, report it (see the good first issue below). A maintainer bumps the version, syncs `bun.lock` / `flake.lock`, runs the tests, and merges. You do not need to build or test anything.
+If a dependency is outdated, report it (see the good first issue below). A maintainer bumps the version, syncs `bun.lock` / `devenv.lock`, runs the tests, and merges. You do not need to build or test anything.
 
 ---
 
@@ -102,7 +102,7 @@ Some contributions span the entire stack and cannot be reduced to a single issue
 
 **Ongoing maintenance:**
 
-- Monthly version audit: run `just check-versions`, then sync `bun.lock` / `flake.lock` and update reference docs
+- Monthly version audit: run `just check-versions`, then sync `bun.lock` / `devenv.lock` and update reference docs
 - Translate documentation from English to Chinese
 
 **Infrastructure:**

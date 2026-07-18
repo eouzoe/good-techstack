@@ -34,7 +34,7 @@ just check-versions
 
 這會把每個直接依賴（`package.json` 裡宣告的）對照 npm 上的最新版本。完整說明——包含不含版本的套件清單，以及如何檢查非 npm 套件（node、devenv、nix、secretspec）——在 [`docs/guide/version-check.zh.md`](docs/guide/version-check.zh.md)。英文版是 [`docs/guide/version-check.md`](docs/guide/version-check.md)。
 
-如果有依賴過時，請回報（見下面的 good first issue）。維護者會升級版本、同步 `bun.lock` / `flake.lock`、跑測試，然後合併。你不需要建置或測試任何東西。
+如果有依賴過時，請回報（見下面的 good first issue）。維護者會升級版本、同步 `bun.lock` / `devenv.lock`、跑測試，然後合併。你不需要建置或測試任何東西。
 
 ---
 
@@ -102,7 +102,7 @@ just check-versions
 
 **持續維護：**
 
-- 每月版本檢查：執行 `just check-versions`，再同步 `bun.lock` / `flake.lock` 並更新參考文件
+- 每月版本檢查：執行 `just check-versions`，再同步 `bun.lock` / `devenv.lock` 並更新參考文件
 - 將文件從英文翻譯成中文
 
 **基礎建設：**

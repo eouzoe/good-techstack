@@ -21,7 +21,7 @@ macOS is the second most common development environment. The following need atte
 **Toolchain compatibility**
 
 - Bun: verify installation and runtime on both Intel and Apple Silicon
-- Nix: verify `flake.nix` works on macOS (nix-darwin vs nixpkgs, `devenv shell` behaviour)
+- Nix: verify `devenv shell` works on macOS (nix-darwin vs nixpkgs, `devenv.nix` toolchain availability)
 - Homebrew: if the user does not have Nix, can the stack use Homebrew? Write a `install.sh` fallback
 - Devenv: verify `devenv hook zsh` works on macOS
 
@@ -86,7 +86,7 @@ The stack is developed on Ubuntu via WSL. Other distributions may differ.
 | Fedora / RHEL       | `nix install` method differs; SELinux may block wrangler; `dnf` vs `apt`                | `start.sh` package detection, Nix install, wrangler dev |
 | Arch Linux          | Rolling release may have newer (incompatible) versions; `sudo` vs `doas`                | Tool version consistency, permission model              |
 | Alpine Linux        | musl libc instead of glibc; some binaries may not work                                  | Bun (officially supports musl), Nix, wrangler           |
-| NixOS               | Nix is native but `devenv shell` behaviour differs; `/usr/bin/env` not always available | `flake.nix`, shebangs, path assumptions                 |
+| NixOS               | Nix is native but `devenv shell` behaviour differs; `/usr/bin/env` not always available | `devenv.nix`, shebangs, path assumptions                |
 | non-systemd distros | Some tools assume systemd for service management                                        | Not typically relevant (stack does not use systemd)     |
 
 For each distribution, the test procedure is:
