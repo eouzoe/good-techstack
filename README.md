@@ -126,7 +126,7 @@ This one command does the heavy lifting:
 
 1. Downloads good-techstack
 2. Installs Nix if missing (NixOS-WSL already provides it)
-3. Installs devenv — which auto-pulls `zsh` + `just` for you via libghostty
+3. Installs devenv — the project's `devenv.nix` pre-installs `zsh` + `just`, and `devenv shell` uses `zsh` by default
 4. Bootstraps the development environment (traced from the first devenv call)
 
 Then finish with the steps below — copy the whole block and run it:

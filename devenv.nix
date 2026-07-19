@@ -12,7 +12,6 @@
     wrangler
     prettier
     git curl jq
-    nushell
   ];
   # Removed: nodejs_22            (js module → nodejs-slim)
   #          typescript            (bunx tsc)
