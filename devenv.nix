@@ -32,16 +32,22 @@
 
   enterTest = ''
     devenv tasks run --mode all \
-      deps:install deps:gen-types lint typecheck:backend typecheck:frontend
+      deps:lint typecheck:backend typecheck:frontend test:backend test:frontend
   '';
 
-  scripts = {
-    "generate-types".exec = "cd apps/backend && bunx wrangler types";
-    lint.exec = "oxlint --type-aware";
-    typecheck.exec = "cd apps/backend && bunx wrangler types && bunx tsc --noEmit";
-    test.exec = "bun test";
-    "check-versions".exec = "bun scripts/check-versions.mjs";
-    "check-env".exec = "bun scripts/check-env.mjs";
+  tasks."deps:lint" = {
+    exec = "oxlint --type-aware";
+    after = [ "deps:install" ];
+  };
+
+  tasks."deps:check-versions" = {
+    exec = "bun scripts/check-versions.mjs";
+    after = [ "deps:install" ];
+  };
+
+  tasks."deps:check-env" = {
+    exec = "bun scripts/check-env.mjs";
+    after = [ "deps:install" ];
   };
 
   tasks."deps:install" = {
@@ -56,7 +62,7 @@
   };
 
   tasks."deps:gen-types" = {
-    exec = "cd apps/backend && bunx wrangler types";
+    exec = "cd apps/backend && bunx wrangler types --env-interface CloudflareBindings";
     execIfModified = [ "apps/backend/src/**" "apps/backend/wrangler.toml" ];
     after = [ "deps:install" ];
   };
@@ -68,25 +74,36 @@
 
   tasks."typecheck:frontend" = {
     exec = "cd apps/frontend && bunx tsc --noEmit";
-    after = [ "deps:gen-types" ];
-  };
-
-  tasks."db:migrate" = {
-    exec = "cd apps/backend && bunx wrangler d1 migrations apply backend-db --local";
     after = [ "deps:install" ];
   };
 
+  tasks."test:backend" = {
+    exec = "cd apps/backend && bunx bun test --pass-with-no-tests";
+    after = [ "deps:install" ];
+  };
+
+  tasks."test:frontend" = {
+    exec = "cd apps/frontend && bunx vitest run --passWithNoTests";
+    after = [ "deps:install" ];
+  };
+
+  # One-shot init steps (D1 migration, seed, etc.) are wired here once the
+  # business layer exists — see docs/agent/testing.md. They use
+  # `processes.<name>.task` (devenv 2.x native) and attach via
+  # `backend.after = [ "...@succeeded" ]`. Not预设 before business确认.
+
   processes = {
     backend = {
-      exec = "bunx wrangler dev";
+      ports.http.allocate = 8787;
+      exec = "bunx wrangler dev --port ${toString config.processes.backend.ports.http.value} --ip 127.0.0.1";
       cwd = "./apps/backend";
-      after = [ "deps:install" "deps:gen-types" "db:migrate@succeeded" ];
-      ready.http.get = { port = 8787; path = "/health"; };
+      after = [ "deps:install" "deps:gen-types" ];
     };
     frontend = {
-      exec = "bunx rsbuild dev";
+      ports.web.allocate = 3000;
+      exec = "bunx rsbuild dev --port ${toString config.processes.frontend.ports.web.value}";
       cwd = "./apps/frontend";
-      after = [ "backend@ready" ];
+      after = [ "deps:install" "deps:gen-types" ];
     };
   };
 

@@ -38,3 +38,6 @@ apps/frontend/src/routeTree.gen.ts
 
 # ── Agent instructions (not committed) ──
 AGENTS.md
+
+# wrangler generates this on env build (deps:gen-types)
+apps/backend/worker-configuration.d.ts

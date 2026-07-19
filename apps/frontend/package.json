@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "rsbuild dev",
-    "build": "rsbuild build"
+    "build": "rsbuild build",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.168.27",
@@ -16,9 +19,13 @@
   "devDependencies": {
     "@rsbuild/core": "^2.1.6",
     "@rsbuild/plugin-react": "^2.1.0",
+    "@testing-library/jest-dom": "^6",
+    "@testing-library/react": "^16",
     "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "typescript": "^7.0.2"
+    "jsdom": "^25",
+    "typescript": "^7.0.2",
+    "vitest": "^3"
   }
 }

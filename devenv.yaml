@@ -14,6 +14,10 @@ inputs:
 
 require_version: ">=2.1.2"
 
+# Fail loudly on port conflicts instead of silently remapping (prevents
+# devenv's sticky fallback-port behaviour from hiding collisions).
+strict_ports: true
+
 # SecretSpec: secretspec.toml declares WHAT secrets the app needs.
 # We do NOT force `secretspec.enable = true` here — that would make
 # every `devenv shell` require a configured provider + set secrets,
