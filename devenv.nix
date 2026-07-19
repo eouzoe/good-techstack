@@ -71,16 +71,22 @@
     after = [ "deps:gen-types" ];
   };
 
+  tasks."db:migrate" = {
+    exec = "cd apps/backend && bunx wrangler d1 migrations apply backend-db --local";
+    after = [ "deps:install" ];
+  };
+
   processes = {
     backend = {
       exec = "bunx wrangler dev";
       cwd = "./apps/backend";
-      after = [ "deps:install" "deps:gen-types" ];
+      after = [ "deps:install" "deps:gen-types" "db:migrate@succeeded" ];
+      ready.http.get = { port = 8787; path = "/health"; };
     };
     frontend = {
       exec = "bunx rsbuild dev";
       cwd = "./apps/frontend";
-      after = [ "deps:install" "deps:gen-types" ];
+      after = [ "backend@ready" ];
     };
   };
 
