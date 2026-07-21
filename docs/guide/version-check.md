@@ -57,7 +57,7 @@ bunx npm view <npm-name> version
 | oxfmt                 | format   | `oxfmt`                           | `bunx npm view oxfmt version`                           | https://oxc.rs                            |
 | Rsbuild               | build    | `@rsbuild/core`                   | `bunx npm view @rsbuild/core version`                   | https://rsbuild.rs                        |
 | Rspack                | build    | `rspack`                          | `bunx npm view rspack version`                          | https://rspack.dev                        |
-| Rstest                | test     | `@rstest/core`                    | `bunx npm view @rstest/core version`                    | https://rstest.rs                        |
+| Rstest                | test     | `@rstest/core`                    | `bunx npm view @rstest/core version`                    | https://rstest.rs                         |
 | Vitest pool (workers) | test     | `@cloudflare/vitest-pool-workers` | `bunx npm view @cloudflare/vitest-pool-workers version` | https://developers.cloudflare.com/workers |
 | Wrangler              | deploy   | `wrangler`                        | `bunx npm view wrangler version`                        | https://developers.cloudflare.com/workers |
 | Cloudflare types      | types    | `@cloudflare/workers-types`       | `bunx npm view @cloudflare/workers-types version`       | https://developers.cloudflare.com/workers |
@@ -76,14 +76,14 @@ identifier above — never guess:
 
 These are not on npm, so the script does not check them. Check them by hand.
 
-| Package    | How to check (macOS / Linux)                                    | How to check (Windows) | Official link                                 |
-| ---------- | --------------------------------------------------------------- | ---------------------- | --------------------------------------------- |
-| Node.js    | `nvm ls-remote \| tail` or `nix eval nixpkgs#nodejs_22.version` | `nvm list available`   | https://nodejs.org/en/about/previous-releases |
-| devenv     | `devenv --version`                                              | `devenv --version`     | https://github.com/cachix/devenv/releases     |
-| Nix        | `nix --version`                                                 | `nix --version`        | https://github.com/NixOS/nix/releases         |
-| SecretSpec | `secretspec --version`                                          | `secretspec --version` | https://secretspec.dev                        |
-| just       | `just --version`                                                | `just --version`       | https://github.com/casey/just/releases        |
-| jj (Jujutsu) | `devenv shell -- jj --version`                                | `devenv shell -- jj --version` | https://jj-vcs.github.io/jj/                  |
+| Package      | How to check (macOS / Linux)                                    | How to check (Windows)         | Official link                                 |
+| ------------ | --------------------------------------------------------------- | ------------------------------ | --------------------------------------------- |
+| Node.js      | `nvm ls-remote \| tail` or `nix eval nixpkgs#nodejs_22.version` | `nvm list available`           | https://nodejs.org/en/about/previous-releases |
+| devenv       | `devenv --version`                                              | `devenv --version`             | https://github.com/cachix/devenv/releases     |
+| Nix          | `nix --version`                                                 | `nix --version`                | https://github.com/NixOS/nix/releases         |
+| SecretSpec   | `secretspec --version`                                          | `secretspec --version`         | https://secretspec.dev                        |
+| just         | `just --version`                                                | `just --version`               | https://github.com/casey/just/releases        |
+| jj (Jujutsu) | `devenv shell -- jj --version`                                  | `devenv shell -- jj --version` | https://jj-vcs.github.io/jj/                  |
 
 ## What to report
 

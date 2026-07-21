@@ -1,17 +1,20 @@
 #!/usr/bin/env sh
 # good-techstack — one-command bootstrap
-# Usage: curl -fsSL <this script> | sh
+# Usage: curl -fsSL <this script> | sh -s <app-name>
 #
-# Supported: Windows (via NixOS-WSL) and Linux. macOS is not supported.
+# Supported: macOS (Apple Silicon), Linux, Windows (via NixOS-WSL).
+# Intel Macs are supported via upstream Nix installer.
 # On Windows, run the Command Prompt block from README.md first, then this
-# inside the NixOS-WSL terminal. Native Linux works but is weakly supported.
+# inside the NixOS-WSL terminal.
 set -eu
 
 REPO_OWNER="${REPO_OWNER:-eouzoe}"
 APP_NAME="${1:-my-app}"
 
-# 0. OS detection (kept at the very top; no nix check here)
+# 0. OS + arch detection (kept at the very top; no nix check here)
 OS="$(uname -s 2>/dev/null || echo unknown)"
+ARCH="$(uname -m 2>/dev/null || echo unknown)"
+NIX_INSTALLER_UPSTREAM=0
 case "$OS" in
   Linux*)
     # Native Linux and WSL (incl. NixOS-WSL) run the same flow below.
@@ -19,8 +22,16 @@ case "$OS" in
     # installed and opened NixOS-WSL, so no Windows-side detection is needed.
     ;;
   Darwin*)
-    echo "error: macOS is not supported yet."
-    exit 1
+    # macOS: Apple Silicon (arm64) uses the Determinate Nix installer.
+    # Intel Macs (x86_64) use the official upstream installer since
+    # Determinate Nix dropped x86_64-darwin support in v3.13.2 (Nov 2025).
+    case "$ARCH" in
+      arm64) ;;
+      x86_64)
+        echo "  -> Intel Mac detected: using upstream Nix installer"
+        NIX_INSTALLER_UPSTREAM=1
+        ;;
+    esac
     ;;
 esac
 
@@ -45,11 +56,18 @@ mkdir -p "${APP_NAME}"
 tar xzf "$GTS_TMP/repo.tar.gz" --strip-components=1 -C "${APP_NAME}"
 cd "${APP_NAME}"
 
-# 3. install Nix if missing (official installer; no rootless detection — the
-#    installer handles rootless/multi-user itself). NixOS-WSL already has it.
+# 3. install Nix if missing. NixOS-WSL already has it.
+#    Apple Silicon + Linux → Determinate Nix installer (handles macOS
+#    APFS volume + launchd, Linux systemd, etc.). Intel Mac → upstream.
 if ! command -v nix >/dev/null 2>&1; then
   echo "  -> Installing Nix ..."
-  curl -fsSL https://install.nixos.org/nix-installer | sh -s -- install --no-confirm
+  if [ "$NIX_INSTALLER_UPSTREAM" = "1" ]; then
+    curl -fsSL https://nixos.org/nix/install | sh
+  else
+    curl -fsSL https://install.determinate.systems/nix | sh -s -- install --no-confirm \
+      --extra-conf "max-substitution-jobs = 128" \
+      --extra-conf "http-connections = 128"
+  fi
   export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
   if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
     . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh

@@ -49,7 +49,7 @@ bunx npm view <npm-name> version
 | oxfmt                 | 格式化   | `oxfmt`                           | `bunx npm view oxfmt version`                           | https://oxc.rs                            |
 | Rsbuild               | 建置     | `@rsbuild/core`                   | `bunx npm view @rsbuild/core version`                   | https://rsbuild.rs                        |
 | Rspack                | 建置     | `rspack`                          | `bunx npm view rspack version`                          | https://rspack.dev                        |
-| Rstest                | 測試     | `@rstest/core`                    | `bunx npm view @rstest/core version`                    | https://rstest.rs                        |
+| Rstest                | 測試     | `@rstest/core`                    | `bunx npm view @rstest/core version`                    | https://rstest.rs                         |
 | Vitest pool (workers) | 測試     | `@cloudflare/vitest-pool-workers` | `bunx npm view @cloudflare/vitest-pool-workers version` | https://developers.cloudflare.com/workers |
 | Wrangler              | 部署     | `wrangler`                        | `bunx npm view wrangler version`                        | https://developers.cloudflare.com/workers |
 | Cloudflare 型別       | 型別     | `@cloudflare/workers-types`       | `bunx npm view @cloudflare/workers-types version`       | https://developers.cloudflare.com/workers |
@@ -67,14 +67,14 @@ npm 的**套件名**不一定等於工具名。永遠使用上面精確的識別
 
 這些不在 npm 上，所以腳本不檢查它們。請手動檢查。
 
-| 套件       | 如何檢查（macOS / Linux）                                       | 如何檢查（Windows）    | 官方連結                                      |
-| ---------- | --------------------------------------------------------------- | ---------------------- | --------------------------------------------- |
-| Node.js    | `nvm ls-remote \| tail` 或 `nix eval nixpkgs#nodejs_22.version` | `nvm list available`   | https://nodejs.org/en/about/previous-releases |
-| devenv     | `devenv --version`                                              | `devenv --version`     | https://github.com/cachix/devenv/releases     |
-| Nix        | `nix --version`                                                 | `nix --version`        | https://github.com/NixOS/nix/releases         |
-| SecretSpec | `secretspec --version`                                          | `secretspec --version` | https://secretspec.dev                        |
-| just       | `just --version`                                                | `just --version`       | https://github.com/casey/just/releases        |
-| jj (Jujutsu) | `devenv shell -- jj --version`                                | `devenv shell -- jj --version` | https://jj-vcs.github.io/jj/                  |
+| 套件         | 如何檢查（macOS / Linux）                                       | 如何檢查（Windows）            | 官方連結                                      |
+| ------------ | --------------------------------------------------------------- | ------------------------------ | --------------------------------------------- |
+| Node.js      | `nvm ls-remote \| tail` 或 `nix eval nixpkgs#nodejs_22.version` | `nvm list available`           | https://nodejs.org/en/about/previous-releases |
+| devenv       | `devenv --version`                                              | `devenv --version`             | https://github.com/cachix/devenv/releases     |
+| Nix          | `nix --version`                                                 | `nix --version`                | https://github.com/NixOS/nix/releases         |
+| SecretSpec   | `secretspec --version`                                          | `secretspec --version`         | https://secretspec.dev                        |
+| just         | `just --version`                                                | `just --version`               | https://github.com/casey/just/releases        |
+| jj (Jujutsu) | `devenv shell -- jj --version`                                  | `devenv shell -- jj --version` | https://jj-vcs.github.io/jj/                  |
 
 ## 要回報什麼
 

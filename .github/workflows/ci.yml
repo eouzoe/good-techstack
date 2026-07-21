@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [dev, main]
+    branches: [dev, main, experiment/devenv-tasks]
   pull_request:
     branches: [main]
 
@@ -15,33 +15,20 @@ jobs:
       - name: Config files present and parseable
         run: |
           errors=0
-          for f in Justfile secretspec.toml .prettierrc.json .editorconfig; do
+          for f in Justfile secretspec.toml .editorconfig package.json; do
             if [ -f "$f" ]; then echo "OK  $f"; else echo "MISS  $f"; errors=$((errors+1)); fi
           done
-          for f in flake.nix flake.lock devenv.nix devenv.lock; do
+          for f in devenv.nix devenv.lock; do
             if [ -f "$f" ]; then echo "OK  $f"; else echo "MISS  $f"; errors=$((errors+1)); fi
           done
           for f in apps/backend/tsconfig.json apps/backend/package.json; do
             if [ -f "$f" ]; then echo "OK  $f"; else echo "MISS  $f"; errors=$((errors+1)); fi
           done
-          npx --yes json5 < .prettierrc.json > /dev/null 2>&1 && echo "OK  .prettierrc.json (valid)"
+          python3 -c "import json; json.load(open('devenv.lock'))" && echo "OK  devenv.lock (valid)"
           exit $errors
 
-      - name: Lock files parseable
-        run: |
-          python3 - <<'PY'
-          import json
-          with open('flake.lock') as f:
-              fl = json.load(f)
-          with open('devenv.lock') as f:
-              dl = json.load(f)
-          assert 'nixpkgs' in fl['nodes'], "flake.lock missing nixpkgs input"
-          assert any('devenv' in k for k in dl.get('nodes', {})), "devenv.lock missing"
-          print("lock files OK")
-          PY
-
-      - name: Nix flake eval (no build)
-        run: nix eval .#bun.outPath --impure 2>&1 | head -3
+      - name: Validate Bun lockfile
+        run: python3 -c "import json; json.load(open('bun.lock'))" && echo "OK  bun.lock (valid)"
 
   devenv:
     runs-on: ubuntu-latest
@@ -59,3 +46,29 @@ jobs:
 
       - name: Build environment
         run: devenv shell -- bun --version
+
+  blank-macos:
+    if: github.ref == 'refs/heads/experiment/devenv-tasks'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            max-substitution-jobs = 128
+            http-connections = 128
+
+      - uses: cachix/cachix-action@v16
+        with:
+          name: devenv
+
+      - name: Install devenv
+        run: nix profile add nixpkgs#devenv
+
+      - name: Time devenv test (first cold build)
+        run: |
+          SECONDS=0
+          devenv test
+          echo "devenv test completed in $SECONDS seconds"
+          echo "time=$SECONDS" >> $GITHUB_OUTPUT

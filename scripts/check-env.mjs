@@ -108,10 +108,9 @@ function cmp(a, b) {
 const tools = [
   { name: "bun", nix: "bun", fix: "devenv-shell" },
   { name: "just", nix: "just", fix: "devenv-shell" },
-  { name: "oxlint", nix: "oxlint", fix: "devenv-shell" },
   { name: "oxfmt", nix: "oxfmt", fix: "devenv-shell" },
-  { name: "wrangler", nix: "wrangler", fix: "devenv-shell" },
-  { name: "prettier", nix: "prettier", fix: "devenv-shell" },
+  { name: "oxlint", bun: "oxlint", fix: "bun-install" },
+  { name: "wrangler", bun: "wrangler", fix: "bun-install" },
   { name: "node", nix: "nodejs_26", fix: "devenv-shell", optional: true },
   { name: "drizzle-kit", bun: "drizzle-kit", fix: "bun-install" },
   { name: "devenv", devenv: true, fix: "devenv-bin" },

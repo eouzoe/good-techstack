@@ -9,7 +9,7 @@ dev:
 
 # 執行 oxlint
 lint:
-    oxlint --type-aware
+    bunx oxlint --type-aware
 
 # TypeScript 型別檢查（根目錄無 tsconfig，逐 workspace 檢查）
 typecheck:
@@ -38,7 +38,7 @@ setup:
 # 一次性引導：啟動種子（start.sh）跑完後，環境已就緒
 bootstrap:
     @command -v bun    >/dev/null 2>&1 && echo "  ✓ bun:      $(bun --version)"
-    @command -v oxlint >/dev/null 2>&1 && echo "  ✓ oxlint:   $(oxlint --version)"
+    @bunx oxlint --version >/dev/null 2>&1 && echo "  ✓ oxlint:   $(bunx oxlint --version)"
     @command -v just   >/dev/null 2>&1 && echo "  ✓ just:     $(just --version)"
     @echo "  → Next: set your secrets and start your AI agent (see README.md)."
 
@@ -47,10 +47,9 @@ bootstrap:
 audit:
     secretspec audit
 
-# 執行 formatter（oxfmt + prettier）
+# 執行 formatter
 format:
     oxfmt --write .
-    prettier --write --ignore-unknown .
 
 # 清理建置產物
 clean:

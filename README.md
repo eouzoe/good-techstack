@@ -14,13 +14,13 @@ curl -L -o %TEMP%\n.wsl "https://github.com/nix-community/NixOS-WSL/releases/lat
 
 Then, inside the NixOS-WSL terminal, run the command below.
 
-**Linux / NixOS-WSL**:
+**macOS / Linux / NixOS-WSL**:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
 ```
 
-> macOS is not supported. Native Linux works but is weakly supported — for the smoothest experience use NixOS-WSL on Windows or a NixOS machine.
+> Intel Macs (x86_64) use the upstream Nix installer instead of Determinate Nix.
 
 ---
 

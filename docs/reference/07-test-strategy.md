@@ -34,7 +34,7 @@ devenv shell -- bunx wrangler tail          # Real-time error monitoring
 |    2. Unit     | `bun test`                      | Bun JSC      | <200ms  |    Yes     | Pure functions, business logic               |
 |  3. Contract   | `bun test`                      | Bun JSC      | <500ms  |    Yes     | oRPC contract consistency                    |
 |  4. Property   | `fast-check`                    | Bun JSC      |   <1s   |    Yes     | Fuzzing edge cases                           |
-|  5. Integration | `vitest-pool-workers`           | workerd      |  5-30s  |    Yes     | D1, R2, KV, DO bindings                      |
+| 5. Integration | `vitest-pool-workers`           | workerd      |  5-30s  |    Yes     | D1, R2, KV, DO bindings                      |
 |     6. E2E     | `@playwright/test`              | Real browser | 30-120s | No, manual | Happy path, auth, security                   |
 | 7. Production  | `wrangler tail` + Observability | Production   |   N/A   |     No     | Error rate, p99                              |
 
@@ -60,13 +60,13 @@ Type-aware linting via `tsgolint`: `oxlint --type-aware`. Supports 59/61 typescr
 
 ## Coverage targets
 
-| Layer       | Target                                | Tool                |
-| ----------- | ------------------------------------- | ------------------- |
-| API routes  | 100%                                  | bun test --coverage |
-| DB queries  | One integration test per query        | vitest run (workerd) |
-| Frontend components | Core components have rstest tests | rstest               |
-| Zod schemas | One smoke + one property per schema   | bun test             |
-| Auth flow   | Three tests (register, login, logout) | playwright           |
+| Layer               | Target                                | Tool                 |
+| ------------------- | ------------------------------------- | -------------------- |
+| API routes          | 100%                                  | bun test --coverage  |
+| DB queries          | One integration test per query        | vitest run (workerd) |
+| Frontend components | Core components have rstest tests     | rstest               |
+| Zod schemas         | One smoke + one property per schema   | bun test             |
+| Auth flow           | Three tests (register, login, logout) | playwright           |
 
 ## E2E notes (CF Workers + Playwright)
 

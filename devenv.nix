@@ -1,17 +1,16 @@
 { pkgs, config, lib, ... }: {
+  # Speed: skip C compiler toolchain (unnecessary for JS/TS — saves hundreds MB
+  # in eval + store). Native addons use system Xcode/gcc, not nix's stdenv.
+  stdenv = pkgs.stdenvNoCC;
+
   languages.javascript.bun.enable = true;
-  languages.javascript.bun.install.enable = true;
 
   packages = with pkgs; [
-    bun
     nodejs_26
     zsh
     just
-    oxlint
     oxfmt
-    wrangler
-    prettier
-    git jujutsu curl jq
+    git jujutsu
   ];
   # Removed: nodejs_22            (js module → nodejs-slim)
   #          typescript            (bunx tsc)
@@ -20,12 +19,12 @@
   # not honour languages.javascript.package) so the runtime version is tracked
   # instead of arriving via a transitive dep.
 
+  # Binary cache: devenv.cachix.org (default, includes all transitive deps incl.
+  # git-hooks.nix binaries — no separate pre-commit-hooks cache needed).
   cachix.pull = [ "devenv" ];
 
   git-hooks.hooks = {
-    oxlint.enable = true;
     oxfmt.enable = true;
-    prettier.enable = true;
   };
 
   dotenv.enable = false;
@@ -36,7 +35,7 @@
   '';
 
   tasks."deps:lint" = {
-    exec = "oxlint --type-aware";
+    exec = "bunx oxlint --type-aware";
     after = [ "deps:install" ];
   };
 
@@ -52,12 +51,7 @@
 
   tasks."deps:install" = {
     exec = "bun install";
-    execIfModified = [
-      "bun.lock"
-      "package.json"
-      "apps/*/package.json"
-      "packages/*/package.json"
-    ];
+    execIfModified = [ "bun.lock" ];
     before = [ "devenv:enterShell" ];
   };
 
@@ -90,7 +84,7 @@
   # One-shot init steps (D1 migration, seed, etc.) are wired here once the
   # business layer exists — see docs/agent/testing.md. They use
   # `processes.<name>.task` (devenv 2.x native) and attach via
-  # `backend.after = [ "...@succeeded" ]`. Not预设 before business确认.
+  # `backend.after = [ "...@succeeded" ]`. Not 预设 before business确认.
 
   processes = {
     backend = {
@@ -157,17 +151,15 @@
     '';
   };
   enterShell = ''
-    echo "┌─────────────────────────────────────┐"
-    echo "│  good-techstack dev environment      │"
-    echo "│  bun:      $(bun --version)                   │"
-    echo "│  node:     $(node --version)                  │"
-    echo "│  oxlint:   $(oxlint --version 2>/dev/null || echo 'N/A')                │"
-    echo "│  wrangler: $(wrangler --version 2>/dev/null || echo 'N/A') │"
-    echo "└─────────────────────────────────────┘"
+    echo "┌────────────────────────────────────┐"
+    echo "│  good-techstack dev environment     │"
+    echo "│  bun:  $(bun --version)                    │"
+    echo "│  node: $(node --version)                   │"
+    echo "│  oxfmt: $(oxfmt --version 2>/dev/null || echo 'N/A') │"
+    echo "└────────────────────────────────────┘"
     echo ""
-    echo "  devenv scripts: lint, typecheck, test"
+    echo "  devenv tasks: lint, typecheck, test"
     echo "  devenv processes: backend, frontend"
-    echo "  devenv mcp: AI agent integration"
     echo ""
   '';
 }

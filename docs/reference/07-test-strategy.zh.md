@@ -61,9 +61,9 @@ Type-aware linting via `tsgolint` (Go-based TS type checker): `oxlint --type-awa
 
 ## 測試涵蓋率目標
 
-| 層         | 目標                           | 工具                |
-| ---------- | ------------------------------ | ------------------- |
-| API route  | 100%                           | bun test --coverage |
+| 層         | 目標                           | 工具                 |
+| ---------- | ------------------------------ | -------------------- |
+| API route  | 100%                           | bun test --coverage  |
 | DB query   | 每 query 1 整合                | vitest run (workerd) |
 | 前端元件   | 核心元件有 rstest 測試         | rstest               |
 | Zod schema | 每 schema 1+1 (smoke+property) | bun test             |
