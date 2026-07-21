@@ -33,6 +33,7 @@ just lint            # devenv shell -- oxlint --type-aware
 
 ```bash
 just test            # devenv shell -- bun test
+just test-frontend   # devenv shell -- bunx rstest (frontend Rsbuild pipeline)
 devenv shell -- bun test --watch   # TDD mode
 devenv shell -- vitest run         # Integration tests (workerd)
 devenv shell -- bunx playwright test   # E2E tests (requires wrangler dev)
@@ -59,5 +60,6 @@ Before pushing, run the same checks CI will run:
 just lint             # oxlint --type-aware
 just typecheck        # tsc --noEmit
 just test             # bun test
+just test-frontend    # rstest
 devenv shell -- vitest run
 ```

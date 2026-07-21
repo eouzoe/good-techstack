@@ -11,7 +11,7 @@
     oxfmt
     wrangler
     prettier
-    git curl jq
+    git jujutsu curl jq
   ];
   # Removed: nodejs_22            (js module → nodejs-slim)
   #          typescript            (bunx tsc)
@@ -83,7 +83,7 @@
   };
 
   tasks."test:frontend" = {
-    exec = "cd apps/frontend && bunx vitest run --passWithNoTests";
+    exec = "cd apps/frontend && bunx rstest";
     after = [ "deps:install" ];
   };
 

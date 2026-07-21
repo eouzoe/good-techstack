@@ -14,7 +14,7 @@ and are **not** product tests:
 | `lint`                                     | oxlint --type-aware | no lint errors                                   |
 | `typecheck:backend` / `typecheck:frontend` | tsc --noEmit        | types compile (incl. Zod4 contract types)        |
 | `test:backend`                             | bun test            | backend unit tests (see below)                   |
-| `test:frontend`                            | vitest run          | frontend unit tests (see below)                  |
+| `test:frontend`                            | rstest              | frontend tests through Rsbuild pipeline          |
 
 Run a single gate: `devenv tasks run lint`. Run the full graph: `devenv test`.
 
@@ -24,17 +24,17 @@ The template pre-wires the **framework** for these but ships **no business
 tests** — add them once the business layer exists. Each layer below lists the
 tool, what to test, and the unlock trigger.
 
-### Frontend (TanStack Start + Rsbuild, Vitest)
+### Frontend (TanStack Start + Rsbuild, Rstest)
 
-Config: `apps/frontend/vitest.config.ts` (jsdom, Testing Library, strict mode).
+Config: `apps/frontend/rstest.config.ts` (jsdom, Testing Library, strict mode).
 Write `*.test.tsx` under `src/`.
 
 - **Unit / component** — render a component, assert output. Use
-  `@testing-library/react` + `jest-dom` matchers (setup in `vitest.setup.ts`).
+  `@testing-library/react` + `jest-dom` matchers (setup in `rstest.setup.ts`).
 - **Route harness** — when `@tanstack-router-testing` is added, load a single
   route or the full `routeTree.gen` via `createRouterHarness`, assert
   loaderData/render without a live server.
-- **Hydration mismatch** — strict mode in `vitest.setup.ts` catches server HTML
+- **Hydration mismatch** — strict mode in `rstest.setup.ts` catches server HTML
   !== client HTML, and non-serializable props passed RSC → client. This bug is
   invisible to the eye pre-prod; catch it here.
 - **Visual regression / E2E (Playwright)** — NOT pre-wired. Add when a critical

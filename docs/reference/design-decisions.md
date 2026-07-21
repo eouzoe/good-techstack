@@ -59,6 +59,7 @@ devenv locks toolchain versions and hashes (`devenv.lock` pins the exact `nixpkg
 | Components     | shadcn/ui (Base UI)   | Radix, MUI                     |
 | Deployment     | Cloudflare Workers    | Vercel, Railway, Fly           |
 | Environment    | Devenv 2.1.2+         | Docker, asdf, mise, flake-only |
+| VCS            | Jujutsu (colocated)   | Git-only workflow               |
 | Monorepo       | Bun workspace         | Turborepo, Nx, pnpm workspaces |
 
 ---
@@ -77,6 +78,7 @@ devenv locks toolchain versions and hashes (`devenv.lock` pins the exact `nixpkg
 | Add Express or Fastify                | Not Web Standards                    | Hono                           |
 | Introduce a second schema library     | Breaks Zod single-source-of-truth    | Zod only                       |
 | Add tRPC                              | oRPC has broader type safety         | oRPC                           |
+| Use git for local version control     | Jujutsu auto-stages, rebase-friendly | `jj`                            |
 | Use npm, pnpm, or yarn                | Bun is the default                   | `bun add`                      |
 | Write API tokens into code or commits | Security vulnerability               | `~/.cloudflare/mcp-token`      |
 

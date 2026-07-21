@@ -14,6 +14,7 @@ Use the fastest tool in the development loop. Use the most realistic tool in the
 devenv shell -- bun test                    # All unit + contract + property
 devenv shell -- bun test --watch            # TDD mode
 devenv shell -- bun test --coverage         # Coverage
+devenv shell -- bunx rstest                 # Frontend tests (Rsbuild pipeline)
 
 # CI gate (workerd correctness)
 devenv shell -- vitest run                  # vitest-pool-workers integration
@@ -32,8 +33,8 @@ devenv shell -- bunx wrangler tail          # Real-time error monitoring
 |    1. Smoke    | `bun test`                      | Bun JSC      |  <50ms  |    Yes     | Schema compiles, bindings connect, app boots |
 |    2. Unit     | `bun test`                      | Bun JSC      | <200ms  |    Yes     | Pure functions, business logic               |
 |  3. Contract   | `bun test`                      | Bun JSC      | <500ms  |    Yes     | oRPC contract consistency                    |
-|  4. Property   | `@fast-check/vitest`            | Bun JSC      |   <1s   |    Yes     | Fuzzing edge cases                           |
-| 5. Integration | `vitest-pool-workers`           | workerd      |  5-30s  |    Yes     | D1, R2, KV, DO bindings                      |
+|  4. Property   | `fast-check`                    | Bun JSC      |   <1s   |    Yes     | Fuzzing edge cases                           |
+|  5. Integration | `vitest-pool-workers`           | workerd      |  5-30s  |    Yes     | D1, R2, KV, DO bindings                      |
 |     6. E2E     | `@playwright/test`              | Real browser | 30-120s | No, manual | Happy path, auth, security                   |
 | 7. Production  | `wrangler tail` + Observability | Production   |   N/A   |     No     | Error rate, p99                              |
 
@@ -43,7 +44,8 @@ devenv shell -- bunx wrangler tail          # Real-time error monitoring
 PR → just lint          (oxlint --type-aware)
    → just typecheck     (tsc --noEmit)
    → just test          (bun test: unit | contract | property)
-   → devenv shell -- vitest run (integration)
+   → just test-frontend (rstest: frontend through Rsbuild pipeline)
+   → devenv shell -- vitest run (integration, workerd)
    → PASS ✅
 ```
 
@@ -61,9 +63,10 @@ Type-aware linting via `tsgolint`: `oxlint --type-aware`. Supports 59/61 typescr
 | Layer       | Target                                | Tool                |
 | ----------- | ------------------------------------- | ------------------- |
 | API routes  | 100%                                  | bun test --coverage |
-| DB queries  | One integration test per query        | vitest run          |
-| Zod schemas | One smoke + one property per schema   | bun test            |
-| Auth flow   | Three tests (register, login, logout) | playwright          |
+| DB queries  | One integration test per query        | vitest run (workerd) |
+| Frontend components | Core components have rstest tests | rstest               |
+| Zod schemas | One smoke + one property per schema   | bun test             |
+| Auth flow   | Three tests (register, login, logout) | playwright           |
 
 ## E2E notes (CF Workers + Playwright)
 
@@ -74,7 +77,7 @@ Type-aware linting via `tsgolint`: `oxlint --type-aware`. Supports 59/61 typescr
 
 ## Official docs
 
-- Vitest: https://vitest.dev
+- Rstest: https://rstest.rs
 - Playwright: https://playwright.dev
 - fast-check: https://fast-check.dev
 - CF vitest-pool-workers: https://developers.cloudflare.com/workers/testing/vitest-integration/

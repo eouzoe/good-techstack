@@ -57,7 +57,7 @@ bunx npm view <npm-name> version
 | oxfmt                 | format   | `oxfmt`                           | `bunx npm view oxfmt version`                           | https://oxc.rs                            |
 | Rsbuild               | build    | `@rsbuild/core`                   | `bunx npm view @rsbuild/core version`                   | https://rsbuild.rs                        |
 | Rspack                | build    | `rspack`                          | `bunx npm view rspack version`                          | https://rspack.dev                        |
-| Vitest                | test     | `vitest`                          | `bunx npm view vitest version`                          | https://vitest.dev                        |
+| Rstest                | test     | `@rstest/core`                    | `bunx npm view @rstest/core version`                    | https://rstest.rs                        |
 | Vitest pool (workers) | test     | `@cloudflare/vitest-pool-workers` | `bunx npm view @cloudflare/vitest-pool-workers version` | https://developers.cloudflare.com/workers |
 | Wrangler              | deploy   | `wrangler`                        | `bunx npm view wrangler version`                        | https://developers.cloudflare.com/workers |
 | Cloudflare types      | types    | `@cloudflare/workers-types`       | `bunx npm view @cloudflare/workers-types version`       | https://developers.cloudflare.com/workers |
@@ -83,6 +83,7 @@ These are not on npm, so the script does not check them. Check them by hand.
 | Nix        | `nix --version`                                                 | `nix --version`        | https://github.com/NixOS/nix/releases         |
 | SecretSpec | `secretspec --version`                                          | `secretspec --version` | https://secretspec.dev                        |
 | just       | `just --version`                                                | `just --version`       | https://github.com/casey/just/releases        |
+| jj (Jujutsu) | `devenv shell -- jj --version`                                | `devenv shell -- jj --version` | https://jj-vcs.github.io/jj/                  |
 
 ## What to report
 

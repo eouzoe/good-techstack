@@ -15,9 +15,17 @@ lint:
 typecheck:
     for d in apps/backend apps/frontend packages/shared; do tsc --noEmit -p "$d" || exit 1; done
 
-# 執行測試
+# 執行測試（bun test — 後端單元 + shared package）
 test:
     bun test
+
+# 前端測試（rstest — 透過 Rsbuild 構建管線模擬部屬）
+test-frontend:
+    cd apps/frontend && bunx rstest
+
+# 全部測試
+test-all:
+    devenv test
 
 # 部署到 Cloudflare Workers
 deploy:
