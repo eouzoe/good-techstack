@@ -8,8 +8,10 @@
     "build": "bunx wrangler deploy --dry-run --outdir=dist",
     "deploy": "bunx wrangler deploy",
     "types": "bunx wrangler types --env-interface CloudflareBindings",
+    "typecheck": "tsc --noEmit",
     "migrate": "bunx wrangler d1 migrations apply backend-db",
     "db:generate": "bunx drizzle-kit generate",
+    "db:push": "bunx drizzle-kit push",
     "db:studio": "bunx drizzle-kit studio"
   },
   "dependencies": {

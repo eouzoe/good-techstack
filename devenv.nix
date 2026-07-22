@@ -3,6 +3,9 @@
   # in eval + store). Native addons use system Xcode/gcc, not nix's stdenv.
   stdenv = pkgs.stdenvNoCC;
 
+  # Default shell inside the devenv environment
+  shell = "${pkgs.zsh}/bin/zsh";
+
   languages.javascript.bun.enable = true;
 
   packages = with pkgs; [

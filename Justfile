@@ -11,9 +11,9 @@ dev:
 lint:
     bunx oxlint --type-aware
 
-# TypeScript type check (per-workspace, no root tsconfig)
+# TypeScript type check (runs `typecheck` script in every workspace via bun)
 typecheck:
-    for d in apps/backend apps/frontend packages/shared; do tsc --noEmit -p "$d" || exit 1; done
+    bun --filter '*' typecheck
 
 # Run tests (bun test — backend unit + shared package)
 test:
@@ -41,6 +41,14 @@ bootstrap:
     @bunx oxlint --version >/dev/null 2>&1 && echo "  ✓ oxlint:   $(bunx oxlint --version)"
     @command -v just   >/dev/null 2>&1 && echo "  ✓ just:     $(just --version)"
     @echo "  → Next: set your secrets and start your AI agent (see README.md)."
+
+# Drizzle — push schema changes to the database
+db-push:
+    bunx drizzle-kit push
+
+# Drizzle — generate SQL migration from schema changes
+db-generate:
+    bunx drizzle-kit generate
 
 # SecretSpec audit log
 audit:
