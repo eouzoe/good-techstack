@@ -6,6 +6,7 @@
   languages.javascript.bun.enable = true;
 
   packages = with pkgs; [
+    bun
     nodejs_26
     zsh
     just
