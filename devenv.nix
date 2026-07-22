@@ -29,6 +29,18 @@
 
   dotenv.enable = false;
 
+  # Secrets: auto-injected from secretspec (env vars in CI, keyring locally).
+  # `or ""` keeps the shell functional even when secrets aren't configured yet.
+  env = {
+    CLOUDFLARE_ACCOUNT_ID = config.secretspec.secrets.CLOUDFLARE_ACCOUNT_ID or "";
+    CLOUDFLARE_API_TOKEN = config.secretspec.secrets.CLOUDFLARE_API_TOKEN or "";
+    DATABASE_URL = config.secretspec.secrets.DATABASE_URL or "";
+    SESSION_SECRET = config.secretspec.secrets.SESSION_SECRET or "";
+    BETTER_AUTH_SECRET = config.secretspec.secrets.BETTER_AUTH_SECRET or "";
+    BETTER_AUTH_URL = config.secretspec.secrets.BETTER_AUTH_URL or "";
+    PUBLIC_APP_URL = config.secretspec.secrets.PUBLIC_APP_URL or "";
+  };
+
   enterTest = ''
     devenv tasks run --mode all \
       deps:lint typecheck:backend typecheck:frontend test:backend test:frontend

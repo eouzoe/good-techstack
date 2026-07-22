@@ -14,17 +14,16 @@ inputs:
 
 require_version: ">=2.1.2"
 
+# Secret resolution via secretspec.toml (provider: env = reads process env,
+# no crash on missing keys — uses `or ""` in devenv.nix).
+secretspec:
+  enable: true
+  provider: env
+  profile: default
+
 # Fail loudly on port conflicts instead of silently remapping (prevents
 # devenv's sticky fallback-port behaviour from hiding collisions).
 strict_ports: true
 
-# SecretSpec: secretspec.toml declares WHAT secrets the app needs.
-# We do NOT force `secretspec.enable = true` here — that would make
-# every `devenv shell` require a configured provider + set secrets,
-# which breaks `devenv test` / CI and fresh clones.
-# Instead the developer loads secrets on demand via:
-#   secretspec config init          # one-time: pick a provider backend
-#   secretspec secret set KEY "..."  # store each secret
-#   secretspec run -- devenv shell -- just dev   # loads + enters
-# (or `devenv shell` after secrets are stored — the CLI auto-enables
-#  integration only when secrets are actually present.)
+# Local: `SECRETSPEC_PROVIDER=keyring secretspec config init` for encrypted
+# keychain storage. CI: inject secrets as GitHub Actions env vars.

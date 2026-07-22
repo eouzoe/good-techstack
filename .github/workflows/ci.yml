@@ -33,7 +33,7 @@ jobs:
   devenv:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: cachix/install-nix-action@v31
 
@@ -51,7 +51,7 @@ jobs:
     if: github.ref == 'refs/heads/experiment/devenv-tasks'
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - uses: DeterminateSystems/nix-installer-action@main
         with:
