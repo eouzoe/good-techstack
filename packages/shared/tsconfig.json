@@ -1,15 +1,7 @@
 {
+  "extends": "../../packages/tsconfig/base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ESNext"],
-    "strict": true,
-    "noUnusedLocals": false,
-    "noEmit": true,
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    "verbatimModuleSyntax": true
+    "lib": ["ESNext"]
   },
   "include": ["src"]
 }

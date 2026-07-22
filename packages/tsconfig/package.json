@@ -1,0 +1,5 @@
+{
+  "name": "@good-techstack/tsconfig",
+  "type": "module",
+  "private": true
+}
