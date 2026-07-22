@@ -4,7 +4,7 @@
   stdenv = pkgs.stdenvNoCC;
 
   # Default shell inside the devenv environment
-  shell = "${pkgs.zsh}/bin/zsh";
+  shell = pkgs.zsh;
 
   languages.javascript.bun.enable = true;
 
@@ -14,7 +14,8 @@
     zsh
     just
     oxfmt
-    git jujutsu
+<<<<<<<<    git jujutsu
+>>>>>>>>>>>>>>> conflict 1 of 1 ends
   ];
   # Removed: nodejs_22            (js module → nodejs-slim)
   #          typescript            (bunx tsc)

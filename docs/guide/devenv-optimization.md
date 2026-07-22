@@ -39,9 +39,9 @@ Safe for JS/TS projects: native addons use the system compiler (Xcode/gcc).
 
 ## macOS
 
-| Concern | Solution |
-|---------|----------|
-| Apple SDK | `apple.sdk` defaults to `pkgs.apple-sdk` on darwin — no action needed |
-| Rosetta 2 x86 packages | `lib.optionals (pkgs.stdenv.isDarwin && pkgs.stdenv.isAarch64)` |
-| Nix store | Determinate installer sets `auto-optimise-store = true` |
-| Devenv eval cache | devenv 2.0 incremental per-attribute cache — no action needed |
+| Concern                | Solution                                                              |
+| ---------------------- | --------------------------------------------------------------------- |
+| Apple SDK              | `apple.sdk` defaults to `pkgs.apple-sdk` on darwin — no action needed |
+| Rosetta 2 x86 packages | `lib.optionals (pkgs.stdenv.isDarwin && pkgs.stdenv.isAarch64)`       |
+| Nix store              | Determinate installer sets `auto-optimise-store = true`               |
+| Devenv eval cache      | devenv 2.0 incremental per-attribute cache — no action needed         |

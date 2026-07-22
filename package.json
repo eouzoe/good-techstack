@@ -1,15 +1,11 @@
 {
   "name": "good-techstack",
   "private": true,
-  "type": "module",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
-  "supportedArchitectures": {
-    "os": ["darwin", "linux", "win32"],
-    "cpu": ["arm64", "x64"]
-  },
+  "type": "module",
   "scripts": {
     "dev": "bun --filter '*' dev",
     "check": "bun --filter '*' typecheck && oxlint",
@@ -19,5 +15,16 @@
     "oxlint": "^0.15.0",
     "typescript": "^7.0.2",
     "wrangler": "^3.100.0"
+  },
+  "supportedArchitectures": {
+    "os": [
+      "darwin",
+      "linux",
+      "win32"
+    ],
+    "cpu": [
+      "arm64",
+      "x64"
+    ]
   }
 }
