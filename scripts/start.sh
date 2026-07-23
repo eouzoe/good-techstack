@@ -86,7 +86,7 @@ nix profile add nixpkgs#devenv
 #    這裡不硬塞 grpc 導出，只保證用最新 devenv 的 trace 機制、功能正常。
 echo "  -> Bootstrapping environment (traced) ..."
 devenv allow
-devenv --trace-to pretty:stderr shell -- just bootstrap
+devenv shell -- just init
 
 # 6. agent detection — tell the user which AI agent to launch. Detect which
 #    agent CLIs are available on the host; default guidance is opencode.

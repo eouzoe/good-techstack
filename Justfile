@@ -35,12 +35,17 @@ deploy:
 setup:
     devenv shell
 
-# One-shot bootstrap (post-start.sh): verify env is ready
-bootstrap:
-    @command -v bun    >/dev/null 2>&1 && echo "  ✓ bun:      $(bun --version)"
-    @bunx oxlint --version >/dev/null 2>&1 && echo "  ✓ oxlint:   $(bunx oxlint --version)"
-    @command -v just   >/dev/null 2>&1 && echo "  ✓ just:     $(just --version)"
-    @echo "  → Next: set your secrets and start your AI agent (see README.md)."
+# One-shot project initialisation (run after start.sh or clone)
+# Generates local config, types, and verifies the template is healthy.
+init:
+    @echo "  -> Generating D1 type bindings …"
+    @devenv tasks run deps:gen-types 2>/dev/null || true
+    @echo "  -> Type checking …"
+    @devenv tasks run typecheck:backend typecheck:frontend
+    @echo "  -> Initialising secrets …"
+    @secretspec init 2>/dev/null && echo "  ✓ secrets configured" || echo "  ⚠ secrets not configured yet (run 'secretspec init' later)"
+    @echo ""
+    @echo "  ✓ Template is ready. Run 'just dev' to start.
 
 # Drizzle — push schema changes to the database
 db-push:

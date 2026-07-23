@@ -14,8 +14,33 @@
     zsh
     just
     oxfmt
-<<<<<<<<    git jujutsu
->>>>>>>>>>>>>>> conflict 1 of 1 ends
+<<<<<<<<<<<<<<<<    git jujutsu
+%%%%%%%%%%%%%%%%%%%%%%% diff from: xutmypzn d2f819b5 "fix: use pkgs.zsh (not string path) for shell option, format with oxfmt" (rebased revision)
+\\\\\\\\\\\\\\\\\\\\\\\        to: upkrukqr 33020db9 "chore: add nushell to devenv packages, wire MCP via devenv shell" (parents of rebased revision)
+-<<<<    git jujutsu
+->>>>>>>>>>> conflict 1 of 1 ends
++    wrangler
++    prettier
++    git jujutsu nushell curl jq
+%%%%%%%%%%%%%%%%%%%%%%% diff from: poooxorq 18af59c8 "feat: adopt rstest for frontend, add jj (jujutsu) VCS" (rebase destination)
+\\\\\\\\\\\\\\\\\\\\\\\        to: xwvquqkw f333f709 "feat: replace bootstrap with init, rewrite CI for quick typecheck" (rebased revision)
+-    wrangler
+-    prettier
+-    git jujutsu curl jq
++<<<<<<<<<<<<    git jujutsu
+++    wrangler
+++    prettier
+++    git jujutsu curl jq
++%%%%%%%%%%%%%%% diff from: upkrukqr 33020db9 "chore: add nushell to devenv packages, wire MCP via devenv shell" (parents of rebased revision)
++\\\\\\\\\\\\\\\        to: xwvquqkw 9f4fe1c9 "feat: replace bootstrap with init, rewrite CI for quick typecheck" (rebased revision)
++-    wrangler
++-    prettier
++-    git jujutsu nushell curl jq
+++<<<<    git jujutsu
+++>>>>>>>>>>> conflict 1 of 1 ends
++>>>>>>>>>>>>>>> conflict 1 of 1 ends
++>>>>>>>>>>>>>>>>>>> conflict 1 of 1 ends
+>>>>>>>>>>>>>>>>>>>>>>> conflict 1 of 1 ends
   ];
   # Removed: nodejs_22            (js module → nodejs-slim)
   #          typescript            (bunx tsc)
