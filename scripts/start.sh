@@ -79,18 +79,10 @@ echo "  -> Installing devenv ..."
 export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
 nix profile add nixpkgs#devenv
 
-# 5. trust this project dir (devenv refuses untrusted dirs), then enter the
-#    devenv shell, run init, and stay inside.
-echo "  -> Bootstrapping environment ..."
+# 5. trust this project dir, then enter the devenv shell (interactive).
+#    Everything else — bun deps, typecheck, secrets — is handled by
+#    devenv tasks & just commands inside the shell.
+echo "  -> Starting devenv shell ..."
 devenv allow
-devenv shell -- bash -c '
-  export DEVENV_ROOT="$PWD"
-  just init
-  echo ""
-  echo "  Done. Your environment is ready inside the devenv shell."
-  echo ""
-  echo "  Next:  just dev    — start backend + frontend servers"
-  echo "         opencode    — launch the AI assistant (if installed)"
-  echo ""
-  exec zsh
-'
+devenv shell
+echo "  Exited devenv shell. See you next time."

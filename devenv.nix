@@ -4,7 +4,7 @@
   stdenv = pkgs.stdenvNoCC;
 
   # Default shell inside the devenv environment
-  # (pkgs.zsh is already in packages; shell option is managed by devenv)
+  # pkgs.zsh is already in packages; use 'zsh' to switch inside the shell.
 
   languages.javascript.bun.enable = true;
 
