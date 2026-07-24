@@ -56,6 +56,9 @@
         "zod": "^4.4.3",
       },
     },
+    "packages/tsconfig": {
+      "name": "@good-techstack/tsconfig",
+    },
   },
   "packages": {
     "@adobe/css-tools": ["@adobe/css-tools@4.5.0", "", {}, "sha512-6OzddxPio9UiWTCemp4N8cYLV2ZN1ncRnV1cVGtve7dhPOtRkleRyx32GQCYSwDYgaHU3USMm84tNsvKzRCa1Q=="],
@@ -213,6 +216,8 @@
     "@fastify/busboy": ["@fastify/busboy@2.1.1", "", {}, "sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA=="],
 
     "@good-techstack/shared": ["@good-techstack/shared@workspace:packages/shared"],
+
+    "@good-techstack/tsconfig": ["@good-techstack/tsconfig@workspace:packages/tsconfig"],
 
     "@img/colour": ["@img/colour@1.1.0", "", {}, "sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ=="],
 
