@@ -43,9 +43,15 @@ init:
     @echo "  -> Type checking …"
     @devenv tasks run typecheck:backend typecheck:frontend
     @echo "  -> Initialising secrets …"
-    @secretspec init 2>/dev/null && echo "  ✓ secrets configured" || echo "  ⚠ secrets not configured yet (run 'secretspec init' later)"
+    @secretspec init 2>/dev/null; ret=$$?; \
+        if [ "$$ret" -eq 0 ]; then \
+            echo "  -> Setting default dev secrets …"; \
+            BETTER_AUTH_SECRET=$$(openssl rand -hex 32 2>/dev/null || echo "local-dev-secret-change-me"); \
+            secretspec secret set BETTER_AUTH_SECRET "$$BETTER_AUTH_SECRET" 2>/dev/null; \
+            secretspec secret set BETTER_AUTH_URL "http://localhost:3000" 2>/dev/null; \
+        fi
     @echo ""
-    @echo "  ✓ Template is ready. Run 'just dev' to start.
+    @echo "  OK Template is ready. Run 'just dev' to start.
 
 # Drizzle — push schema changes to the database
 db-push:
