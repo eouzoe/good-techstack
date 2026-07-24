@@ -1,7 +1,6 @@
 # Frontend: TanStack Start
 
-> depends_on: [01-api.md, 05-schema.md]
-> tags: [frontend, react, ssr, tanstack]
+> depends_on: [/en/reference/01-api.md, /en/reference/05-schema.md]
 > 最後更新：2026-07-10
 
 ## TanStack Start

@@ -8,13 +8,13 @@ Why we chose what we chose, what we avoid, and the principles that guide both.
 
 ### 1. Zod is the single source of truth for schemas
 
-Zod schemas live in `packages/contract/`. oRPC input/output, Drizzle DB types, TanStack Form validation, and better-auth plugin config all derive from Zod.
+Zod schemas live in `packages/shared/`. oRPC input/output, Drizzle DB types, TanStack Form validation, and better-auth plugin config all derive from Zod.
 
 Do not introduce a second schema language (TypeBox, Valibot, ArkType, etc.).
 
 ### 2. Bun first, Node only in CI
 
-Daily development uses Bun. Node.js is used only in CI (Cloudflare officially supports only Node.js). The `check` CI job installs Bun via `oven-sh/setup-bun` directly; the `devenv-test` job runs the full devenv environment.
+Daily development uses Bun. Node.js is used only in CI (Cloudflare officially supports only Node.js). The CI runs `devenv tasks run typecheck:backend typecheck:frontend` across three OSes (typecheck-linux, typecheck-macos, check-windows). There is no lint, test, or vitest step in CI.
 
 ### 3. Cloudflare native, do not bypass
 
@@ -30,7 +30,7 @@ Hono uses Web Standards API (`Request`, `Response`, `fetch`, `URL`). Shared logi
 
 ### 6. Documentation is the harness
 
-Every technical decision is recorded. An agent reads the relevant documentation before changing code, and updates it after. Dependency versions are locked in `devenv.lock` and `bun.lock`; check currency with `just check-versions` (see `docs/guide/version-check.md`).
+Every technical decision is recorded. An agent reads the relevant documentation before changing code, and updates it after. Dependency versions are locked in `devenv.lock` and `bun.lock`; check currency with `just check-versions` (see `docs/en/guide/version-check.md`).
 
 ### 7. Simplicity over everything
 
@@ -86,6 +86,6 @@ devenv locks toolchain versions and hashes (`devenv.lock` pins the exact `nixpkg
 
 | Situation               | Consider              | Note                  |
 | ----------------------- | --------------------- | --------------------- |
-| Bundle size is critical | Zod Mini (`zod/mini`) | 2.1kb vs 5.9kb        |
+| Bundle sise is critical | Zod Mini (`zod/mini`) | 2.1kb vs 5.9kb        |
 | Expo native             | Expo + Expo Router    | Shares oRPC contracts |
 | Type-aware linting      | oxlint `--type-aware` | Alpha stage           |

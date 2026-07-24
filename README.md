@@ -1,80 +1,103 @@
-> 完整中文說明在 [`README.zh.md`](README.zh.md)。請先閱讀中文指南以便了解詳細情況與步驟。
+> [繁體中文版本](README.zh.md)
 
 # good-techstack
 
-Your product idea. One command. Shipped.
+One command. A conversation to build. Your product on the edge.
+
+---
 
 ## Quick start
-
-**Windows** — open **Command Prompt as Administrator** and run this once (downloads NixOS-WSL, ~550 MB, then opens it):
-
-```cmd
-curl -L -o %TEMP%\n.wsl "https://github.com/nix-community/NixOS-WSL/releases/latest/download/nixos.wsl" && wsl --install --from-file %TEMP%\n.wsl
-```
-
-Then, inside the NixOS-WSL terminal, run the command below.
-
-**macOS / Linux / NixOS-WSL**:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
 ```
 
-> Intel Macs (x86_64) use the upstream Nix installer instead of Determinate Nix.
+<sub>**Windows:** open **Command Prompt as Administrator** and run this first (installs NixOS-WSL, ~550 MB):</sub>
 
----
+```cmd
+curl -L -o %TEMP%\n.wsl "https://github.com/nix-community/NixOS-WSL/releases/latest/download/nixos.wsl" && wsl --install --from-file %TEMP%\n.wsl
+```
 
-You have an idea. You want to build it, put it out there, see if it works.
+<sub>Then run the curl command above inside the NixOS-WSL terminal.</sub>
+<sub>**Intel Mac:** the script detects your architecture and uses the upstream Nix installer automatically.</sub>
 
-You do not want to spend weeks setting up infrastructure, choosing between authentication libraries, debugging configurations, or writing boilerplate for the fifth time.
-
-This stack is for you.
-
----
-
-## The gap between a prototype and a product
-
-Vibe coding is fun. You describe something, an agent generates it, and it looks right in the browser.
-
-Then you try to ship it.
-
-There is no database. There is no login. There is nowhere to put it. The prototype was a single page, and now you need authentication, data persistence, error handling, deployment, a domain name — things no prototype ever thinks about.
-
-Good-techstack fills that gap.
-
-It gives you, from a single command:
-
-- A backend that works and stays working
-- A database that needs no management
-- Authentication that works out of the box
-- A frontend that loads fast everywhere
-- Infrastructure that costs nothing until you have users
-- An AI agent that understands every part of it
-
-These are not optional extras. They are the difference between something that looks like a product and something that is one.
+That one command downloads the stack, installs Nix + devenv, and opens an interactive shell. From there, hand over to your AI agent — or keep going yourself.
 
 ---
 
 ## For your AI agent
 
-This is the part that changes how you build.
+Copy this block and paste it as the initial instruction for Claude Code, Codex, opencode, or any AI coding agent:
 
-Most development stacks are designed for humans reading documentation. Good-techstack is designed for humans and their AI agents, equally.
+````markdown
+You are setting up a good-techstack project. Detect your environment and work autonomously.
 
-Your agent reads the documentation — written for it, by design — and understands:
+1. **Identify the OS** — run `uname -s` and `uname -m`. Match the behaviour:
+   - **macOS (arm64):** the install script uses Determinate Nix. After install, configure `extra-trusted-substituters` for speed.
+   - **macOS (x86_64 / Intel):** the install script uses the upstream Nix installer. Same post-install optimisation.
+   - **Linux (native):** Determinate Nix installer. Check for existing Nix first.
+   - **WSL / NixOS-WSL:** Nix is already installed. Skip Nix install, go straight to `devenv allow`.
+   - **Other:** run `curl -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh` and handle errors.
 
-- **What tools exist**, and which ones to use. It will not suggest Prisma or Next.js or Redis. They are not in this stack.
-- **What versions to install**. It checks before acting. It does not guess.
-- **What patterns to follow**, and what to avoid. Every common mistake is catalogued with its alternative.
-- **How to verify its own work**. A seven-layer test matrix must pass before any task is complete.
+2. **Ensure Nix is available.** If missing, run the start script with `sh scripts/start.sh`.
 
-The result is an agent that ships working code. Every time. Not code that looks plausible and breaks at runtime.
+3. **Optimise the environment for your platform:**
+   - macOS: add `extra-trusted-substituters = https://cache.nixos.org https://devenv.cachix.org` to `/etc/nix/nix.conf` (or `~/.config/nix/nix.conf`), then `sudo launchctl stop org.nixos.nix-daemon && sudo launchctl start org.nixos.nix-daemon`.
+   - NixOS / NixOS-WSL: ensure `nix.settings.substituters` includes cache URLs for faster downloads.
+   - Windows WSL: ensure `/etc/wsl.conf` has `[wsl2] kernelSettings=true` and sufficient memory (recommended: 8 GB).
 
-When you tell your agent "add a login page", you get a login page — with sessions, token refresh, OAuth providers, CSRF protection — because the agent knows the auth library, has read its configuration, and follows the established patterns.
+4. **Install the AI agent** (if not already present):
+   - Prefer Claude Code: `nix profile add nixpkgs#claude-code` or `npm i -g @anthropic-ai/claude-code`
+   - Fallback Codex: `nix profile add nixpkgs#codex-cli`
+   - Fallback opencode: `nix profile add nixpkgs#opencode`
+   - If none available, install opencode (smallest footprint).
 
-When you tell your agent "deploy", it deploys. The database is created. The environment is configured. The worker is live.
+5. **Handle authentication:**
+   - Cloudflare API token: guide the user to create one at https://dash.cloudflare.com/profile/api-tokens (template: Workers:Edit). Save to `~/.cloudflare/mcp-token`.
+   - If the AI agent needs its own API key, guide the user through signup.
 
-This is what happens when the agent understands the full stack.
+6. **Initialise the project:** run `just init` inside `devenv shell`. This generates D1 type bindings, runs type checking, and sets up local dev secrets.
+
+7. **Read the bootstrap protocol:** open `docs/en/agent/bootstrap-prompt.md` and follow it step by step. Then read `docs/en/agent/scaffolding.md` for the product discovery protocol.
+
+8. **Start the conversation:** begin the 7-question product discovery with the user. Do not write code until the entity map is confirmed.
+````
+
+Paste that into your chat with any AI coding agent. The agent will detect your OS, install dependencies, configure optimisations, and start building — you only answer questions about your product idea.
+
+---
+
+## What makes this different
+
+### The Zod 4 chain — from database to browser
+
+A single Zod schema generates your database types, API contracts, form validation, and auth config. No duplication. No drift. One source of truth runs through every layer:
+
+```
+packages/shared/ → Zod schema (single source of truth)
+  ├── Drizzle ORM:  z.infer<> maps to D1 row types
+  ├── oRPC:         .input(UserCreate).output(UserResponse)
+  ├── TanStack Form: zodResolver(UserCreate)
+  └── better-auth:   plugin config is also Zod
+```
+
+### Full-stack TypeScript, not just your code
+
+The entire pipeline is typed — `wrangler.toml` bindings, D1 queries, Hono routes, oRPC contracts, frontend components, environment variables. If it compiles, it works. No runtime surprises from mismatched types.
+
+### Developer experience that scales
+
+|        | What it means                                      |
+| ------ | -------------------------------------------------- |
+| **DX** | Bun cold starts in 1.2 ms. oxlint runs 50× faster than ESLint. `just dev` starts both servers. Changes reflect instantly. |
+| **AX** | Your AI agent reads documentation written for it, not you. It knows exactly which tools to use, which versions to install, and which patterns to follow. It verifies every step before continuing. |
+| **Setup** | One command. No Homebrew, no asdf, no Docker. Nix + devenv gives everyone the same environment. |
+
+### Supply chain, locked
+
+- `devenv.lock` pins the exact nixpkgs commit (toolchain hashes)
+- `bun.lock` pins every JavaScript dependency
+- Cloudflare Workers sandbox isolates your runtime
 
 ---
 
@@ -82,24 +105,24 @@ This is what happens when the agent understands the full stack.
 
 | What        | You get                                                      |
 | ----------- | ------------------------------------------------------------ |
-| Runtime     | Bun — fast enough that cold starts are not a thing           |
-| API         | Hono + oRPC — type-safe from frontend to database            |
+| Runtime     | Bun — fast enough that cold starts disappear                 |
+| API         | Hono + oRPC — type-safe edge to database                     |
 | Database    | D1 — SQLite at the edge, zero management                     |
-| Auth        | better-auth — email, OAuth, SSO, all included                |
-| Frontend    | TanStack Start — React, fast, type-safe                      |
-| UI          | shadcn/ui — components that look good and work               |
+| Auth        | better-auth — email, OAuth, SSO, ready to use                |
+| Frontend    | TanStack Start — React, SSR, RSC, fast everywhere            |
+| UI          | shadcn/ui — components that look good out of the box         |
 | Linter      | oxlint — hundreds of rules, finishes before you notice       |
 | Deployment  | Cloudflare Workers — free until you grow                     |
 | Environment | Devenv 2.x + Nix — one command, identical setup for everyone |
 
-All tested. All type-safe. All deployed to the edge.
+All typed. All tested. All deployed to the edge.
 
 ---
 
 ## How it works
 
 ```
-Your AI agent reads docs/ → understands the full stack
+Your AI agent reads docs/en/ → understands the full stack
 
          TanStack Start (React + SSR + RSC)
          shadcn/ui · Tailwind · TypeScript
@@ -110,72 +133,51 @@ Your AI agent reads docs/ → understands the full stack
     D1  │  R2  │  KV  │  Queues  │  DO  │  Email
 ```
 
-You write your business logic. The stack handles the rest.
+You own your business logic. The stack owns the plumbing.
 
 ---
 
-## Start
+## Detailed setup
+
+The quick-start command does everything in one pass. Here is what happens:
+
+1. Downloads the latest good-techstack into `./my-app/`
+2. Installs **Nix** if missing (Determinate Nix on Apple Silicon + Linux, upstream on Intel Mac, skipped on NixOS-WSL)
+3. Installs **devenv** via `nix profile add`
+4. Trusts the project directory (`devenv allow`)
+5. Enters `devenv shell` — interactive, with `bun`, `node`, `oxlint`, `oxfmt`, `wrangler`, `just`, `typescript` all available
+
+From inside the shell:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/eouzoe/good-techstack/main/scripts/start.sh | sh
+bun install               # Install JavaScript dependencies
+just init                 # Generate bindings, typecheck, seed secrets
+just dev                  # Start backend + frontend dev servers
 ```
 
-> **Windows:** run the Command Prompt block in [Quick start](#quick-start) first to install NixOS-WSL, then run the command above inside the NixOS-WSL terminal.
-
-This one command does the heavy lifting:
-
-1. Downloads good-techstack
-2. Installs Nix if missing (NixOS-WSL already provides it)
-3. Installs devenv — the project's `devenv.nix` pre-installs `zsh` + `just`, and `devenv shell` uses `zsh` by default
-4. Bootstraps the development environment (traced from the first devenv call)
-
-Then finish with the steps below — copy the whole block and run it:
-
-```bash
-# 1. Trust this project so `devenv shell` activates without prompts
-devenv allow
-
-# 2. SecretSpec — install the CLI once, then set every key from secretspec.toml
-curl -fsSL https://secretspec.dev/install.sh | sh
-devenv shell -- secretspec init
-devenv shell -- secretspec secret set DATABASE_URL "postgres://..."
-devenv shell -- secretspec secret set SESSION_SECRET "..."
-
-# 3. Start your AI agent (Claude Code / Codex / OpenCode)
-devenv shell -- claude --print "$(cat docs/agent/bootstrap-prompt.md)" .
-# devenv shell -- codex  --prompt "$(cat docs/agent/bootstrap-prompt.md)" .
-# devenv shell -- opencode --prompt "$(cat docs/agent/bootstrap-prompt.md)" .
-```
-
-(Optional) For auto-activation on `cd` into the project, add `eval "$(devenv hook zsh)"` to your `~/.zshrc` (or `bash`/`fish`/`nu`). devenv replaces direnv — no `.envrc` needed.
-
-You only need two things: **a computer with internet** and **a product idea**.
-
----
-
-## Got stuck?
-
-Open an issue at [github.com/eouzoe/good-techstack/issues/3](https://github.com/eouzoe/good-techstack/issues/3) — tell us what system you are on and what happened. No jargon, no forms, just describe your situation.
+Continue with your AI agent (paste the prompt above), or explore the documentation at `docs/en/`.
 
 ---
 
 ## For developers
 
-The full technical reference is in `docs/`. Start with `docs/getting-started.md`.
+The full technical reference is in `docs/en/`.
 
-- [Guide](docs/guide/) — development, deployment, testing
-- [Version checking](docs/guide/version-check.md) — how to check for outdated dependencies
-- [Local environment check](docs/guide/env-check.md) — verify your machine matches the pinned versions (Linux)
-- [Reference](docs/reference/) — per-layer deep dives (runtime, API, DB, auth, frontend, schema, infra, TypeScript)
-- [Design decisions](docs/reference/design-decisions.md) — why we chose what we chose
-- [Agent](docs/agent/) — AI agent rules, bootstrap, scaffolding, MCP reference
-- [Contributing](CONTRIBUTING.md)
-- [License](LICENSE)
+- [Getting started](docs/en/getting-started.md)
+- [Development guide](docs/en/guide/development.md)
+- [Deployment guide](docs/en/guide/deployment.md)
+- [Testing guide](docs/en/guide/testing.md)
+- [Reference docs](docs/en/reference/) — per-layer deep dives
+- [Design decisions](docs/en/reference/design-decisions.md)
+- [Agent docs](docs/en/agent/) — rules, bootstrap, scaffolding
+- [Contribution areas](docs/en/guide/contribution-areas.md)
 
 ---
 
-This project does not aim to be the best stack, or the most complete, or the most elegant. It aims to be the stack that lets you start.
+## Got stuck?
 
-Your idea, shipped. That is the goal.
+Open an issue at [github.com/eouzoe/good-techstack/issues/3](https://github.com/eouzoe/good-techstack/issues/3) — tell us your system and what happened. No jargon, no forms, just describe the situation.
 
-Everything else is configuration.
+---
+
+Your idea, shipped. That is the point.

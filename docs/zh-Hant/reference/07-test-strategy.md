@@ -1,8 +1,7 @@
 # 測試策略：7 層分層矩陣
 
-> depends_on: [00-runtime.md, 06-infra.md]
-> tags: [test, quality, ci, verification]
-> 核對表見：`docs/guide/testing.md`
+> depends_on: [/en/reference/00-runtime.md, /en/reference/06-infra.md]
+> 核對表見：`docs/guide/testing.md"`
 > 最後更新：2026-07-10
 
 ## 原則

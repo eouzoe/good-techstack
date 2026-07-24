@@ -77,14 +77,15 @@ devenv shell -- bunx wrangler tail
 
 ## CI Gate
 
-Pull requests must pass:
+CI runs only `devenv tasks run typecheck:backend typecheck:frontend`. All other layers are run locally.
+
+The full local gate before push:
 
 ```
 just lint             # oxlint --type-aware
-  → just typecheck     # tsc --noEmit
+  → just typecheck    # tsc --noEmit
   → just test         # bun test (unit | contract | property)
   → devenv shell -- vitest run (integration)
-  → Pass → merge
 ```
 
 ## Coverage Targets

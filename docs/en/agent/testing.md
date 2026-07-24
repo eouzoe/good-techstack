@@ -48,7 +48,7 @@ Config: `apps/backend` runs `bun test` over `*.test.ts`.
 - **Unit** — pure functions: pricing, transforms, authz decisions. No DB, no net.
 - **Contract** — Zod4 schema boundaries (feed invalid input, assert Zod rejects
   with clear messages) + oRPC `implement` fake handler to verify each route
-  honors its input/output contract without starting a server or touching I/O.
+  honours its input/output contract without starting a server or touching I/O.
 - **Integration / smoke / D1 migration / auth / cache** — see memory
   (`testing-strategy.md`). Wire as `processes.<name>.task` + `backend.after`
   once the layer exists.
@@ -60,7 +60,7 @@ Config: `apps/backend` runs `bun test` over `*.test.ts`.
 - **Constraint violations** — declare `unique`/`check`/FK in Drizzle schema;
   the DB enforces natively. Tests only confirm the declaration holds.
 - **Contract drift** — oRPC v2 + Zod4 shared types make frontend/backend align
-  at type-check time; contract tests verify the schema rules and handler honors.
+  at type-check time; contract tests verify the schema rules and handler honours.
 
 ## Performance note
 

@@ -113,8 +113,8 @@ This is an ongoing responsibility, not a one-time task.
 **Monthly version audit**
 
 - Every 4-6 weeks, run the version checker and update:
-  - `docs/reference/*.md` if behaviour changed between versions
-  - `docs/getting-started.md` if the setup or prerequisites changed between versions
+  - `docs/en/reference/*.md` if behaviour changed between versions
+  - `docs/en/getting-started.md` if the setup or prerequisites changed between versions
 - This is the kind of maintenance that does not require deep context. Anyone can do it.
 
 ---
@@ -123,14 +123,14 @@ This is an ongoing responsibility, not a one-time task.
 
 **Translate reference docs**
 
-- `docs/reference/typescript.md` has no Chinese version yet
-- `docs/reference/design-decisions.md` has no Chinese version yet
-- `docs/guide/development.md`, `docs/guide/deployment.md`, `docs/guide/testing.md` have no Chinese versions
+- `docs/en/reference/typescript.md` has no Chinese version yet
+- `docs/en/reference/design-decisions.md` has no Chinese version yet
+- `docs/en/guide/development.md`, `docs/en/guide/deployment.md`, `docs/en/guide/testing.md` have no Chinese versions
 - Translation should be technical and accurate, not creative
 
 **Agent documentation**
 
-- `docs/agent/scaffolding.md` has no Chinese version yet
+- `docs/en/agent/scaffolding.md` has no Chinese version yet
 - The forced review mechanism could use more concrete examples in both languages
 
 **Tutorial by example**
@@ -144,8 +144,8 @@ This is an ongoing responsibility, not a one-time task.
 
 **CI pipeline** (`.github/workflows/ci.yml`)
 
-- Lint → type-check → unit test → integration test on every PR
-- Run on push to `main` and on pull requests
+- Type-check on every PR across three OSes (typecheck-linux, typecheck-macos, check-windows)
+- Run on push to `dev` and `main` and on pull requests
 - Cache Nix store and `node_modules` for speed
 
 **E2E test expansion**

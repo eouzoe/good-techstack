@@ -37,7 +37,7 @@ project/
 ├── apps/backend/       # Hono + oRPC + better-auth
 ├── apps/frontend/      # TanStack Start
 ├── packages/shared/    # 型別、contract、schema
-├── package.json (workspaces: ["apps/*", "packages/*"])
+├── package.json (workspaces: ["apps/*", "packages/*", "../en/reference/)
 ├── bun.lock
 ```
 

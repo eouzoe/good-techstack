@@ -2,7 +2,7 @@
 
 > depends_on: [00-runtime.md, 06-infra.md]
 > tags: [test, quality, ci, verification]
-> Checklist at: `docs/guide/testing.md`
+> Checklist at: `docs/en/guide/testing.md`
 > Last updated: 2026-07-10
 
 ## Principle
@@ -34,19 +34,27 @@ devenv shell -- bunx wrangler tail          # Real-time error monitoring
 |    2. Unit     | `bun test`                      | Bun JSC      | <200ms  |    Yes     | Pure functions, business logic               |
 |  3. Contract   | `bun test`                      | Bun JSC      | <500ms  |    Yes     | oRPC contract consistency                    |
 |  4. Property   | `fast-check`                    | Bun JSC      |   <1s   |    Yes     | Fuzzing edge cases                           |
-| 5. Integration | `vitest-pool-workers`           | workerd      |  5-30s  |    Yes     | D1, R2, KV, DO bindings                      |
+| 5. Integration | `vitest-pool-workers`           | workerd      |  5-30s  | Local only | D1, R2, KV, DO bindings                      |
 |     6. E2E     | `@playwright/test`              | Real browser | 30-120s | No, manual | Happy path, auth, security                   |
 | 7. Production  | `wrangler tail` + Observability | Production   |   N/A   |     No     | Error rate, p99                              |
 
 ## CI gate matrix
 
+CI runs `devenv tasks run typecheck:backend typecheck:frontend` on three OSes. All other layers (lint, unit, contract, property, integration) are run locally before push.
+
 ```
-PR → just lint          (oxlint --type-aware)
-   → just typecheck     (tsc --noEmit)
-   → just test          (bun test: unit | contract | property)
-   → just test-frontend (rstest: frontend through Rsbuild pipeline)
-   → devenv shell -- vitest run (integration, workerd)
+PR → just typecheck     (devenv tasks run typecheck:backend typecheck:frontend)
    → PASS ✅
+```
+
+The local gate before pushing is:
+
+```
+just lint             (oxlint --type-aware)
+  → just typecheck    (tsc --noEmit)
+  → just test         (bun test: unit | contract | property)
+  → just test-frontend(rstest: frontend through Rsbuild pipeline)
+  → devenv shell -- vitest run (integration, workerd)
 ```
 
 ## oxlint + oxfmt

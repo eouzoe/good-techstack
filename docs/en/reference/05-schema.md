@@ -9,7 +9,7 @@
 Zod is the intermediate language for the entire type-safe chain:
 
 ```
-packages/contract/ → user.zod.ts (single source of truth)
+packages/shared/ → user.zod.ts (single source of truth)
   ├── oRPC: .input(UserCreate).output(UserResponse)
   ├── Drizzle: z.infer<> maps to DB row type
   ├── TanStack Form: zodResolver(UserCreate)

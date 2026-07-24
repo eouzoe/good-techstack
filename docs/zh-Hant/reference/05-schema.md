@@ -9,7 +9,7 @@
 Zod 是整條型別安全鏈的中間語言：
 
 ```
-packages/contract/ → user.zod.ts (唯一 source of truth)
+packages/shared/ → user.zod.ts (唯一 source of truth)
   ├── oRPC: .input(UserCreate).output(UserResponse)
   ├── Drizzle: z.infer<> 對應 DB row type
   ├── TanStack Form: zodResolver(UserCreate)
@@ -55,7 +55,7 @@ import * as z from "zod/mini"; // 2.1kb gzip vs 5.9kb
 const EnvSchema = z.object({
   DATABASE_URL: z.string().url(),
   PORT: z.coerce.number().int().positive().default(8080),
-  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  NODE_ENV: z.enum(["development", "production", "test", "../en/reference/).default("development"),
 });
 ```
 

@@ -80,18 +80,16 @@ separate flake — toolchain versions live entirely in `devenv.lock`.
 | Secret management | `.env` (no audit)                      | `secretspec.toml` (audit log, 11 providers) |
 | Git hooks         | Manual `oxlint` on CI only             | Pre-commit blocks unformatted code          |
 | Agent integration | None                                   | MCP server + commands auto-configured       |
-| CI Layer 1        | `oven-sh/setup-bun` + bare `bun`       | Unchanged (fast PR gate)                    |
-| CI Layer 2        | —                                      | `devenv test` (full environment validation) |
+| CI                | `nixbuild/nix-quick-install-action@v35` + `devenv tasks run` | 3 jobs across Linux/macOS/Windows |
 
 ### CI usage
 
 ```yaml
-- uses: cachix/install-nix-action@v27
+- uses: nixbuild/nix-quick-install-action@v35
 - run: devenv shell -- bunx wrangler deploy
 ```
 
-The Layer 1 CI job (`check`) runs lint/typecheck/test directly.
-The new Layer 2 CI job (`devenv-test`) runs `devenv test` for full environment validation.
+CI runs `devenv tasks run typecheck:backend typecheck:frontend` on three OSes (typecheck-linux, typecheck-macos, check-windows). Wrangler deploy is manual — no CI pipeline includes it.
 
 ## SecretSpec
 

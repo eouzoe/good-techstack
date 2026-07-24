@@ -52,9 +52,9 @@ devenv shell -- bunx wrangler d1 migrations apply <name>     # Apply migrations 
 devenv shell -- bunx wrangler types     # Generate TypeScript types for Cloudflare bindings
 ```
 
-## Full CI Gate
+## Pre-push Gate
 
-Before pushing, run the same checks CI will run:
+CI runs only `just typecheck`. Run the full gate locally before pushing:
 
 ```bash
 just lint             # oxlint --type-aware

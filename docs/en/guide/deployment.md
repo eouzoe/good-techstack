@@ -52,11 +52,4 @@ Use Cloudflare Observability MCP to check error rate and latency after deploymen
 
 ## CI/CD
 
-The CI pipeline (GitHub Actions) runs:
-
-1. `oxlint --type-aware`
-2. `tsc --noEmit`
-3. `bun test` (unit, contract, property)
-4. `vitest run` (integration)
-
-All must pass before merge.
+CI runs `devenv tasks run typecheck:backend typecheck:frontend` on three OSes. Lint, test, and vitest are run locally before push but are not part of the CI pipeline.

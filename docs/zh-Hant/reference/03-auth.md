@@ -1,7 +1,6 @@
 # Auth: better-auth
 
-> depends_on: [01-api.md, 02-db.md, 05-schema.md]
-> tags: [auth, session, oauth, security]
+> depends_on: [/en/reference/01-api.md, /en/reference/02-db.md, /en/reference/05-schema.md]
 > 最後更新：2026-07-10
 
 ## 版本
