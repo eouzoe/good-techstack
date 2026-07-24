@@ -16,7 +16,6 @@
     oxfmt
     git jujutsu
     wrangler
-    prettier
     curl
     jq
   ];
@@ -33,6 +32,8 @@
 
   git-hooks.hooks = {
     oxfmt.enable = true;
+    oxlint.enable = true;
+    oxlint.extraOptions = [ "--fix" ];
   };
 
   dotenv.enable = false;
@@ -51,12 +52,12 @@
 
   enterTest = ''
     devenv tasks run --mode all \
-      deps:lint typecheck:backend typecheck:frontend test:backend test:frontend
+      deps:lint test:backend test:frontend
   '';
 
   tasks."deps:lint" = {
-    exec = "bunx oxlint --type-aware";
-    after = [ "deps:install" ];
+    exec = "bunx oxlint";
+    after = [ "deps:install" "deps:gen-types" ];
   };
 
   tasks."deps:check-versions" = {
@@ -81,15 +82,7 @@
     after = [ "deps:install" ];
   };
 
-  tasks."typecheck:backend" = {
-    exec = "cd apps/backend && bunx tsc --noEmit";
-    after = [ "deps:gen-types" ];
-  };
 
-  tasks."typecheck:frontend" = {
-    exec = "cd apps/frontend && bunx tsc --noEmit";
-    after = [ "deps:install" ];
-  };
 
   tasks."test:backend" = {
     exec = "cd apps/backend && bunx bun test --pass-with-no-tests";
@@ -142,8 +135,8 @@
       description = "Run oxlint on the codebase";
     };
     typecheck = {
-      cmd = "devenv shell -- just typecheck";
-      description = "Run TypeScript type checking";
+      cmd = "devenv shell -- just lint";
+      description = "Run oxlint (includes type checking via --type-check)";
     };
     test = {
       cmd = "devenv shell -- just test";

@@ -1,0 +1,66 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "options": {
+    "typeAware": true,
+    "typeCheck": true,
+    "denyWarnings": true,
+    "reportUnusedDisableDirectives": "error"
+  },
+  "plugins": [
+    "import",
+    "react",
+    "vitest",
+    "jsx-a11y",
+    "promise",
+    "node",
+    "unicorn",
+    "typescript",
+    "oxc"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "pedantic": "error",
+    "perf": "error",
+    "style": "error",
+    "nursery": "warn"
+  },
+  "rules": {
+    "no-console": "error",
+    "no-debugger": "error",
+    "typescript/no-unused-vars": ["error", { "args": "all", "argsIgnorePattern": "^_" }],
+    "typescript/no-explicit-any": ["error", { "fixToUnknown": true }],
+    "import/no-duplicates": "error",
+    "oxc/no-async-await": "off",
+    "oxc/no-optional-chaining": "off",
+    "oxc/no-rest-spread-properties": "off",
+    "import/no-named-export": "off",
+    "import/no-default-export": "off",
+    "import/prefer-default-export": "off"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2025": true
+  },
+  "overrides": [
+    {
+      "files": ["*.test.ts", "*.test.tsx", "*.spec.ts"],
+      "rules": {
+        "typescript/no-explicit-any": "off",
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["scripts/**"],
+      "rules": {
+        "no-console": "off",
+        "typescript/no-unsafe-assignment": "off",
+        "typescript/no-unsafe-member-access": "off",
+        "typescript/no-unsafe-call": "off",
+        "typescript/no-unsafe-return": "off",
+        "typescript/no-unsafe-argument": "off"
+      }
+    }
+  ]
+}

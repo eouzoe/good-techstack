@@ -7,7 +7,7 @@ on:
     branches: [dev, main]
 
 jobs:
-  typecheck-linux:
+  lint-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -16,13 +16,13 @@ jobs:
       - run: devenv allow
       - run: |
           set +e
-          devenv shell -- devenv tasks run typecheck:backend typecheck:frontend
+          devenv shell -- devenv tasks run deps:lint
           EXIT_CODE=$?
           set -e
-          echo "typecheck exit code: $EXIT_CODE"
+          echo "lint exit code: $EXIT_CODE"
           if [ "$EXIT_CODE" -gt 1 ]; then exit "$EXIT_CODE"; fi
 
-  typecheck-macos:
+  lint-macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v7
@@ -34,10 +34,10 @@ jobs:
       - run: devenv allow
       - run: |
           set +e
-          devenv shell -- devenv tasks run typecheck:backend typecheck:frontend
+          devenv shell -- devenv tasks run deps:lint
           EXIT_CODE=$?
           set -e
-          echo "typecheck exit code: $EXIT_CODE"
+          echo "lint exit code: $EXIT_CODE"
           if [ "$EXIT_CODE" -gt 1 ]; then exit "$EXIT_CODE"; fi
 
   check-windows:

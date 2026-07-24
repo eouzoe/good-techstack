@@ -2,8 +2,8 @@
 init:
     @echo "  -> Generating D1 type bindings …"
     @devenv tasks run deps:gen-types 2>/dev/null || true
-    @echo "  -> Type checking …"
-    @devenv tasks run typecheck:backend typecheck:frontend
+    @echo "  -> Linting & type checking …"
+    @devenv tasks run deps:lint
     @echo "  -> Initialising secrets …"
     @secretspec init 2>/dev/null; ret=$$?; \
         if [ "$$ret" -eq 0 ]; then \
