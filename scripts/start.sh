@@ -80,28 +80,17 @@ export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
 nix profile add nixpkgs#devenv
 
 # 5. trust this project dir (devenv refuses untrusted dirs), then enter the
-#    devenv shell and bootstrap — traced from here.
-#    Trace 用 devenv 原生 --trace-to（pretty 到 stderr）。是否導出 OTLP 由
-#    使用者自行決定（設 DEVENV_TRACE_TO / OTEL_EXPORTER_OTLP_ENDPOINT 即可），
-#    這裡不硬塞 grpc 導出，只保證用最新 devenv 的 trace 機制、功能正常。
-echo "  -> Bootstrapping environment (traced) ..."
+#    devenv shell, run init, and stay inside.
+echo "  -> Bootstrapping environment ..."
 devenv allow
-devenv shell -- just init
-
-# 6. agent detection — tell the user which AI agent to launch. Detect which
-#    agent CLIs are available on the host; default guidance is opencode.
-AGENT_DETECTED=""
-for a in opencode claude codex; do
-  command -v "$a" >/dev/null 2>&1 && AGENT_DETECTED="$AGENT_DETECTED $a"
-done
-
-echo ""
-echo "  Done. Your environment is ready."
-echo ""
-echo "  Next: start your AI agent (see the boxed steps in README.md)."
-if [ -n "$AGENT_DETECTED" ]; then
-  echo "  Detected agent CLI(s):$AGENT_DETECTED"
-  echo "  Default: opencode   ->  run: opencode"
-else
-  echo "  No agent CLI detected. Install one, e.g. 'npm i -g opencode', then run it."
-fi
+devenv shell -- bash -c '
+  export DEVENV_ROOT="$PWD"
+  just init
+  echo ""
+  echo "  Done. Your environment is ready inside the devenv shell."
+  echo ""
+  echo "  Next:  just dev    — start backend + frontend servers"
+  echo "         opencode    — launch the AI assistant (if installed)"
+  echo ""
+  exec zsh
+'
