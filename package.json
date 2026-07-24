@@ -12,9 +12,10 @@
     "deploy": "bun --filter '*' deploy"
   },
   "devDependencies": {
-    "oxlint": "^0.15.0",
+    "oxlint": "^1.75.0",
+    "oxlint-tsgolint": "^7.0.2001",
     "typescript": "^7.0.2",
-    "wrangler": "^3.100.0"
+    "wrangler": "^4.114.0"
   },
   "supportedArchitectures": {
     "os": [
