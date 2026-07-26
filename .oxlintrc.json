@@ -34,6 +34,8 @@
     "oxc/no-async-await": "off",
     "oxc/no-optional-chaining": "off",
     "oxc/no-rest-spread-properties": "off",
+    "react/function-component-definition": "off",
+    "import/default": "off",
     "import/no-named-export": "off",
     "import/no-default-export": "off",
     "import/prefer-default-export": "off"
@@ -49,6 +51,13 @@
       "rules": {
         "typescript/no-explicit-any": "off",
         "no-console": "off"
+      }
+    },
+    {
+      "files": ["apps/frontend/**/*.tsx", "apps/frontend/**/*.ts"],
+      "rules": {
+        "react/react-in-jsx-scope": "off",
+        "vitest/require-hook": "off"
       }
     },
     {

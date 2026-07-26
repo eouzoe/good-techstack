@@ -1,4 +1,4 @@
 import { expect } from "@rstest/core";
-import * as jestDomMatchers from "@testing-library/jest-dom/matchers";
+import matchers from "@testing-library/jest-dom/matchers";
 
-expect.extend(jestDomMatchers);
+expect.extend(matchers);
