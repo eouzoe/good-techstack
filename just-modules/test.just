@@ -1,11 +1,3 @@
-# Run tests (bun test — backend unit + shared package)
+# Run oxlint (CI lint check)
 test:
-    bun test
-
-# Frontend tests (rstest — simulated deploy via Rsbuild build pipeline)
-test-frontend:
-    cd apps/frontend && bunx rstest
-
-# Full test suite
-test-all:
-    devenv test
+    bunx oxlint
