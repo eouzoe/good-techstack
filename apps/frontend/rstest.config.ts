@@ -3,9 +3,9 @@ import { withRsbuildConfig } from "@rstest/adapter-rsbuild";
 
 export default defineConfig({
   extends: withRsbuildConfig(),
-  testEnvironment: "jsdom",
   globals: true,
-  setupFiles: ["./rstest.setup.ts"],
   include: ["src/**/*.{test,spec}.{ts,tsx}"],
   passWithNoTests: true,
+  setupFiles: ["./rstest.setup.ts"],
+  testEnvironment: "jsdom",
 });

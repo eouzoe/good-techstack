@@ -4,7 +4,7 @@ import { itemHandler } from "./handler";
 import { createAuth } from "./auth";
 import { createDb } from "./db";
 
-export type Env = {
+export interface Env {
   Bindings: {
     DB: D1Database;
     BETTER_AUTH_URL: string;
@@ -13,23 +13,23 @@ export type Env = {
   Variables: {
     userId: string | null;
   };
-};
+}
 
 const app = new Hono<Env>();
 
-// better-auth handler
+// Better-auth handler
 const getAuth = (c: { env: Env["Bindings"] }) => createAuth(c.env);
-app.on(["GET", "POST"], "/api/auth/*", (c) => {
-  return getAuth(c).handler(c.req.raw);
-});
+app.on(["GET", "POST"], "/api/auth/*", (c) => 
+  getAuth(c).handler(c.req.raw)
+);
 
-// oRPC RPC handler
+// ORPC RPC handler
 const orpcHandler = new RPCHandler(itemHandler);
 
 app.use("/rpc/*", async (c, next) => {
   const { matched, response } = await orpcHandler.handle(c.req.raw, {
-    prefix: "/rpc",
     context: { db: createDb(c.env.DB), user: null },
+    prefix: "/rpc",
   });
   if (matched) {
     return c.newResponse(response.body, response);

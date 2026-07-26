@@ -1,18 +1,18 @@
 #!/usr/bin/env bun
 // Verify that the tools installed on THIS machine match the versions the
-// project actually provides — NOT the latest published upstream versions.
+// Project actually provides — NOT the latest published upstream versions.
 //
 // WHY THIS IS DIFFERENT FROM check-versions.mjs
-//   check-versions.mjs asks "is our pinned version behind the official latest?"
+//   Check-versions.mjs asks "is our pinned version behind the official latest?"
 //   That question is for MAINTAINERS: if a contributor sees a newer release, they
-//   report it and WE decide and apply the bump.
+//   Report it and WE decide and apply the bump.
 //   This script asks the opposite question: "is the contributor running a NEWER
-//   or different version than the project pins?" If they are, and something
-//   breaks, nobody is responsible. The project promises the pinned versions
-//   work; we maintain those, not whatever is newest on npm/GitHub today.
+//   Or different version than the project pins?" If they are, and something
+//   Breaks, nobody is responsible. The project promises the pinned versions
+//   Work; we maintain those, not whatever is newest on npm/GitHub today.
 //
 //   So when a tool mismatches, the fix is to ALIGN TO THE PROJECT VERSION — most
-//   often by entering the devenv shell, which provides exactly the pinned set.
+//   Often by entering the devenv shell, which provides exactly the pinned set.
 //   Do not `npm i -g` / download the newest release to "fix" a mismatch.
 //
 // Run (Linux):   bun scripts/check-env.mjs
@@ -41,42 +41,42 @@ function sh(cmd, args, opts = {}) {
 
 // --- expected versions from the project's own pins -------------------------
 
-// devenv pins its own CLI version in devenv.yaml (ref=vX.Y.Z)
+// Devenv pins its own CLI version in devenv.yaml (ref=vX.Y.Z)
 function devenvPinned() {
   const text = readFileSync(join(root, "devenv.yaml"), "utf8");
-  const m = text.match(/ref=v([0-9]+\.[0-9]+\.[0-9]+)/);
+  const m = /ref=v([0-9]+\.[0-9]+\.[0-9]+)/.exec(text);
   return m ? m[1] : null;
 }
 
-// bun.lock is JSON5; pull the resolved version of an npm package.
+// Bun.lock is JSON5; pull the resolved version of an npm package.
 function bunLockVersion(name) {
   const text = readFileSync(join(root, "bun.lock"), "utf8");
   const re = new RegExp(
-    `"${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}":\\s*\\[\\s*"[^"]*@([^"]+)"`,
+    `"${name.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)}":\\s*\\[\\s*"[^"]*@([^"]+)"`,
   );
   const m = re.exec(text);
   return m ? m[1] : null;
 }
 
-// nixpkgs tool version. We evaluate the EXACT revision pinned in devenv.lock
+// Nixpkgs tool version. We evaluate the EXACT revision pinned in devenv.lock
 // (not the floating `nixpkgs` channel), so this matches what `devenv shell`
-// actually provides and works offline once that revision is in the store.
+// Actually provides and works offline once that revision is in the store.
 //
-// devenv.lock is a flake-lock-format JSON with MANY nixpkgs nodes (each pulled
-// in by a different dependency). Only the one reachable from
-// nodes.root.inputs.nixpkgs is the toolchain nixpkgs — follow that pointer
-// rather than grabbing the first "nixpkgs" match, which would be wrong.
+// Devenv.lock is a flake-lock-format JSON with MANY nixpkgs nodes (each pulled
+// In by a different dependency). Only the one reachable from
+// Nodes.root.inputs.nixpkgs is the toolchain nixpkgs — follow that pointer
+// Rather than grabbing the first "nixpkgs" match, which would be wrong.
 function nixpkgsRev() {
   const lock = JSON.parse(readFileSync(join(root, "devenv.lock"), "utf8"));
   const nodeName = lock?.nodes?.root?.inputs?.nixpkgs;
-  if (!nodeName) return null;
+  if (!nodeName) {return null;}
   return lock?.nodes?.[nodeName]?.locked?.rev ?? null;
 }
 function nixpkgsVersion(attr) {
   const rev = nixpkgsRev();
-  if (!rev) return null;
+  if (!rev) {return null;}
   return sh("nix", ["eval", `github:NixOS/nixpkgs/${rev}#${attr}.version`, "--raw"], {
-    timeout: 20000,
+    timeout: 20_000,
   });
 }
 
@@ -84,21 +84,21 @@ function nixpkgsVersion(attr) {
 
 function localVersion(name, flag = "--version") {
   const out = sh(name, [flag]);
-  if (!out) return null;
-  const m = out.match(/v?(\d+\.\d+(?:\.\d+)?(?:[-+][0-9A-Za-z.-]+)?)/);
+  if (!out) {return null;}
+  const m = /v?(\d+\.\d+(?:\.\d+)?(?:[-+][0-9A-Za-z.-]+)?)/.exec(out);
   return m ? m[1] : null;
 }
 
 function parseSemver(v) {
-  const m = String(v).match(/^(\d+)\.(\d+)\.(\d+)/);
+  const m = /^(\d+)\.(\d+)\.(\d+)/.exec(String(v));
   return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null;
 }
 function cmp(a, b) {
   const pa = parseSemver(a);
   const pb = parseSemver(b);
-  if (!pa || !pb) return null;
+  if (!pa || !pb) {return null;}
   for (let i = 0; i < 3; i++) {
-    if (pa[i] !== pb[i]) return pa[i] < pb[i] ? -1 : 1;
+    if (pa[i] !== pb[i]) {return pa[i] < pb[i] ? -1 : 1;}
   }
   return 0;
 }
@@ -106,14 +106,14 @@ function cmp(a, b) {
 // --- tool table -------------------------------------------------------------
 
 const tools = [
-  { name: "bun", nix: "bun", fix: "devenv-shell" },
-  { name: "just", nix: "just", fix: "devenv-shell" },
-  { name: "oxfmt", nix: "oxfmt", fix: "devenv-shell" },
-  { name: "oxlint", bun: "oxlint", fix: "bun-install" },
-  { name: "wrangler", bun: "wrangler", fix: "bun-install" },
-  { name: "node", nix: "nodejs_26", fix: "devenv-shell", optional: true },
-  { name: "drizzle-kit", bun: "drizzle-kit", fix: "bun-install" },
-  { name: "devenv", devenv: true, fix: "devenv-bin" },
+  { fix: "devenv-shell", name: "bun", nix: "bun" },
+  { fix: "devenv-shell", name: "just", nix: "just" },
+  { fix: "devenv-shell", name: "oxfmt", nix: "oxfmt" },
+  { bun: "oxlint", fix: "bun-install", name: "oxlint" },
+  { bun: "wrangler", fix: "bun-install", name: "wrangler" },
+  { fix: "devenv-shell", name: "node", nix: "nodejs_26", optional: true },
+  { bun: "drizzle-kit", fix: "bun-install", name: "drizzle-kit" },
+  { devenv: true, fix: "devenv-bin", name: "devenv" },
 ];
 
 console.log("Checking your local toolchain against the project-pinned versions...\n");
@@ -123,9 +123,9 @@ let mismatches = 0;
 for (const t of tools) {
   const local = localVersion(t.name);
   let expected = null;
-  if (t.nix) expected = nixpkgsVersion(t.nix);
-  else if (t.bun) expected = bunLockVersion(t.bun);
-  else if (t.devenv) expected = devenvPinned();
+  if (t.nix) {expected = nixpkgsVersion(t.nix);}
+  else if (t.bun) {expected = bunLockVersion(t.bun);}
+  else if (t.devenv) {expected = devenvPinned();}
 
   if (local == null) {
     console.log(`?  ${t.name}  — not found on PATH (run \`devenv shell\` to get it)`);
@@ -160,13 +160,17 @@ if (mismatches === 0) {
 
 function fixCommand(t, expected) {
   switch (t.fix) {
-    case "devenv-shell":
+    case "devenv-shell": {
       return "devenv shell   # (or: direnv allow — then the shell auto-enters with the pinned versions)";
-    case "bun-install":
+    }
+    case "bun-install": {
       return `bun install   # syncs ${t.name} to ${expected} from bun.lock`;
-    case "devenv-bin":
+    }
+    case "devenv-bin": {
       return `install devenv v${expected} exactly — see https://github.com/cachix/devenv/releases/tag/v${expected}`;
-    default:
+    }
+    default: {
       return `align ${t.name} to ${expected}`;
+    }
   }
 }

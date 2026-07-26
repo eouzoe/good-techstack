@@ -1,17 +1,17 @@
 #!/usr/bin/env bun
 // Compare every dependency the project directly controls against the latest
-// version published on npm, and report what is outdated.
+// Version published on npm, and report what is outdated.
 //
 // WHY WE COMPARE "ALL" (every direct dependency, across every workspace):
-//   bun.lock is the real source of truth for npm versions. If a direct
-//   dependency drifts from the latest published version, we want to know so
-//   the maintainers can bump it. Transitive dependencies are resolved and
-//   refreshed by bun itself (`bun update`) — contributors do not act on those.
+//   Bun.lock is the real source of truth for npm versions. If a direct
+//   Dependency drifts from the latest published version, we want to know so
+//   The maintainers can bump it. Transitive dependencies are resolved and
+//   Refreshed by bun itself (`bun update`) — contributors do not act on those.
 //
 // WHAT THE CONTRIBUTOR ACTUALLY LOOKS AT:
 //   The packages flagged "DIRECT" below. Those are the dependencies declared
-//   in a package.json (root + apps/* + packages/*). Report an outdated one and
-//   a maintainer will bump it, sync bun.lock, and run the tests.
+//   In a package.json (root + apps/* + packages/*). Report an outdated one and
+//   A maintainer will bump it, sync bun.lock, and run the tests.
 //
 // Run (any OS with bun):   bun scripts/check-versions.mjs
 // Via just:                just check-versions
@@ -29,10 +29,10 @@ const root = process.cwd();
 // Collect every dependency declared in any package.json (direct dependencies).
 function findPackageJson(dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === "node_modules" || entry.name === ".devenv") continue;
+    if (entry.name === "node_modules" || entry.name === ".devenv") {continue;}
     const full = join(dir, entry.name);
-    if (entry.isDirectory()) findPackageJson(full, out);
-    else if (entry.name === "package.json") out.push(full);
+    if (entry.isDirectory()) {findPackageJson(full, out);}
+    else if (entry.name === "package.json") {out.push(full);}
   }
   return out;
 }
@@ -47,8 +47,8 @@ for (const file of findPackageJson(root)) {
   }
 }
 
-// bun.lock is JSON5 (trailing commas, possibly unquoted keys), so parse it with
-// a tolerant regex instead of JSON.parse. Each packages entry looks like:
+// Bun.lock is JSON5 (trailing commas, possibly unquoted keys), so parse it with
+// A tolerant regex instead of JSON.parse. Each packages entry looks like:
 //   "name": ["name@version", "", {...}, "sha512..."]
 const lockText = readFileSync(join(root, "bun.lock"), "utf8");
 const resolved = new Map();
@@ -57,8 +57,8 @@ let m;
 while ((m = entryRe.exec(lockText)) !== null) {
   const name = m[1];
   const version = m[2];
-  if (version.includes("workspace:")) continue; // local workspace, not a real version
-  if (!resolved.has(name)) resolved.set(name, version);
+  if (version.includes("workspace:")) {continue;} // Local workspace, not a real version
+  if (!resolved.has(name)) {resolved.set(name, version);}
 }
 
 function npmLatest(name) {
@@ -72,7 +72,7 @@ function npmLatest(name) {
         stdio: ["ignore", "pipe", "ignore"],
       }).trim();
     } catch {
-      // try the next command
+      // Try the next command
     }
   }
   return null;
@@ -80,7 +80,7 @@ function npmLatest(name) {
 
 console.log("Checking direct dependencies against npm...\n");
 let outdated = 0;
-for (const [name, range] of [...directDeps.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+for (const [name, range] of [...directDeps.entries()].toSorted((a, b) => a[0].localeCompare(b[0]))) {
   const locked = resolved.get(name) ?? "(absent from bun.lock)";
   const latest = npmLatest(name);
   if (!latest) {

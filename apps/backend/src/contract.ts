@@ -2,17 +2,17 @@ import { os } from "@orpc/server";
 import { z } from "zod";
 
 export const itemSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  title: z.string().min(1),
   content: z.string().optional(),
   createdAt: z.string(),
+  id: z.string(),
+  title: z.string().min(1),
   updatedAt: z.string(),
+  userId: z.string(),
 });
 
 export const createItemSchema = z.object({
-  title: z.string().min(1),
   content: z.string().optional(),
+  title: z.string().min(1),
 });
 
 export const listItems = os.input(z.void()).output(z.array(itemSchema));

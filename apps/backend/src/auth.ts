@@ -6,11 +6,11 @@ export function createAuth(env: {
   BETTER_AUTH_SECRET: string;
 }) {
   return betterAuth({
-    database: env.DB,
     baseURL: env.BETTER_AUTH_URL,
-    secret: env.BETTER_AUTH_SECRET,
+    database: env.DB,
     emailAndPassword: {
       enabled: true,
     },
+    secret: env.BETTER_AUTH_SECRET,
   });
 }

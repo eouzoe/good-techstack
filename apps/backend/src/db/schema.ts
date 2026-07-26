@@ -4,16 +4,16 @@ import { sql } from "drizzle-orm";
 export const items = sqliteTable(
   "items",
   {
-    id: text("id").primaryKey(),
-    userId: text("user_id").notNull(),
-    title: text("title").notNull(),
     content: text("content"),
     createdAt: text("created_at")
       .notNull()
       .default(sql`(datetime('now'))`),
+    id: text("id").primaryKey(),
+    title: text("title").notNull(),
     updatedAt: text("updated_at")
       .notNull()
       .default(sql`(datetime('now'))`),
+    userId: text("user_id").notNull(),
   },
   (table) => [index("idx_items_user_id").on(table.userId)],
 );
