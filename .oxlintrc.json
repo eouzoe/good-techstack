@@ -36,6 +36,8 @@
     "oxc/no-rest-spread-properties": "off",
     "react/function-component-definition": "off",
     "import/default": "off",
+    "vitest/require-hook": "off",
+    "typescript/prefer-readonly-parameter-types": "off",
     "import/no-named-export": "off",
     "import/no-default-export": "off",
     "import/prefer-default-export": "off"
@@ -68,7 +70,9 @@
         "typescript/no-unsafe-member-access": "off",
         "typescript/no-unsafe-call": "off",
         "typescript/no-unsafe-return": "off",
-        "typescript/no-unsafe-argument": "off"
+        "typescript/no-unsafe-argument": "off",
+        "import/no-nodejs-modules": "off",
+        "node/no-sync": "off"
       }
     }
   ]
