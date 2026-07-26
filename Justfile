@@ -2,6 +2,7 @@
 # Complements devenv tasks: agents use devenv's task runner, humans use just.
 
 import 'just-modules/init.just'
+import 'just-modules/update.just'
 import 'just-modules/dev.just'
 import 'just-modules/test.just'
 import 'just-modules/deploy.just'
