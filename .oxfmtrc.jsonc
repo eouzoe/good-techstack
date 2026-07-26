@@ -1,0 +1,21 @@
+{
+  "tabWidth": 2,
+  "printWidth": 100,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "sortImports": {
+    "groups": [
+      "builtin",
+      "external",
+      ["internal", "subpath"],
+      ["parent", "sibling", "index"],
+      "style",
+      "unknown"
+    ],
+    "newlinesBetween": true,
+    "ignoreCase": true
+  },
+  "sortPackageJson": true
+}
