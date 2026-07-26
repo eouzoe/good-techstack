@@ -24,19 +24,20 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.2025",
+    "@cloudflare/workers-types": "^5.20260726.1",
     "@rsbuild/core": "^2.1.6",
     "@rsbuild/plugin-react": "^2.1.0",
     "@rstest/adapter-rsbuild": "^0.11.2",
     "@rstest/core": "^0.11.2",
-    "@testing-library/jest-dom": "^6",
+    "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16",
     "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.10",
-    "jsdom": "^25",
-    "oxlint": "^0.15.0",
+    "jsdom": "^29.1.1",
+    "oxlint": "^1.75.0",
+    "oxlint-tsgolint": "^7.0.2001",
     "typescript": "^7.0.2",
     "wrangler": "^4.112.0"
   }
