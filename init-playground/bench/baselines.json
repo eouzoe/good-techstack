@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-08-09T11:31:02.459Z",
+  "components": {
+    "kv": {
+      "directMeanMs": 41.88,
+      "p50Ms": 42,
+      "p95Ms": 53,
+      "p99Ms": 61,
+      "hyperfineMeanMs": 301.2792453333334,
+      "hyperfineMedianMs": 297.59786720000005
+    },
+    "d1": {
+      "directMeanMs": 43.45,
+      "p50Ms": 43,
+      "p95Ms": 55,
+      "p99Ms": 91,
+      "hyperfineMeanMs": 381.1861849333334,
+      "hyperfineMedianMs": 409.9913902
+    },
+    "r2": {
+      "directMeanMs": 66.91,
+      "p50Ms": 66,
+      "p95Ms": 81,
+      "p99Ms": 109,
+      "hyperfineMeanMs": 767.2179285999999,
+      "hyperfineMedianMs": 771.6104682
+    },
+    "do": {
+      "directMeanMs": 40.99,
+      "p50Ms": 26,
+      "p95Ms": 36,
+      "p99Ms": 1481,
+      "hyperfineMeanMs": 442.55503080000005,
+      "hyperfineMedianMs": 441.9471052
+    },
+    "consistency": {}
+  }
+}

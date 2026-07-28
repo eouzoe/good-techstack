@@ -1,55 +1,25 @@
-# Check your local environment (Linux)
+# Environment alignment
 
-`check-versions` tells maintainers when a pinned dependency is behind upstream.
-This check tells **you** whether the tools on your own machine match what the
-project provides — because if you run a newer or different version and it
-breaks, nobody is responsible for the fallout. The project guarantees the
-pinned set works, and we maintain it.
+The `devenv shell` automatically provides the pinned tool versions
+(bun, node, oxlint, oxfmt, wrangler, just, etc.) from the lock files.
+No manual environment check is needed.
 
-## Run it
+## Keeping dependencies up to date
 
 ```bash
-just check-env          # or: bun scripts/check-env.mjs
+just update    # bun update + devenv update
 ```
 
-Linux only. The fix commands below are bash.
+This updates both npm packages (`bun update`) and Nix packages
+(`devenv update`). Run it periodically or when entering the project
+after a long break.
 
-## What it compares
+## Why this used to be more complex
 
-The script reads the project's own pins and compares them with the versions on
-your `PATH`:
+Earlier versions had `check-env.mjs` (compare local tools against
+lock files) and `check-versions.mjs` (compare pinned deps against
+npm latest). These were removed because:
 
-| Source                  | Tools                                              |
-| ----------------------- | -------------------------------------------------- |
-| `devenv.lock` (nixpkgs) | bun, node, oxlint, oxfmt, wrangler, prettier, just |
-| `devenv.yaml`           | devenv CLI (`ref=v2.1.2`)                          |
-| `bun.lock`              | npm CLIs such as drizzle-kit                       |
-
-## A mismatch means align, not upgrade
-
-If a tool differs, the fix is to use the project's pinned version — most often
-by entering the devenv shell, which provides exactly that set:
-
-```bash
-devenv shell            # provides exactly the pinned tool versions
-# or, for auto-entry on every cd:
-direnv allow
-```
-
-For npm CLIs that live in `bun.lock` (e.g. `drizzle-kit`), sync with:
-
-```bash
-bun install             # pulls pinned versions from bun.lock
-```
-
-Do **not** `npm i -g` / download the newest release to "fix" a mismatch. Use
-the project's version; we look after it.
-
-## Why this is separate from `check-versions`
-
-- `check-versions` compares our pinned deps against the **official latest** —
-  a maintainer signal (a contributor reports a newer release; we bump).
-- `check-env` compares **your machine** against the **project-pinned** versions
-  — a contributor safeguard (use our version, not a newer one that breaks).
-
-See [version-check.md](version-check.md) for the dependency freshness check.
+- `devenv shell` already guarantees environment alignment
+- `just update` is a simpler update workflow
+- npm latest checking is a maintainer concern, not a daily task

@@ -1,0 +1,7 @@
+{
+  "plugins": ["react"],
+  "categories": { "correctness": "error", "style": "error" },
+  "rules": {
+    "react/jsx-max-depth": ["error", { "max": 5 }]
+  }
+}

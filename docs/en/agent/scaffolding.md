@@ -101,11 +101,11 @@ Present the entity map to the user and say:
 
 Generate files in this order. After each step, verify before continuing.
 
-### 1. Zod schemas
+### 1. Valibot schemas
 
 `packages/shared/src/<entity>.schema.ts`
 
-One file per entity with create, update, and response types. Use Zod v4 syntax.
+One file per entity with create, update, and response types. Use Valibot v1.4+.
 
 ### 2. Drizzle tables
 
@@ -130,6 +130,27 @@ List page, detail page, create/edit form, and route registration.
 `apps/backend/src/auth/roles.ts`
 
 Permission mapping based on the entity map's `actions` field. Apply middleware to routes.
+
+### Env var firewalls (security rule)
+
+When generating code, enforce these env var access rules:
+
+- **Frontend (client)**: Only reads `PUBLIC_*` prefixed vars. These are safe to embed in client JS.
+- **Backend (server)**: Handles all secrets (`JWT_SECRET`, `API_KEY`, `BETTER_AUTH_SECRET`, etc.).
+- **No backend secret may be imported or referenced from `apps/frontend/` or any `src/client/` file.**
+- If a secret must be exposed to the client (e.g., analytics ID), create a `PUBLIC_` prefixed version in `wrangler.jsonc` `[vars]`.
+- The `envPrefix: ["PUBLIC_"]` in `rsbuild.config.ts` enforces this at build time. Do not change this setting.
+- AI agents: do not reference `env.*` without `PUBLIC_` prefix in client-side code — oxlint will reject it.
+
+### Env generation order
+
+When adding a new binding or environment variable:
+
+1. Add placeholder to `wrangler.jsonc` `[vars]` or binding section
+2. Add `PUBLIC_` variant in `wrangler.jsonc` `[vars]` if client needs access
+3. Generate types: `wrangler types`
+4. Set local value: `secretspec run --scope runtime -- <cmd>`
+5. For production: `wrangler secret put <KEY>` or set via Cloudflare dashboard
 
 ### Deployment confirmation (Forced Review)
 

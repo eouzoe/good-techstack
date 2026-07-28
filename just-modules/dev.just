@@ -4,13 +4,13 @@ alias d := dev
 dev:
     devenv processes up
 
-# Run oxlint
+# Run oxlint (includes type-aware checking via config)
 lint:
     bunx oxlint --type-aware
 
-# TypeScript type check
+# TypeScript type check (tsc --noEmit)
 typecheck:
-    bun --filter '*' typecheck
+    tsc --noEmit
 
 # Run formatter
 format:

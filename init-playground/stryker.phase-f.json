@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "mutate": ["src/shared/queue-schemas.ts"],
+  "testRunner": "vitest",
+  "concurrency": 4,
+  "coverageAnalysis": "perTest",
+  "reporters": ["json", "clear-text"],
+  "jsonReporter": {
+    "fileName": "reports/mutation-phase-f/queue-schemas-report.json"
+  },
+  "tempDirName": "reports/mutation-phase-f/.stryker-tmp",
+  "inPlace": true,
+  "thresholds": {
+    "high": 80,
+    "low": 60,
+    "break": 70
+  },
+  "plugins": ["@stryker-mutator/vitest-runner"]
+}

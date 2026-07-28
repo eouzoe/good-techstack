@@ -12,7 +12,7 @@
     git jujutsu
     wrangler
     curl
-    jq
+    jaq
   ];
 
   cachix.pull = [ "devenv" ];
@@ -24,17 +24,12 @@
 
   dotenv.enable = false;
 
-  env = {
-    CLOUDFLARE_ACCOUNT_ID = config.secretspec.secrets.CLOUDFLARE_ACCOUNT_ID or "";
-    CLOUDFLARE_API_TOKEN = config.secretspec.secrets.CLOUDFLARE_API_TOKEN or "";
-  };
-
   enterTest = ''
     devenv tasks run --mode all deps:lint
   '';
 
   tasks."deps:lint" = {
-    exec = "bunx oxlint";
+    exec = "bunx oxlint --type-aware";
     after = [ "deps:install" ];
   };
 
@@ -61,8 +56,8 @@
       description = "Run oxlint on the codebase";
     };
     typecheck = {
-      cmd = "devenv shell -- just lint";
-      description = "Run oxlint (includes type checking via typeCheck config)";
+      cmd = "devenv shell -- just typecheck";
+      description = "Run tsc --noEmit for TypeScript type checking";
     };
   };
 

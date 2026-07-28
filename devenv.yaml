@@ -2,7 +2,7 @@ inputs:
   nixpkgs:
     url: github:NixOS/nixpkgs/nixos-unstable
   devenv:
-    url: github:cachix/devenv?ref=v2.1.2
+    url: github:cachix/devenv?ref=v2.2.1
     inputs:
       nixpkgs:
         follows: nixpkgs
@@ -12,18 +12,18 @@ inputs:
       nixpkgs:
         follows: nixpkgs
 
-require_version: ">=2.1.2"
+require_version: ">=2.2.1"
 
-# Secret resolution via secretspec.toml (provider: env = reads process env,
-# no crash on missing keys — uses `or ""` in devenv.nix).
+# Secret resolution via secretspec.toml (provider: dotenv = .env next to
+# secretspec.toml, gitignored; scopes runtime/deploy for least privilege).
 secretspec:
   enable: true
-  provider: env
+  provider: dotenv
   profile: default
 
 # Fail loudly on port conflicts instead of silently remapping (prevents
 # devenv's sticky fallback-port behaviour from hiding collisions).
 strict_ports: true
 
-# Local: `SECRETSPEC_PROVIDER=keyring secretspec config init` for encrypted
-# keychain storage. CI: inject secrets as GitHub Actions env vars.
+# Local: `SECRETSPEC_PROVIDER=keyring secretspec config global init` for
+# encrypted keychain storage. CI: inject secrets as GitHub Actions env vars.

@@ -1,0 +1,271 @@
+# ── Dev ──────────────────────────────────────────────────
+# Start all dev processes (router-watcher + dev server + drizzle studio)
+dev:
+    devenv processes up
+
+# Dev server only (vite dev, foreground)
+dev-server:
+    bun run dev
+
+# Cloudflare-native dev (wrangler with in-memory persistence)
+dev-cf: build
+    bunx wrangler dev --persist-to=:memory:
+
+# Stop detached dev processes
+dev-down:
+    devenv processes down
+
+# Show dev process status
+dev-status:
+    devenv processes list
+
+# ── Build ─────────────────────────────────────────────────
+build:
+    bun run build
+
+# ── DB Local (bun:sqlite) ────────────────────────────────
+drizzle-push:
+    bunx drizzle-kit push
+
+drizzle-push-seed: drizzle-push
+    bun cli/seed.ts --force
+
+db-seed:
+    bash -c 'if [ -f .dev.snapshot.db ]; then cp .dev.snapshot.db gstack.db && echo "✓ Restored from snapshot"; else bun cli/seed.ts --snapshot .dev.snapshot.db; fi'
+
+# ── Codegen ──────────────────────────────────────────────
+codegen:
+    bun scripts/codegen-router.ts
+
+codegen-watch:
+    bun --watch scripts/codegen-router.ts
+
+# ── Quality ──────────────────────────────────────────────
+typecheck: cf-typegen
+    bunx tsc --noEmit
+
+lint:
+    bunx oxlint --type-aware
+
+format:
+    bunx oxfmt --write .
+
+# ── Test ─────────────────────────────────────────────────
+# THE verification entry: runs the Kernel suite, prints summary + §1.4 JSON.
+# Exit non-zero on any failed invariant (CI uses this same gate later).
+test:
+    bun run scripts/verify.ts
+
+# Full unit-test suite (vitest) — includes the Kernel's own mutation-pinned tests.
+test-unit:
+    bun run test
+
+# ── Worker-boundary suite (Phase E/F) ────────────────────
+# Runs the @cloudflare/vitest-pool-workers suite inside real workerd against the
+# D1 binding. Separate gate from `test-unit` (node env) — the Worker boundary
+# gets its own runtime, config, and typecheck, so `just test` stays node-only.
+# NOTE: vitest-pool-workers hosts a Node process that talks to the workerd binary
+# over WebSockets. Bun's ws.WebSocket lacks the upgrade/unexpected-response
+# events the pool needs, so this gate MUST run under Node (devenv `nodejs_26`),
+# not bun — exactly why devenv installs both `bun` and `nodejs_26`.
+test-worker:
+    node node_modules/vitest/vitest.mjs run --config vitest.worker.config.ts --no-file-parallelism
+
+test-worker-typecheck:
+    node node_modules/typescript/bin/tsc --noEmit -p tests/worker/tsconfig.json
+
+test-watch:
+    bunx vitest
+
+# ── Verification ─────────────────────────────────────────
+# Local-debug observation of VerificationRun detail (JSONL, pipe into `jaq`).
+observe:
+    bun run scripts/observe.ts
+
+# ── DB ───────────────────────────────────────────────────
+migrate:
+    bunx wrangler d1 migrations apply gstack
+
+seed:
+    bun run cli/seed.ts
+
+# ── Deploy ───────────────────────────────────────────────
+# Injects only the deploy-scoped secrets (SecretSpec 0.17+).
+deploy:
+    bun run build && secretspec run --scope deploy -- bunx wrangler deploy
+
+# Profile Worker cold-start (bundle size + CPU summary → worker-startup.cpuprofile)
+startup: build
+    bunx wrangler check startup
+
+# ── Security ─────────────────────────────────────────────
+secrets-scan:
+    betterleaks git --pre-commit --staged
+
+# Check/resolve SecretSpec secrets (generates BETTER_AUTH_SECRET when missing)
+secrets-check:
+    secretspec check
+
+# Show the SecretSpec audit log of secret access
+secrets-audit:
+    secretspec audit
+
+# ── CF types ─────────────────────────────────────────────
+cf-typegen:
+    bunx wrangler types
+
+# ── Mutation (F+1 §46.11-A) ──────────────────────────────
+# Institutionalized mutation: runs every scoped Stryker config against the
+# boundary it guards. Scope = the config basename without extension
+# (kernel | phase-d | phase-d-schema | phase-d-adapter | phase-f | all).
+# MUST run under Node — @stryker-mutator's vitest-runner drives the same
+# vitest binary, and bun's ws lacks the events the pool needs.
+mutate scope='all':
+    bash scripts/mutate.sh "{{ scope }}"
+
+# ── Meta-suite (F+1 §46.11-B) ────────────────────────────
+# Test-of-the-tests: guards suite shape (file floors) + mutation citation.
+test-meta:
+    bunx vitest run tests/meta-suite/meta-count-guard.test.ts
+
+# ── Performance (G §46.12) ───────────────────────────────
+# Baseline harness (all-inline, no shell script): builds the bench worker,
+# starts wrangler dev (in-memory), hammers each binding with oha/hyperfine plus
+# direct in-worker performance.now() probes, writes bench/baselines.json.
+# Fails if a directMean regresses >20% vs the committed baseline (drift
+# detection, not CI auto-gating). Pass `--update` after a deliberate change to
+# re-baseline. Recipes are bash scripts because wrangler dev + traps need the
+# full shebang semantics; tools (node, hyperfine, oha) resolve in the dev shell.
+perf run='':
+    #!/usr/bin/env -S bash -euo pipefail
+    UPDATE="{{ run }}"
+    ROOT="{{ justfile_directory() }}"
+    cd "$ROOT"
+
+    BENCH_PORT=8790
+    BASE="http://localhost:${BENCH_PORT}"
+    BASELINE="bench/baselines.json"
+    RUN_DIR="bench/.run"
+    mkdir -p "$RUN_DIR"
+
+    echo "── build"
+    bun run build >/dev/null
+
+    NODE_BIN="$(command -v node || true)"
+    if [ -z "$NODE_BIN" ]; then
+      NODE_BIN="$(ls -d /nix/store/*nodejs-26*/bin/node 2>/dev/null | head -1 || true)"
+    fi
+    if [ -z "$NODE_BIN" ]; then
+      echo "✗ node not found (needed to run wrangler dev)" >&2
+      exit 1
+    fi
+    echo "── start bench worker (port ${BENCH_PORT})"
+
+    start_worker() {
+      "$NODE_BIN" node_modules/wrangler/bin/wrangler.js dev --config wrangler.bench.jsonc --port "$BENCH_PORT" --persist-to="$RUN_DIR/mf" \
+        >"$RUN_DIR/wrangler.log" 2>&1 &
+      DEV_PID=$!
+      for _ in $(seq 1 60); do
+        if curl -fsS --max-time 2 "$BASE/bench/health" >/dev/null 2>&1; then
+          return 0
+        fi
+        sleep 1
+      done
+      echo "✗ bench worker never became healthy" >&2
+      tail -30 "$RUN_DIR/wrangler.log" >&2
+      return 1
+    }
+    stop_worker() {
+      kill "$DEV_PID" 2>/dev/null || true
+      wait "$DEV_PID" 2>/dev/null || true
+    }
+    trap 'stop_worker' EXIT
+    start_worker || exit 1
+    echo "✓ bench worker healthy"
+
+    echo "── hyperfine: component comparison (each runs curl)"
+    hyperfine --warmup 3 --runs 15 \
+      -n kv "curl -fsS '$BASE/bench/health?op=kv&count=10'" \
+      -n d1 "curl -fsS '$BASE/bench/health?op=d1&count=10'" \
+      -n r2 "curl -fsS '$BASE/bench/health?op=r2&count=10'" \
+      -n do "curl -fsS '$BASE/bench/health?op=do&count=10'" \
+      --export-json "$RUN_DIR/hyperfine.json" >/dev/null 2>&1 || true
+
+    echo "── direct probes: in-worker performance.now() (authoritative I/O)"
+    for op in kv d1 r2 do consistency; do
+      curl -fsS --max-time 30 "$BASE/bench/health?op=$op&count=10" >/dev/null 2>&1 || true
+      ok=""
+      for attempt in 1 2 3; do
+        if curl -fsS --max-time 30 "$BASE/bench/health?op=$op&count=100" >"$RUN_DIR/direct-$op.json" 2>/dev/null \
+          && [ -s "$RUN_DIR/direct-$op.json" ]; then
+          ok=1
+          break
+        fi
+        rm -f "$RUN_DIR/direct-$op.json"
+        # miniflare dev intermittently dies under sustained R2/DO load; restart
+        # the worker so the remaining ops are still measured.
+        stop_worker
+        start_worker || exit 1
+        sleep 1
+      done
+      if [ -z "$ok" ]; then
+        echo "  ⚠ probe $op failed after restarts; skipping"
+      fi
+    done
+
+    echo "── assemble baseline (before stressing; oha can knock the local dev server over)"
+    bun run scripts/collect-bench.ts "$RUN_DIR" "$BASELINE" "$UPDATE"
+
+    echo "── oha: HTTP hot-path QPS (best-effort; count=1 keeps the dev server alive)"
+    oha -z 5s -q 50 -o json --latency-correction "$BASE/bench/health?op=kv&count=1" >"$RUN_DIR/oha-kv.json" 2>/dev/null || true
+    oha -z 5s -q 50 -o json --latency-correction "$BASE/bench/health?op=d1&count=1" >"$RUN_DIR/oha-d1.json" 2>/dev/null || true
+    oha -z 5s -q 50 -o json --latency-correction "$BASE/bench/health?op=r2&count=1" >"$RUN_DIR/oha-r2.json" 2>/dev/null || true
+    oha -z 5s -q 50 -o json --latency-correction "$BASE/bench/health?op=do&count=1" >"$RUN_DIR/oha-do.json" 2>/dev/null || true
+
+    echo "── drill: multi-step data-flow scenario"
+    if command -v drill >/dev/null 2>&1; then
+      drill --benchmark "bench/drill-flow.yml" --stats >"$RUN_DIR/drill.txt" 2>&1 || true
+    else
+      echo "  (drill not on PATH; scenario skipped)"
+    fi
+
+    exit 0
+
+# Consistency observation: write-then-read distribution, KV vs D1.
+# Requires `just perf` (or a running bench worker on :8790) first.
+consistency:
+    bun run scripts/consistency.ts 50
+
+# Flame profile (G §46.12): perf record → inferno collapse → SVG flamegraph.
+# `perf` is a host-level tool that is NOT available inside containers/devenv,
+# so this runs on a host where perf exists. Usage:
+#   just flame-record   # `perf record -g -- sleep <sec>` (pre-requisite)
+#   just flame-render   # collapse to folded → inferno-flamegraph → bench/.out/flame.svg
+# `inferno` provides inferno-collapse-perf + inferno-flamegraph (devenv ≥ 2026-08).
+flame-record delay='30':
+    #!/usr/bin/env -S bash -euo pipefail
+    if ! command -v perf >/dev/null 2>&1; then
+      echo "✗ perf(1) not present (host-level tool; unavailable in the devenv/container)" >&2
+      echo "  run on the host: perf record -g -o bench/.run/perf.data -- sleep {{ delay }}" >&2
+      exit 1
+    fi
+    mkdir -p bench/.run
+    perf record -g -o bench/.run/perf.data sleep "{{ delay }}"
+
+flame-render:
+    #!/usr/bin/env bash -euo pipefail
+    set -euo pipefail
+    PERF_DATA="bench/.run/perf.data"
+    if [ ! -f "$PERF_DATA" ]; then
+      echo "✗ no bench/.run/perf.data — run `just flame-record` first" >&2
+      exit 1
+    fi
+    if ! command -v inferno-collapse-perf >/dev/null 2>&1; then
+      echo "✗ inferno-collapse-perf missing (devenv needs `inferno` in packages)" >&2
+      exit 1
+    fi
+    mkdir -p bench/.out
+    inferno-collapse-perf "$PERF_DATA" \
+      | inferno-flamegraph --title "gstack bench worker" \
+      > bench/.out/flame.svg
+    echo "✓ bench/.out/flame.svg"

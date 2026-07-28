@@ -1,0 +1,22 @@
+concurrency: 1
+base: 'http://localhost:8790/bench'
+iterations: 20
+rampup: 0
+
+plan:
+  - name: kv hot path
+    request:
+      method: GET
+      url: '/health?op=kv&count=10'
+  - name: d1 hot path
+    request:
+      method: GET
+      url: '/health?op=d1&count=10'
+  - name: r2 hot path
+    request:
+      method: GET
+      url: '/health?op=r2&count=10'
+  - name: do hot path
+    request:
+      method: GET
+      url: '/health?op=do&count=10'

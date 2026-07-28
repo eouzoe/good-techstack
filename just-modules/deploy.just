@@ -1,6 +1,6 @@
-# Deploy to Cloudflare Workers
+# Deploy to Cloudflare Workers (injects only the deploy-scoped secrets)
 deploy:
-    wrangler deploy
+    secretspec run --scope deploy -- wrangler deploy
 
 # Drizzle — push schema changes to the database
 db-push:

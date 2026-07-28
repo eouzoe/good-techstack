@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 100,
+  "sortImports": {
+    "internalPattern": ["#shared"],
+    "groups": [
+      "builtin",
+      "external",
+      "internal",
+      ["parent", "sibling", "index"],
+      "style",
+      "type",
+      "unknown"
+    ],
+    "newlinesBetween": true
+  },
+  "sortTailwindcss": true,
+  "sortPackageJson": true,
+  "ignorePatterns": ["node_modules", "dist", ".wrangler"]
+}

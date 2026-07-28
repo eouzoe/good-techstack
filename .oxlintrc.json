@@ -56,14 +56,20 @@
       }
     },
     {
-      "files": ["apps/frontend/**/*.tsx", "apps/frontend/**/*.ts"],
+      "files": ["init-playground/src/client/**/*.tsx", "init-playground/src/client/**/*.ts"],
       "rules": {
         "react/react-in-jsx-scope": "off",
-        "vitest/require-hook": "off"
+        "vitest/require-hook": "off",
       }
     },
     {
-      "files": ["scripts/**"],
+      "files": ["init-playground/src/server/**/*.ts"],
+      "rules": {
+        "import/no-nodejs-modules": "off"
+      }
+    },
+    {
+      "files": ["init-playground/scripts/**"],
       "rules": {
         "no-console": "off",
         "typescript/no-unsafe-assignment": "off",

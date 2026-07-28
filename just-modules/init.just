@@ -4,14 +4,8 @@ init:
     @devenv tasks run deps:gen-types 2>/dev/null || true
     @echo "  -> Type checking …"
     @devenv tasks run typecheck:backend typecheck:frontend
-    @echo "  -> Initialising secrets …"
-    @secretspec init 2>/dev/null; ret=$$?; \
-        if [ "$$ret" -eq 0 ]; then \
-            echo "  -> Setting default dev secrets …"; \
-            BETTER_AUTH_SECRET=$$(openssl rand -hex 32 2>/dev/null || echo "local-dev-secret-change-me"); \
-            secretspec secret set BETTER_AUTH_SECRET "$$BETTER_AUTH_SECRET" 2>/dev/null; \
-            secretspec secret set BETTER_AUTH_URL "http://localhost:3000" 2>/dev/null; \
-        fi
+    @echo "  -> Checking secrets …"
+    @secretspec check 2>/dev/null || echo "  (SecretSpec: set missing values with 'secretspec set <KEY>' — see docs/en/reference/06-infra.md)"
     @echo ""
     @echo "  OK Template is ready. Run 'just dev' to start."
 

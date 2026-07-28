@@ -60,4 +60,4 @@
 - 使用檔案變數語法 `{file:~/.cloudflare/mcp-token}` 來引用 token，絕不使用實際值。
 - CI secrets 透過 GitHub Secrets 注入，不要寫在程式碼或文件中。
 - 讀取或寫入任何 secret 前：先讀 `secretspec.toml` 確認 key 是否存在。
-- 使用 `secretspec run -- <cmd>` 將 secret 注入到指令中。不要透過 `--env` 參數傳遞 secret。
+- 使用 `secretspec run --scope <name> -- <cmd>` 將正確子集的 secret 注入到指令中 (scope: `runtime`、`deploy`)。不要透過 `--env` 參數傳遞 secret。

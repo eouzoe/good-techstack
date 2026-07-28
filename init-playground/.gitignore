@@ -1,0 +1,52 @@
+# ── Runtime ──
+node_modules/
+
+# ── Environment (SecretSpec writes secrets here — never commit) ──
+.env
+.env.local
+.env.production
+.dev.vars
+
+# ── Build output ──
+dist/
+build/
+.out/
+.vite/
+coverage/
+
+# ── Cloudflare ──
+.wrangler/
+
+# ── Nix / devenv ──
+.devenv/
+devenv.local.nix
+.pre-commit-config.yaml
+
+# ── IDE / OS ──
+.DS_Store
+*.swp
+*.swo
+*~
+
+# ── TypeScript ──
+*.tsbuildinfo
+
+# ── Generated (TanStack Router / wrangler types) ──
+.tanstack/
+routeTree.gen.ts
+worker-configuration.d.ts
+
+# ── Local dev DB (seed snapshots) ──
+*.snapshot.db
+gstack.db
+
+
+# ── Stryker mutation reports ──
+reports/
+
+# ── Bench raw artifacts (per-run logs/JSON; only baselines.json is committed) ──
+bench/.run/
+bench/.out/
+
+# ── Miniflare persist directory leaked into workspace root by old --persist-to=:memory: ──
+:memory:/

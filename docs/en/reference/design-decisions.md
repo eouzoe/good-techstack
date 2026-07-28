@@ -58,7 +58,7 @@ devenv locks toolchain versions and hashes (`devenv.lock` pins the exact `nixpkg
 | CSS            | Tailwind CSS 4        | Vanilla CSS, CSS modules       |
 | Components     | shadcn/ui (Base UI)   | Radix, MUI                     |
 | Deployment     | Cloudflare Workers    | Vercel, Railway, Fly           |
-| Environment    | Devenv 2.1.2+         | Docker, asdf, mise, flake-only |
+| Environment    | Devenv 2.2.1+         | Docker, asdf, mise, flake-only |
 | VCS            | Jujutsu (colocated)   | Git-only workflow              |
 | Monorepo       | Bun workspace         | Turborepo, Nx, pnpm workspaces |
 

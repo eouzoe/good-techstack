@@ -42,3 +42,12 @@ AGENTS.md
 
 # wrangler generates this on env build (deps:gen-types)
 apps/backend/worker-configuration.d.ts
+**/worker-configuration.d.ts
+
+# Local dev DB snapshots (seed caching)
+*.snapshot.db
+
+# ── Stryker mutation testing (generated during runs) ──
+stryker-setup-*.js
+reports/mutation/
+

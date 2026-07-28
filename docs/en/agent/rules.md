@@ -60,4 +60,15 @@ If you are starting without the bootstrap prompt (user already has the stack):
 - Reference tokens using the file variable syntax `{file:~/.cloudflare/mcp-token}`, never by value.
 - CI secrets are injected through GitHub Secrets. Do not write them in code or documentation.
 - Before reading or writing any secret: read `secretspec.toml` first to confirm the key exists.
-- Use `secretspec run -- <cmd>` to inject secrets into a command. Do not pass secrets via `--env` flags.
+- Use `secretspec run --scope <name> -- <cmd>` to inject the right subset of secrets into a command (scopes: `runtime`, `deploy`). Do not pass secrets via `--env` flags.
+
+## 8. Environment variable firewall
+
+- Frontend (client) code may only read `PUBLIC_*` prefixed environment variables.
+- Backend (`src/server/`) handles all secrets. No backend secret may be referenced from `src/client/` or any `apps/frontend/` file.
+- This is enforced at build time by `rsbuild.config.ts` → `source.envPrefix: ["PUBLIC_"]`. Never change this setting.
+- When adding a new binding or env var:
+  1. Add placeholder to `wrangler.jsonc` `[vars]` or binding section
+  2. If client needs access, create a `PUBLIC_` variant (e.g., `PUBLIC_ANALYTICS_ID`)
+  3. Run `wrangler types` to regenerate types
+  4. Set local value via `secretspec run --scope runtime -- <cmd>`

@@ -10,7 +10,7 @@
 
 ```bash
 devenv shell -- bun run dev         # 本機開發
-devenv shell -- bunx rsbuild build   # 前端建置
+devenv shell -- bun run build       # 前端建置 (vite build)
 devenv shell -- bunx wrangler types  # binding TS 型別生成
 devenv shell -- bunx wrangler deploy # 部署到 Workers
 ```
@@ -53,7 +53,7 @@ devenv shell -- bunx wrangler deploy # 部署到 Workers
 
 | 層      | 工具                | 範圍                                                    |
 | ------- | ------------------- | ------------------------------------------------------- |
-| 環境    | **devenv** (2.1.2+) | Shell 啟動、套件、toolchain 鎖定、程序、腳本、git hooks |
+| 環境    | **devenv** (2.2.1+) | Shell 啟動、套件、toolchain 鎖定、程序、腳本、git hooks |
 | JS 依賴 | **Bun**             | `node_modules`, `bun.lock`                              |
 
 devenv 是單一事實源：`devenv.nix` 宣告 toolchain，`devenv.lock` 鎖定這些工具
@@ -77,7 +77,7 @@ devenv 是單一事實源：`devenv.nix` 宣告 toolchain，`devenv.lock` 鎖定
 | 維度        | 之前 (純 flake)                | 之後 (devenv)                  |
 | ----------- | ------------------------------ | ------------------------------ |
 | Shell 啟動  | _過去_ `nix develop` (3.8s)    | `devenv shell` (3.2s)          |
-| Secret 管理 | `.env` (無 audit)              | `secretspec.toml` (audit log)  |
+| Secret 管理 | `.env` (無 audit)              | `secretspec.toml` (audit log, 23 providers, scopes) |
 | Git hooks   | 手動 CI 才跑 oxlint            | Pre-commit 阻擋未格式化程式碼  |
 | Agent 整合  | 無                             | MCP server + commands 自動配置 |
 | CI Layer 1  | `oven-sh/setup-bun` + 裸 `bun` | 不變 (快速 PR gate)            |
@@ -98,27 +98,38 @@ Layer 1 CI job（`check`）直接執行 lint / typecheck / test。
 Secret 由 **SecretSpec** 管理，取代 `.env` 檔案。
 
 ```
-secretspec.toml          # Key 定義 (提交到 git)
-~/.config/secretspec/    # 加密值 (本機 only, 永不提交)
-secretspec run -- <cmd>  # 注入 secret 到指令
-secretspec audit         # 查看存取歷史
+secretspec.toml          # 宣告 (提交到 git; 值存在 provider 中)
+.env                     # 預設 dev provider (dotenv, gitignored) — CF Vite plugin 也會讀
+secretspec run --scope runtime -- <cmd>  # 注入 scope 子集到指令
+secretspec check         # 解析/生成缺少的 secret (BETTER_AUTH_SECRET 會自動生成)
+secretspec audit         # 查看存取歷史 (預設開啟, 本機 JSONL)
 ```
 
-支援 provider：local keyring、dotenv、1Password、Vault、AWS Secrets Manager、GCP Secret Manager。
+Provider：keyring、dotenv、env、1Password、Vault/OpenBao、age、SOPS、AWS/GCP/Azure secret managers 等 (0.17 共 23 個)。
+
+### Scopes (SecretSpec 0.17+)
+
+`[scopes.runtime]` 和 `[scopes.deploy]` 讓每個 process 只拿到它需要的 secret：
+
+```bash
+secretspec run --scope runtime -- bun run dev      # BETTER_AUTH_*
+secretspec run --scope deploy -- wrangler deploy   # CLOUDFLARE_*
+```
+
+`run --scope` 會從子環境移除不在 scope 內的 secret。
 
 ### 遷移
 
 ```bash
-# 安裝
+# 安裝 (只在非 devenv shell 需要 — devenv 2.2+ 已內建 CLI)
 curl -fsSL https://secretspec.dev/install.sh | bash
-secretspec init
 
 # 設定 secretspec.toml 中定義的 key
-secretspec secret set DATABASE_URL
-secretspec secret set CLOUDFLARE_API_TOKEN
+secretspec set CLOUDFLARE_API_TOKEN
+secretspec set CLOUDFLARE_ACCOUNT_ID
 
 # 使用
-secretspec run -- devenv shell
+secretspec run --scope runtime -- devenv shell
 ```
 
 官方文件：https://secretspec.dev/quick-start/

@@ -1,0 +1,23 @@
+# Phase E — Worker-boundary test config.
+#
+# Deliberately MUCH thinner than the real `wrangler.jsonc`: it carries only the
+# bindings the phase under test actually exercises (D1 `DB`) plus the main
+# fetch worker. The production config binds DO/KV/R2/Queues/RateLimit — those
+# pull in service plumbing (`EVENTS_DO -> script:gstack`) that workerd must
+# materialise as services, the vitest-pool-workers runner does not provide out
+# of the box, and Phase E does not need. Keeping this minimal is itself a
+# §6.8/ship-what-you-use call at the boundary: the D1 path is the one the
+# kernel replicates to the Worker runtime.
+name = "gstack"
+main = "./tests/worker/worker-stub.ts"
+compatibility_date = "2026-07-29"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "gstack-test"
+database_id = "test-d1-id"
+
+[vars]
+USE_MOCKS = "false"
+BETTER_AUTH_URL = "http://test"
+BETTER_AUTH_SECRET = "test-secret"

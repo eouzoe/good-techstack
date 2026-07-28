@@ -21,10 +21,10 @@ To push binaries to a project cache, create `devenv.local.nix` (gitignored):
 }
 ```
 
-Set `CACHIX_AUTH_TOKEN` in your CI environment or via SecretSpec:
+Set `CACHIX_AUTH_TOKEN` in your CI environment or via SecretSpec. On devenv 2.2+, the Cachix auth token is a built-in required secret — set `secretspec.cachix_auth_token = true` in `devenv.yaml` (falls back to the token stored by `cachix authtoken`). Otherwise:
 
 ```bash
-secretspec secret set CACHIX_AUTH_TOKEN "cachix-..."
+secretspec set CACHIX_AUTH_TOKEN "cachix-..."
 secretspec run -- devenv shell
 ```
 

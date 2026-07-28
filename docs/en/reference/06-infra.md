@@ -10,7 +10,7 @@
 
 ```bash
 devenv shell -- bun run dev        # Local development
-devenv shell -- bunx rsbuild build   # Frontend build
+devenv shell -- bun run build      # Frontend build (vite build)
 devenv shell -- bunx wrangler types  # Binding TS types
 devenv shell -- bunx wrangler deploy # Deploy to Workers
 ```
@@ -53,7 +53,7 @@ Authentication: Bearer Token (`~/.cloudflare/mcp-token`), never expires.
 
 | Layer              | Tool                | Scope                                                                        |
 | ------------------ | ------------------- | ---------------------------------------------------------------------------- |
-| Environment        | **devenv** (2.1.2+) | Shell activation, packages, toolchain pinning, processes, scripts, git hooks |
+| Environment        | **devenv** (2.2.1+) | Shell activation, packages, toolchain pinning, processes, scripts, git hooks |
 | JS dependency tree | **Bun**             | `node_modules`, `bun.lock`                                                   |
 
 devenv is the single source of truth: `devenv.nix` declares the toolchain and
@@ -77,7 +77,7 @@ separate flake — toolchain versions live entirely in `devenv.lock`.
 | Aspect            | Before (flake only)                    | After (devenv)                              |
 | ----------------- | -------------------------------------- | ------------------------------------------- |
 | Shell activation  | _Formerly_ `nix develop` (3.8s cached) | `devenv shell` (3.2s cached)                |
-| Secret management | `.env` (no audit)                      | `secretspec.toml` (audit log, 11 providers) |
+| Secret management | `.env` (no audit)                      | `secretspec.toml` (audit log, 23 providers, scopes) |
 | Git hooks         | Manual `oxlint` on CI only             | Pre-commit blocks unformatted code          |
 | Agent integration | None                                   | MCP server + commands auto-configured       |
 | CI                | `nixbuild/nix-quick-install-action@v35` + `devenv tasks run` | 3 jobs across Linux/macOS/Windows |
@@ -96,27 +96,38 @@ CI runs `devenv tasks run typecheck:backend typecheck:frontend` on three OSes (t
 Secrets are managed by **SecretSpec** instead of `.env` files.
 
 ```
-secretspec.toml          # Key definitions (committed to git)
-~/.config/secretspec/    # Encrypted values (local, never committed)
-secretspec run -- <cmd>  # Inject secrets into a command
-secretspec audit         # View access history
+secretspec.toml          # Declarations (committed to git; values live in the provider)
+.env                     # Default dev provider (dotenv, gitignored) — also read by the CF Vite plugin
+secretspec run --scope runtime -- <cmd>  # Inject a scoped subset into a command
+secretspec check         # Resolve/generate missing secrets (BETTER_AUTH_SECRET is auto-generated)
+secretspec audit         # View access history (on by default, local JSONL)
 ```
 
-Supported providers: local keyring, dotenv, 1Password, Vault, AWS Secrets Manager, GCP Secret Manager.
+Providers: keyring, dotenv, env, 1Password, Vault/OpenBao, age, SOPS, AWS/GCP/Azure secret managers, and more (23 total in 0.17).
+
+### Scopes (SecretSpec 0.17+)
+
+`[scopes.runtime]` and `[scopes.deploy]` give each process only the secrets it needs:
+
+```bash
+secretspec run --scope runtime -- bun run dev      # BETTER_AUTH_*
+secretspec run --scope deploy -- wrangler deploy   # CLOUDFLARE_*
+```
+
+`run --scope` also strips non-scope secrets from the child environment.
 
 ### Migration
 
 ```bash
-# Install
+# Install (only needed outside a devenv shell — devenv 2.2+ bundles the CLI)
 curl -fsSL https://secretspec.dev/install.sh | bash
-secretspec init
 
 # Set keys defined in secretspec.toml
-secretspec secret set DATABASE_URL
-secretspec secret set CLOUDFLARE_API_TOKEN
+secretspec set CLOUDFLARE_API_TOKEN
+secretspec set CLOUDFLARE_ACCOUNT_ID
 
 # Use
-secretspec run -- devenv shell
+secretspec run --scope runtime -- devenv shell
 ```
 
 Reference: https://secretspec.dev/quick-start/
