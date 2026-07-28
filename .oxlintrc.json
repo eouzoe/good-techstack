@@ -45,7 +45,6 @@
   "env": {
     "browser": true,
     "node": true,
-    "bun": true,
     "es2025": true
   },
   "overrides": [
@@ -65,9 +64,6 @@
     },
     {
       "files": ["scripts/**"],
-      "globals": {
-        "Bun": "readonly"
-      },
       "rules": {
         "no-console": "off",
         "typescript/no-unsafe-assignment": "off",
@@ -76,11 +72,7 @@
         "typescript/no-unsafe-return": "off",
         "typescript/no-unsafe-argument": "off",
         "import/no-nodejs-modules": "off",
-        "node/no-sync": "off",
-        "eslint/no-magic-numbers": "off",
-        "eslint/capitalized-comments": "off",
-        "unicorn/no-useless-undefined": "off",
-        "typescript/strict-boolean-expressions": "off"
+        "node/no-sync": "off"
       }
     }
   ]

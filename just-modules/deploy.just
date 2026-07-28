@@ -1,3 +1,11 @@
-# Deploy to Cloudflare Workers (with evidence chain)
+# Deploy to Cloudflare Workers
 deploy:
-    bun run scripts/deploy.ts
+    wrangler deploy
+
+# Drizzle — push schema changes to the database
+db-push:
+    bunx drizzle-kit push
+
+# Drizzle — generate SQL migration from schema changes
+db-generate:
+    bunx drizzle-kit generate
