@@ -28,17 +28,15 @@ describe('db adapter journal guards (§6.5 meta)', () => {
 
   it('rejects an entry missing a numeric when', () => {
     expect.hasAssertions();
-    expect(() => parseJournalEntries([{ tag: '0000_init' }])).toThrow(/Invalid drizzle migration journal/u);
+    expect(() => parseJournalEntries([{ tag: '0000_init' }])).toThrow(
+      /Invalid drizzle migration journal/u,
+    );
   });
 
   it('rejects a mixed well-formed and malformed array in one payload', () => {
     expect.hasAssertions();
     expect(() =>
-      parseJournalEntries([
-        { tag: '0000_init', when: 1 },
-        42,
-        { tag: '0002_skip', when: 3 },
-      ]),
+      parseJournalEntries([{ tag: '0000_init', when: 1 }, 42, { tag: '0002_skip', when: 3 }]),
     ).toThrow(/Invalid drizzle migration journal/u);
   });
 

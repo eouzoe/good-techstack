@@ -55,8 +55,14 @@ describe('db schema invariants (§6.4 Schema)', () => {
   it('assigns an auto-incremented PK and a default sort order on insert', async () => {
     expect.hasAssertions();
     const { db } = await createTestDb();
-    await db.insert(techs).values({ name: 'a', url: 'https://a', version: '1', description: 'd' }).run();
-    await db.insert(techs).values({ name: 'b', url: 'https://b', version: '1', description: 'd' }).run();
+    await db
+      .insert(techs)
+      .values({ name: 'a', url: 'https://a', version: '1', description: 'd' })
+      .run();
+    await db
+      .insert(techs)
+      .values({ name: 'b', url: 'https://b', version: '1', description: 'd' })
+      .run();
     const rowA = await db.select().from(techs).where(eq(techs.name, 'a')).get();
     const rowB = await db.select().from(techs).where(eq(techs.name, 'b')).get();
     expect(rowA?.id).toBe(1);
@@ -80,7 +86,10 @@ describe('db schema invariants (§6.4 Schema)', () => {
     expect.hasAssertions();
     const { db } = await createTestDb();
     await db.insert(visitCounters).values({ name: 'only' }).run();
-    await expectConstraintRejection(db.insert(visitCounters).values({ name: 'only' }).run(), 'UNIQUE');
+    await expectConstraintRejection(
+      db.insert(visitCounters).values({ name: 'only' }).run(),
+      'UNIQUE',
+    );
   });
 
   it('persists only via a committed transaction (rollback leaves no rows)', async () => {
@@ -100,7 +109,7 @@ describe('db query invariants (§6.4 Query)', () => {
     const { db } = await createTestDb();
     await db.insert(visitCounters).values({ name: 'relational', counter: 7 }).run();
     const row = await db.query.visitCounters.findFirst({
-      where: eq(visitCounters.name, 'relational'),
+      where: { name: 'relational' },
     });
     expect(row?.counter).toBe(7);
   });
@@ -117,7 +126,11 @@ describe('db query invariants (§6.4 Query)', () => {
       .run();
 
     const ordered = await db.select().from(techs).orderBy(techs.sortOrder).all();
-    const invariant = rowInvariant(ordered, 'select orders rows by sort_order ascending', isAscendingRows);
+    const invariant = rowInvariant(
+      ordered,
+      'select orders rows by sort_order ascending',
+      isAscendingRows,
+    );
     const suite = runSuite([invariant]);
     expect(suite.status).toBe('ok');
     expect(suite.failed).toBe(0);
@@ -126,7 +139,10 @@ describe('db query invariants (§6.4 Query)', () => {
   it('supports update that reflects back through a subsequent read', async () => {
     expect.hasAssertions();
     const { db } = await createTestDb();
-    await db.insert(techs).values({ name: 'x', url: 'https://x', version: '1', description: 'd' }).run();
+    await db
+      .insert(techs)
+      .values({ name: 'x', url: 'https://x', version: '1', description: 'd' })
+      .run();
     await db.update(techs).set({ version: '2' }).where(eq(techs.name, 'x')).run();
     const rows = await db.select().from(techs).all();
     expect(rows[0]?.version).toBe('2');
@@ -142,7 +158,9 @@ describe('db integrity invariants (§6.4 Integrity)', () => {
     await expectConstraintRejection(
       db.transaction(async (tx) => {
         await tx.insert(features).values({ title: 'partial', icon: 'x', description: 'd' }).run();
-        await tx.run(sql`INSERT INTO techs (name, url, version, description) VALUES (NULL, 'https://x', '1', 'd')`);
+        await tx.run(
+          sql`INSERT INTO techs (name, url, version, description) VALUES (NULL, 'https://x', '1', 'd')`,
+        );
       }),
       'NOT NULL',
     );

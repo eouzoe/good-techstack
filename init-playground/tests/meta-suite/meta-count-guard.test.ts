@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 /// Test-of-the-tests guard (plan §46.11-B): pins the SHAPE of the suite so a
@@ -43,7 +44,7 @@ const FLOORS: Floor[] = [
   { path: `${NODE_DIR}/property-fuzz.test.ts`, minCases: 1 },
   { path: `${WORKER_DIR}/worker.test.ts`, minCases: 2 },
   { path: `${WORKER_DIR}/worker-runtime.test.ts`, minCases: 3 },
-  { path: `${WORKER_DIR}/worker-rpc.test.ts`, minCases: 1 },
+  { path: `${WORKER_DIR}/worker-rpc.test.ts`, minCases: 5 },
   { path: `${WORKER_DIR}/property-db.test.ts`, minCases: 1 },
 ];
 
@@ -63,9 +64,7 @@ const readSource = (path: string): string => readFileSync(join(ROOT, path), 'utf
 /// intentionally matches a wide net; the floor is loose enough to survive
 /// reformatting but catches files that were hollowed out (0–1 cases).
 const countCases = (source: string): number =>
-  (source
-    .replace(/^\s*\/\/.*$/gm, '')
-    .match(/\b(it|test)\s*(\.prop|\.each)?\s*\(/g) ?? []).length;
+  (source.replace(/^\s*\/\/.*$/gm, '').match(/\b(it|test)\s*(\.prop|\.each)?\s*\(/g) ?? []).length;
 
 describe('meta-suite — test-of-the-tests guard (§ F+1 / §46.11-B)', () => {
   it('keeps the documented test files present (no silent deletions)', () => {
@@ -129,7 +128,9 @@ describe('meta-suite — mutation citation (§ F+1 / §46.11-B-2)', () => {
     for (const owed of MUTATE_BOUNDARIES_OWED) {
       const owned =
         [...covered].some((t) => t === owed) ||
-        [...covered].some((t) => t.startsWith(owed) && (owed.endsWith('/') || owed.endsWith('.ts')));
+        [...covered].some(
+          (t) => t.startsWith(owed) && (owed.endsWith('/') || owed.endsWith('.ts')),
+        );
       expect(owned, `mutation must cover boundary: ${owed} (edit a stryker.*.json)`).toBe(true);
     }
   });

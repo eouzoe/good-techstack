@@ -14,7 +14,9 @@ describe('contract adapter guards (tests/contract-common.ts)', () => {
   it('throws a clean error when a procedure declares no output schema', () => {
     expect.hasAssertions();
     // oxlint-disable-next-line typescript/no-unsafe-type-assertion -- deliberate shape-malformed stand-in for the real oRPC procedure type.
-    const schemaLessProc = { '~orpc': {} } as unknown as Parameters<typeof getContractOutputSchema>[0];
+    const schemaLessProc = { '~orpc': {} } as unknown as Parameters<
+      typeof getContractOutputSchema
+    >[0];
     expect(() => getContractOutputSchema(schemaLessProc)).toThrow('declares no output schema');
   });
 
@@ -34,7 +36,12 @@ describe('contract adapter guards (tests/contract-common.ts)', () => {
 describe('contract shape (§6.3)', () => {
   it('exposes exactly the four info sub-procedures', () => {
     expect.hasAssertions();
-    expect(Object.keys(contract.info).toSorted()).toStrictEqual(['events', 'features', 'pageMeta', 'techs']);
+    expect(Object.keys(contract.info).toSorted()).toStrictEqual([
+      'events',
+      'features',
+      'pageMeta',
+      'techs',
+    ]);
   });
 
   it('reveals every stored sub-procedure through the shared output schema adapter', () => {

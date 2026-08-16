@@ -1,4 +1,3 @@
-import { describe, it } from 'vitest';
 import {
   anything,
   array,
@@ -14,6 +13,7 @@ import {
   string,
 } from 'fast-check';
 import { safeParse } from 'valibot';
+import { describe, it } from 'vitest';
 
 import {
   AuditLogQueueSchema,

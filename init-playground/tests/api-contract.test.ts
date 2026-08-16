@@ -36,7 +36,11 @@ describe('techs contract (§6.3)', () => {
         version: '2.0.0-beta',
       },
     ];
-    const valid = outputInvariant(validRow, 'a well-formed tech row is always accepted', acceptsSchema(schema));
+    const valid = outputInvariant(
+      validRow,
+      'a well-formed tech row is always accepted',
+      acceptsSchema(schema),
+    );
     const badUrl = outputInvariant(
       [{ ...validRow[0], url: 'not-a-url' }],
       'a tech row with a malformed url is always rejected',
@@ -72,7 +76,11 @@ describe('features contract (§6.3)', () => {
   it('accepts only fully-formed feature rows', () => {
     expect.hasAssertions();
     const validRow = [{ description: 'Runtime and test runner', icon: '🚀', title: 'Bun' }];
-    const valid = outputInvariant(validRow, 'a well-formed feature row is always accepted', acceptsSchema(schema));
+    const valid = outputInvariant(
+      validRow,
+      'a well-formed feature row is always accepted',
+      acceptsSchema(schema),
+    );
     const emptyTitle = outputInvariant(
       [{ description: 'x', icon: '🔗', title: '' }],
       'a feature row with an empty title is always rejected',
@@ -96,8 +104,13 @@ describe('pageMeta contract (§6.3)', () => {
   it('accepts only non-empty page metadata', () => {
     expect.hasAssertions();
     const validMeta = { description: 'A full-stack template', title: 'gstack' };
-    const valid = outputInvariant(validMeta, 'well-formed page metadata is always accepted', acceptsSchema(schema));
-    const emptyDescription = outputInvariant({ description: '', title: 'gstack' },
+    const valid = outputInvariant(
+      validMeta,
+      'well-formed page metadata is always accepted',
+      acceptsSchema(schema),
+    );
+    const emptyDescription = outputInvariant(
+      { description: '', title: 'gstack' },
       'page metadata with an empty description is always rejected',
       rejectsSchema(schema),
     );
@@ -113,17 +126,26 @@ describe('events contract (streaming, §6.3)', () => {
 
   const eventInvariants: ReturnType<typeof outputInvariant>[] = [
     outputInvariant(
-      { data: { message: 'All systems operational', severity: 'info', title: 'Status' }, type: 'notification' },
+      {
+        data: { message: 'All systems operational', severity: 'info', title: 'Status' },
+        type: 'notification',
+      },
       'a registered notification event is always accepted',
       acceptsSchema(itemSchema),
     ),
     outputInvariant(
-      { data: { message: 'Degraded service', severity: 'warn', title: 'Status' }, type: 'notification' },
+      {
+        data: { message: 'Degraded service', severity: 'warn', title: 'Status' },
+        type: 'notification',
+      },
       'a notification with the warn severity is always accepted',
       acceptsSchema(itemSchema),
     ),
     outputInvariant(
-      { data: { message: 'Service down', severity: 'error', title: 'Status' }, type: 'notification' },
+      {
+        data: { message: 'Service down', severity: 'error', title: 'Status' },
+        type: 'notification',
+      },
       'a notification with the error severity is always accepted',
       acceptsSchema(itemSchema),
     ),

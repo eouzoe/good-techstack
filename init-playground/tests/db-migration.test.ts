@@ -40,7 +40,10 @@ describe('db migration invariants (§6.5)', () => {
     expect.hasAssertions();
     const { db } = await createTestDb();
     await db.insert(features).values({ title: 'keep', icon: 'x', description: 'd' }).run();
-    await db.insert(techs).values({ name: 'keep', url: 'https://k', version: '1', description: 'd' }).run();
+    await db
+      .insert(techs)
+      .values({ name: 'keep', url: 'https://k', version: '1', description: 'd' })
+      .run();
     // Second full apply on the same handle must be a no-op for existing data.
     await applyMigrations(db, new URL('../drizzle', import.meta.url).pathname);
     await expect(db.select().from(features).all()).resolves.toHaveLength(1);
@@ -52,8 +55,13 @@ describe('db migration invariants (§6.5)', () => {
     const folder0000 = sliceMigrationsFolder(1);
     try {
       const historical = await openDbWithMigrations(folder0000);
-      await historical.db.insert(techs).values({ name: 'v1', url: 'https://v1', version: '1', description: 'd' }).run();
-      const beforeTables = await historical.db.all('SELECT name FROM sqlite_master WHERE name = \'visit_counters\'');
+      await historical.db
+        .insert(techs)
+        .values({ name: 'v1', url: 'https://v1', version: '1', description: 'd' })
+        .run();
+      const beforeTables = await historical.db.all(
+        "SELECT name FROM sqlite_master WHERE name = 'visit_counters'",
+      );
       expect(beforeTables).toHaveLength(0);
 
       const folderFull = sliceMigrationsFolder(2);
@@ -91,10 +99,20 @@ describe('db migration invariants (§6.5)', () => {
   it('runs the app query suite against the migrated schema', async () => {
     expect.hasAssertions();
     const { db } = await createTestDb();
-    await db.insert(techs).values({ name: 'a', url: 'https://a', version: '1', description: 'd', sortOrder: 2 }).run();
-    await db.insert(techs).values({ name: 'b', url: 'https://b', version: '1', description: 'd', sortOrder: 1 }).run();
+    await db
+      .insert(techs)
+      .values({ name: 'a', url: 'https://a', version: '1', description: 'd', sortOrder: 2 })
+      .run();
+    await db
+      .insert(techs)
+      .values({ name: 'b', url: 'https://b', version: '1', description: 'd', sortOrder: 1 })
+      .run();
     const ordered = await db.select().from(techs).orderBy(techs.sortOrder).all();
-    const invariant = rowInvariant(ordered, 'app queries work against the migrated schema', isAscendingRows);
+    const invariant = rowInvariant(
+      ordered,
+      'app queries work against the migrated schema',
+      isAscendingRows,
+    );
     const suite = runSuite([invariant]);
     expect(suite.status).toBe('ok');
     expect(suite.failed).toBe(0);

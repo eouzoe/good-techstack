@@ -1,8 +1,8 @@
 import { minLength, pipe, safeParse, string } from 'valibot';
 import { describe, expect, it } from 'vitest';
 
-import { type VerifyOptions } from '../src/verification/verify';
 import { runSuite } from '../src/verification/suite';
+import { type VerifyOptions } from '../src/verification/verify';
 
 const MIN_LENGTH = 5;
 

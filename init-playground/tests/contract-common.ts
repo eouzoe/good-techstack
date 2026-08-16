@@ -56,9 +56,15 @@ const getContractYieldSchema = (proc: AnyProcedureContract): AnySchema => {
   return (detail?.yieldSchema ?? output) as AnySchema;
 };
 
-const acceptsSchema = (schema: AnySchema) => (value: unknown): boolean => safeParse(schema, value).success;
+const acceptsSchema =
+  (schema: AnySchema) =>
+  (value: unknown): boolean =>
+    safeParse(schema, value).success;
 
-const rejectsSchema = (schema: AnySchema) => (value: unknown): boolean => !safeParse(schema, value).success;
+const rejectsSchema =
+  (schema: AnySchema) =>
+  (value: unknown): boolean =>
+    !safeParse(schema, value).success;
 
 /// Convenience: build one `VerifyOptions` case from a [witness → invariant → oracle]
 /// triple over a contract output schema. Keeps the Phase B shape exactly.

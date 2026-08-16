@@ -7,8 +7,8 @@ import {
   QueuePayloadSchema,
   WebhookQueueSchema,
 } from '../src/shared/queue-schemas';
-import { type VerifyOptions } from '../src/verification/verify';
 import { runSuite } from '../src/verification/suite';
+import { type VerifyOptions } from '../src/verification/verify';
 
 const MAX_SUBJECT_LENGTH = 256;
 const VALID_SUBJECT = 'x'.repeat(MAX_SUBJECT_LENGTH);
