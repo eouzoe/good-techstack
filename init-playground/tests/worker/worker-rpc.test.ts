@@ -1,8 +1,8 @@
 import { env } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { handleRPC } from '../../src/server/rpc';
 import { features as featuresTable } from '../../src/server/db/schema';
+import { handleRPC } from '../../src/server/rpc';
 import { getMigratedDb, resetWorkerDb, runAsyncInvariant } from './worker-common';
 
 /// Phase E — §6.5/§6.9 request boundary on real workerd: the production
@@ -45,4 +45,82 @@ describe('§6.9 RPC request boundary through real D1', () => {
     });
     expect(status).toBe('ok');
   });
+
+  it('surfaces an Effect typed failure as a NOT_FOUND error envelope', async () => {
+    expect.hasAssertions();
+    const res = await handleRPC(
+      new Request('http://test/api/rpc/info/techs', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: '{}',
+      }),
+      env,
+    );
+    expect(res.status).toBe(404);
+    const payload = (await res.json()) as {
+      json: { code?: string; message?: string } | undefined;
+    };
+    expect(payload.json?.code).toBe('NOT_FOUND');
+    expect(payload.json?.message).toBe('No technologies found');
+  });
+
+  it('serves the static pageMeta procedure through oRPC', async () => {
+    expect.hasAssertions();
+    const res = await handleRPC(
+      new Request('http://test/api/rpc/info/pageMeta', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: '{}',
+      }),
+      env,
+    );
+    expect(res.status).toBe(200);
+    const payload = (await res.json()) as { json: { title?: string } | undefined };
+    expect(payload.json?.title).toBe('gstack — opinionated full-stack template');
+  });
+
+  it('streams the events procedure as SSE', async () => {
+    expect.hasAssertions();
+    const res = await handleRPC(
+      new Request('http://test/api/rpc/info/events', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: '{}',
+      }),
+      env,
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('content-type')).toBe('text/event-stream');
+    const reader = res.body?.getReader();
+    expect(reader).toBeDefined();
+    await reader?.cancel();
+  }, 15_000);
+
+  it('emits a first SSE event chunk with the contract shape', async () => {
+    expect.hasAssertions();
+    const res = await handleRPC(
+      new Request('http://test/api/rpc/info/events', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: '{}',
+      }),
+      env,
+    );
+    expect(res.status).toBe(200);
+    const reader = res.body?.getReader();
+    expect(reader).toBeDefined();
+    const first = await reader!.read();
+    const second = await reader!.read();
+    await reader!.cancel();
+    let buffer = '';
+    const decoder = new TextDecoder();
+    if (first.value !== undefined) {
+      buffer += decoder.decode(first.value as Uint8Array, { stream: true });
+    }
+    if (second.value !== undefined) {
+      buffer += decoder.decode(second.value as Uint8Array, { stream: true });
+    }
+    expect(buffer).toContain('data:');
+    expect(buffer).toContain('event:');
+  }, 15_000);
 });

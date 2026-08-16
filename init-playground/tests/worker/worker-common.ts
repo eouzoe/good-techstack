@@ -46,13 +46,21 @@ let migrationsPromise: Promise<D1Migration[]> | undefined;
 
 const loadMigrations = (): Promise<D1Migration[]> => {
   migrationsPromise ??= (async () => {
-    const [raw0000, raw0001] = await Promise.all([
-      import('../../../drizzle/0000_init.sql?raw').then((module) => module.default),
-      import('../../../drizzle/0001_invite-counters.sql?raw').then((module) => module.default),
+    const [rawInit, rawInviteCounters, rawAuthTables] = await Promise.all([
+      import('../../../drizzle/20260805204740_init/migration.sql?raw').then(
+        (module) => module.default,
+      ),
+      import('../../../drizzle/20260805204942_invite-counters/migration.sql?raw').then(
+        (module) => module.default,
+      ),
+      import('../../../drizzle/20260819065621_auth-tables/migration.sql?raw').then(
+        (module) => module.default,
+      ),
     ]);
     return [
-      { name: '0000_init.sql', queries: splitSql(raw0000) },
-      { name: '0001_invite-counters.sql', queries: splitSql(raw0001) },
+      { name: '20260805204740_init.sql', queries: splitSql(rawInit) },
+      { name: '20260805204942_invite-counters.sql', queries: splitSql(rawInviteCounters) },
+      { name: '20260819065621_auth-tables.sql', queries: splitSql(rawAuthTables) },
     ];
   })();
   return migrationsPromise;
@@ -83,7 +91,9 @@ const getMigratedDb = (): Promise<MigratedDb> => {
 const resetWorkerDb = async (): Promise<void> => {
   await getMigratedDb();
   dbPromise = undefined;
-  await env.DB.exec('DELETE FROM visit_counters; DELETE FROM techs; DELETE FROM features;');
+  await env.DB.exec(
+    'DELETE FROM verification; DELETE FROM session; DELETE FROM account; DELETE FROM user; DELETE FROM visit_counters; DELETE FROM techs; DELETE FROM features;',
+  );
 };
 
 interface AsyncInvariant<TValue, TObservation> {
@@ -99,7 +109,13 @@ interface AsyncInvariant<TValue, TObservation> {
 const runAsyncInvariant = async <TValue, TObservation = TValue>(
   options: AsyncInvariant<TValue, TObservation>,
 ): Promise<'ok' | 'failed'> => {
-  const { execute, observe = (value: TValue): Promise<TObservation> => Promise.resolve(value as unknown as TObservation), oracle, invariant } = options;
+  const {
+    execute,
+    observe = (value: TValue): Promise<TObservation> =>
+      Promise.resolve(value as unknown as TObservation),
+    oracle,
+    invariant,
+  } = options;
   const observed = await observe(await execute());
   const suite = runSuite([
     {

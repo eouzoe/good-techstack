@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { beforeEach, describe, it } from 'vitest';
 import { assert, asyncProperty, nat } from 'fast-check';
+import { beforeEach, describe, it } from 'vitest';
 
 import { visitCounters } from '../../src/server/db/schema';
 import { getMigratedDb, resetWorkerDb } from './worker-common';
@@ -32,13 +32,29 @@ describe('§6.10 property-based D1 arithmetic over the real W1 store', () => {
         const db = await getMigratedDb();
         const name = `prop-w-${drawId}-${bumpCount}`;
         await db.insert(visitCounters).values({ name, counter: 0 }).run();
-        const startRow = await db.select({ counter: visitCounters.counter }).from(visitCounters).where(eq(visitCounters.name, name)).get();
+        const startRow = await db
+          .select({ counter: visitCounters.counter })
+          .from(visitCounters)
+          .where(eq(visitCounters.name, name))
+          .get();
         const start = startRow?.counter ?? 0;
         for (let i = 0; i < bumpCount; i += 1) {
-          const row = await db.select({ counter: visitCounters.counter }).from(visitCounters).where(eq(visitCounters.name, name)).get();
-          await db.update(visitCounters).set({ counter: (row?.counter ?? 0) + 1 }).where(eq(visitCounters.name, name)).run();
+          const row = await db
+            .select({ counter: visitCounters.counter })
+            .from(visitCounters)
+            .where(eq(visitCounters.name, name))
+            .get();
+          await db
+            .update(visitCounters)
+            .set({ counter: (row?.counter ?? 0) + 1 })
+            .where(eq(visitCounters.name, name))
+            .run();
         }
-        const endRow = await db.select({ counter: visitCounters.counter }).from(visitCounters).where(eq(visitCounters.name, name)).get();
+        const endRow = await db
+          .select({ counter: visitCounters.counter })
+          .from(visitCounters)
+          .where(eq(visitCounters.name, name))
+          .get();
         const end = endRow?.counter ?? -1;
         return end === start + bumpCount;
       }),

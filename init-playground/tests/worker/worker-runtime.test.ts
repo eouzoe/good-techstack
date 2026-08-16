@@ -1,7 +1,4 @@
-import {
-  createExecutionContext,
-  waitOnExecutionContext,
-} from 'cloudflare:test';
+import { createExecutionContext, waitOnExecutionContext } from 'cloudflare:test';
 import { env } from 'cloudflare:workers';
 import { beforeEach, describe, expect, it } from 'vitest';
 
@@ -30,7 +27,7 @@ describe('§6.8 request isolation and D1 atomicity', () => {
     await db.insert(visitCounters).values({ name: 'request-a', counter: 1 }).run();
 
     const status = await runAsyncInvariant({
-      execute: () => db.query.visitCounters.findFirst({ where: (table, { eq }) => eq(table.name, 'request-a') }),
+      execute: () => db.query.visitCounters.findFirst({ where: { name: 'request-a' } }),
       oracle: (row) => row?.counter === 1,
       invariant: 'D1 reflects the request-local write, atomically',
     });
@@ -43,10 +40,12 @@ describe('§6.8 request isolation and D1 atomicity', () => {
     let settled = false;
 
     const turn = Promise.resolve();
-    ctx.waitUntil((async () => {
-      await turn;
-      settled = true;
-    })());
+    ctx.waitUntil(
+      (async () => {
+        await turn;
+        settled = true;
+      })(),
+    );
 
     await waitOnExecutionContext(ctx);
     const status = await runAsyncInvariant({
