@@ -39,6 +39,7 @@ worker-configuration.d.ts
 # ── Local dev DB (seed snapshots) ──
 *.snapshot.db
 gstack.db
+undefined*
 
 
 # ── Stryker mutation reports ──
