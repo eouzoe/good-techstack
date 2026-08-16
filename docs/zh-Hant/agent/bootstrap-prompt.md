@@ -126,7 +126,7 @@ apps/frontend/src/     → 4 個頁面 stub
 
 問：「這是你的產品 scaffold。要部署嗎？」
 
-只有使用者確認後才部署。後端使用 `devenv shell -- bunx wrangler deploy`。
+只有使用者確認後才部署。後端使用 `devenv shell -- secretspec run --scope deploy -- bunx alchemy deploy`。
 
 ---
 

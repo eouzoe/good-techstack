@@ -57,8 +57,8 @@ devenv shell -- vitest run
 Happy path (register → create resource → logout), auth flow, security headers.
 
 ```bash
-# Terminal 1: start the dev server
-devenv shell -- bunx wrangler dev --persist-to .wrangler/state &
+# Terminal 1: start the dev server (alchemy dev — vite dev server + CF bindings)
+devenv shell -- bun run dev &
 
 # Wait for the server to be ready
 sleep 5

@@ -9,11 +9,14 @@
 ### Development to deployment
 
 ```bash
-devenv shell -- bun run dev        # Local development
-devenv shell -- bun run build      # Frontend build (vite build)
-devenv shell -- bunx wrangler types  # Binding TS types
-devenv shell -- bunx wrangler deploy # Deploy to Workers
+devenv shell -- bun run dev              # Local development (alchemy dev, binds from env)
+devenv shell -- bunx alchemy deploy      # Deploy (alchemy runs the Vite build + applies D1 migrations)
 ```
+
+The `alchemy.run.ts` file replaces `wrangler.jsonc` as the IaC layer: every
+Cloudflare binding (D1, KV, DO, Rate Limit, and the auth config) is declared as
+an `Effect` resource and passed to the Worker via `InferEnv`. There is no
+standalone `vite build` script — builds happen inside `alchemy deploy`.
 
 ### Services and free tier
 
@@ -86,10 +89,10 @@ separate flake — toolchain versions live entirely in `devenv.lock`.
 
 ```yaml
 - uses: nixbuild/nix-quick-install-action@v35
-- run: devenv shell -- bunx wrangler deploy
+- run: devenv shell -- secretspec run --scope deploy -- bunx alchemy deploy
 ```
 
-CI runs `devenv tasks run typecheck:backend typecheck:frontend` on three OSes (typecheck-linux, typecheck-macos, check-windows). Wrangler deploy is manual — no CI pipeline includes it.
+CI runs `devenv tasks run typecheck:backend typecheck:frontend` on three OSes (typecheck-linux, typecheck-macos, check-windows). Alchemy deploy is manual — no CI pipeline includes it.
 
 ## SecretSpec
 
@@ -97,11 +100,16 @@ Secrets are managed by **SecretSpec** instead of `.env` files.
 
 ```
 secretspec.toml          # Declarations (committed to git; values live in the provider)
-.env                     # Default dev provider (dotenv, gitignored) — also read by the CF Vite plugin
+.env                     # Default dev provider (dotenv, gitignored)
 secretspec run --scope runtime -- <cmd>  # Inject a scoped subset into a command
 secretspec check         # Resolve/generate missing secrets (BETTER_AUTH_SECRET is auto-generated)
 secretspec audit         # View access history (on by default, local JSONL)
 ```
+
+alchemy reads its `Config` bindings (`BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`,
+`USE_MOCKS`) from the process environment at dev/deploy time, so scope
+injection via `secretspec run` is the wiring path — there is no CF Vite plugin
+anymore.
 
 Providers: keyring, dotenv, env, 1Password, Vault/OpenBao, age, SOPS, AWS/GCP/Azure secret managers, and more (23 total in 0.17).
 
@@ -111,7 +119,7 @@ Providers: keyring, dotenv, env, 1Password, Vault/OpenBao, age, SOPS, AWS/GCP/Az
 
 ```bash
 secretspec run --scope runtime -- bun run dev      # BETTER_AUTH_*
-secretspec run --scope deploy -- wrangler deploy   # CLOUDFLARE_*
+secretspec run --scope deploy -- bunx alchemy deploy   # CLOUDFLARE_* + BETTER_AUTH_*
 ```
 
 `run --scope` also strips non-scope secrets from the child environment.

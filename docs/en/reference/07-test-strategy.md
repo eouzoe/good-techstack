@@ -20,10 +20,10 @@ devenv shell -- bunx rstest                 # Frontend tests (Rsbuild pipeline)
 devenv shell -- vitest run                  # vitest-pool-workers integration
 
 # Before deployment
-devenv shell -- bunx playwright test        # E2E (against wrangler dev)
+devenv shell -- bunx playwright test        # E2E (against alchemy dev)
 
 # Production monitoring
-devenv shell -- bunx wrangler tail          # Real-time error monitoring
+devenv shell -- bunx alchemy tail           # Real-time error monitoring
 ```
 
 ## Test layers
@@ -78,8 +78,8 @@ Type-aware linting via `tsgolint`: `oxlint --type-aware`. Supports 59/61 typescr
 
 ## E2E notes (CF Workers + Playwright)
 
-- Target `wrangler dev`, not `vite dev` (CSP + Vite HMR conflict)
-- Add `--persist-to .wrangler/state` (otherwise D1 SQLite is empty)
+- Target `alchemy dev` (vite dev server + CF bindings via miniflare), not a standalone `vite dev`
+- Make sure D1 SQLite persists across restarts — alchemy persists local plan state in `.alchemy/` (localState)
 - Use WebAuthn virtual authenticator, not `DEV_BYPASS_USER_ID`
 - Third-party OAuth: seed session row + inject cookie
 

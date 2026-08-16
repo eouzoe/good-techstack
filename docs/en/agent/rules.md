@@ -68,7 +68,7 @@ If you are starting without the bootstrap prompt (user already has the stack):
 - Backend (`src/server/`) handles all secrets. No backend secret may be referenced from `src/client/` or any `apps/frontend/` file.
 - This is enforced at build time by `rsbuild.config.ts` → `source.envPrefix: ["PUBLIC_"]`. Never change this setting.
 - When adding a new binding or env var:
-  1. Add placeholder to `wrangler.jsonc` `[vars]` or binding section
+  1. Declare it as a `Config` binding in `alchemy.run.ts` (e.g., `Config.string('MY_VAR')`) so it flows into `WebsiteEnv` via `InferEnv`
   2. If client needs access, create a `PUBLIC_` variant (e.g., `PUBLIC_ANALYTICS_ID`)
-  3. Run `wrangler types` to regenerate types
+  3. Add the key to `secretspec.toml` so `secretspec check` can resolve it
   4. Set local value via `secretspec run --scope runtime -- <cmd>`

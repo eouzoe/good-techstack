@@ -9,11 +9,14 @@
 ### 開發→部屬流程
 
 ```bash
-devenv shell -- bun run dev         # 本機開發
-devenv shell -- bun run build       # 前端建置 (vite build)
-devenv shell -- bunx wrangler types  # binding TS 型別生成
-devenv shell -- bunx wrangler deploy # 部署到 Workers
+devenv shell -- bun run dev              # 本機開發 (alchemy dev，bindings 從 env 綁定)
+devenv shell -- bunx alchemy deploy      # 部屬（alchemy 內部執行 Vite build + 自動套用 D1 migrations）
 ```
+
+`alchemy.run.ts` 取代 `wrangler.jsonc` 作為 IaC 層：所有 Cloudflare binding
+（D1、KV、DO、Rate Limit、auth config）宣告為 `Effect` resource，透過
+`InferEnv` 傳給 Worker。不再有獨立的 `vite build` script — build 在
+`alchemy deploy` 內部執行。
 
 ### 服務與免費方案
 
@@ -87,7 +90,7 @@ devenv 是單一事實源：`devenv.nix` 宣告 toolchain，`devenv.lock` 鎖定
 
 ```yaml
 - uses: cachix/install-nix-action@v27
-- run: devenv shell -- bunx wrangler deploy
+- run: devenv shell -- secretspec run --scope deploy -- bunx alchemy deploy
 ```
 
 Layer 1 CI job（`check`）直接執行 lint / typecheck / test。
@@ -99,11 +102,15 @@ Secret 由 **SecretSpec** 管理，取代 `.env` 檔案。
 
 ```
 secretspec.toml          # 宣告 (提交到 git; 值存在 provider 中)
-.env                     # 預設 dev provider (dotenv, gitignored) — CF Vite plugin 也會讀
+.env                     # 預設 dev provider (dotenv, gitignored)
 secretspec run --scope runtime -- <cmd>  # 注入 scope 子集到指令
 secretspec check         # 解析/生成缺少的 secret (BETTER_AUTH_SECRET 會自動生成)
 secretspec audit         # 查看存取歷史 (預設開啟, 本機 JSONL)
 ```
+
+alchemy 在 dev/deploy 時從 process env 讀取 `Config` bindings
+（`BETTER_AUTH_SECRET`、`BETTER_AUTH_URL`、`USE_MOCKS`），因此透過
+`secretspec run` 注入 scope 就是接線路徑 — 不再有 CF Vite plugin。
 
 Provider：keyring、dotenv、env、1Password、Vault/OpenBao、age、SOPS、AWS/GCP/Azure secret managers 等 (0.17 共 23 個)。
 
@@ -113,10 +120,19 @@ Provider：keyring、dotenv、env、1Password、Vault/OpenBao、age、SOPS、AWS
 
 ```bash
 secretspec run --scope runtime -- bun run dev      # BETTER_AUTH_*
-secretspec run --scope deploy -- wrangler deploy   # CLOUDFLARE_*
+secretspec run --scope deploy -- bunx alchemy deploy   # CLOUDFLARE_* + BETTER_AUTH_*
 ```
 
 `run --scope` 會從子環境移除不在 scope 內的 secret。
+
+live 環境的 `BETTER_AUTH_URL` 需用 `production` profile 覆蓋（預設 profile 是 dev 的 `localhost:1337`），否則 better-auth 的 redirect 會指向本機：
+
+```bash
+secretspec set --profile production BETTER_AUTH_URL https://<your-domain>
+secretspec run --scope deploy --profile production -- bunx alchemy deploy
+```
+
+`production` 繼承 default profile，只需覆寫 `BETTER_AUTH_URL`；此變更觸發 `[Website] update`（不動 D1/KV）。fresh live D1 只有 migrations 沒有資料，需先 seed（見 `docs/en/guide/deployment.md` 的 `cli/seed-live.sql`）。
 
 ### 遷移
 

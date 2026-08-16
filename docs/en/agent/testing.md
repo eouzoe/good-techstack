@@ -10,7 +10,7 @@ and are **not** product tests:
 | Task                                       | Tool                | What it proves                                   |
 | ------------------------------------------ | ------------------- | ------------------------------------------------ |
 | `deps:install`                             | bun                 | lockfile resolves, deps present                  |
-| `deps:gen-types`                           | wrangler types      | backend bindings typed (gitignored, regenerated) |
+| `typecheck`                                | tsc --noEmit        | types compile incl. `InferEnv` bindings from `alchemy.run.ts` |
 | `lint`                                     | oxlint --type-aware | no lint errors                                   |
 | `typecheck:backend` / `typecheck:frontend` | tsc --noEmit        | types compile (incl. Zod4 contract types)        |
 | `test:backend`                             | bun test            | backend unit tests (see below)                   |

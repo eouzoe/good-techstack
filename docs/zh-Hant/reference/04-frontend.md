@@ -13,9 +13,9 @@
 
 ### Cloudflare Workers 整合
 
-- `npm create cloudflare@latest -- --framework=tanstack-start`
+- 透過 `alchemy.run.ts` 的 `Cloudflare.Website.Vite` 使用 TanStack Start
 - Binding 支援：D1/R2/KV/Queues/DO/Workflows/Cron
-- Type generation：`wrangler types`
+- Type generation：`Cloudflare.InferEnv<typeof Website>` → `src/env.d.ts`（無 `wrangler types`）
 
 ### Rsbuild 配置
 

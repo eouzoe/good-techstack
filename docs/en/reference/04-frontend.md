@@ -16,9 +16,9 @@ Non-breaking, additive to v1.x.
 
 ### Cloudflare Workers integration
 
-- `npm create cloudflare@latest -- --framework=tanstack-start`
+- TanStack Start via `Cloudflare.Website.Vite` in `alchemy.run.ts`
 - Binding support: D1, R2, KV, Queues, DO, Workflows, Cron
-- Type generation: `wrangler types`
+- Type generation: `Cloudflare.InferEnv<typeof Website>` → `src/env.d.ts` (no `wrangler types`)
 
 ### Rsbuild configuration
 

@@ -138,7 +138,7 @@ When generating code, enforce these env var access rules:
 - **Frontend (client)**: Only reads `PUBLIC_*` prefixed vars. These are safe to embed in client JS.
 - **Backend (server)**: Handles all secrets (`JWT_SECRET`, `API_KEY`, `BETTER_AUTH_SECRET`, etc.).
 - **No backend secret may be imported or referenced from `apps/frontend/` or any `src/client/` file.**
-- If a secret must be exposed to the client (e.g., analytics ID), create a `PUBLIC_` prefixed version in `wrangler.jsonc` `[vars]`.
+- If a secret must be exposed to the client (e.g., analytics ID), create a `PUBLIC_` prefixed version as a `Config` binding in `alchemy.run.ts`.
 - The `envPrefix: ["PUBLIC_"]` in `rsbuild.config.ts` enforces this at build time. Do not change this setting.
 - AI agents: do not reference `env.*` without `PUBLIC_` prefix in client-side code — oxlint will reject it.
 
@@ -146,11 +146,11 @@ When generating code, enforce these env var access rules:
 
 When adding a new binding or environment variable:
 
-1. Add placeholder to `wrangler.jsonc` `[vars]` or binding section
-2. Add `PUBLIC_` variant in `wrangler.jsonc` `[vars]` if client needs access
-3. Generate types: `wrangler types`
+1. Declare a `Config` binding in `alchemy.run.ts` (e.g., `Config.string('MY_VAR')`) — it flows into `WebsiteEnv` via `InferEnv`
+2. Add `PUBLIC_` variant as a `Config` binding in `alchemy.run.ts` if client needs access
+3. Add the key to `secretspec.toml` so `secretspec check` can resolve it
 4. Set local value: `secretspec run --scope runtime -- <cmd>`
-5. For production: `wrangler secret put <KEY>` or set via Cloudflare dashboard
+5. For production: `secretspec run --scope deploy -- bunx alchemy deploy` injects deploy-scoped secrets
 
 ### Deployment confirmation (Forced Review)
 

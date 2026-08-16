@@ -126,7 +126,7 @@ apps/frontend/src/     → 4 page stubs
 
 Ask: "This is your product scaffold. Shall I deploy it?"
 
-Only deploy if the user confirms. Use `devenv shell -- bunx wrangler deploy` for the backend.
+Only deploy if the user confirms. Use `devenv shell -- secretspec run --scope deploy -- bunx alchemy deploy` for the backend.
 
 ---
 

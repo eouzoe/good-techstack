@@ -19,10 +19,10 @@ devenv shell -- bunx rstest                 # 前端測試（Rsbuild 管線）
 devenv shell -- vitest run                  # vitest-pool-workers 整合測試
 
 # 部屬前
-devenv shell -- bunx playwright test        # E2E（對 wrangler dev）
+devenv shell -- bunx playwright test        # E2E（對 alchemy dev）
 
 # 生產監控
-devenv shell -- bunx wrangler tail          # 即時錯誤監控
+devenv shell -- bunx alchemy tail          # 即時錯誤監控
 ```
 
 ## 測試層級
@@ -70,8 +70,8 @@ Type-aware linting via `tsgolint` (Go-based TS type checker): `oxlint --type-awa
 
 ## E2E 注意事項 (CF Workers + Playwright)
 
-- target `wrangler dev`，非 `vite dev` (CSP + Vite HMR 衝突)
-- 加 `--persist-to .wrangler/state` (否則 D1 SQLite 為空)
+- target `alchemy dev`（vite dev server + 經 miniflare 的 CF bindings），非獨立的 `vite dev`
+- 確保 D1 SQLite 跨重啟持久化 — alchemy 把 local plan state 存在 `.alchemy/` (localState)
 - WebAuthn virtual authenticator 而非 `DEV_BYPASS_USER_ID`
 - 第三方 OAuth: seed session row + inject cookie
 

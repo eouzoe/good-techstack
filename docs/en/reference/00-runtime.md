@@ -32,12 +32,12 @@ project/
 
 Not choosing Turborepo or Nx: Bun workspace + `bun test` is fast enough. Extra complexity has no benefit.
 
-## Bun + wrangler compatibility
+## Bun + alchemy/wrangler compatibility
 
 | Scenario               | Result                                                   |
 | ---------------------- | -------------------------------------------------------- |
-| `bunx wrangler deploy` | Works on Linux and Mac. Windows has an issue (bun#10464) |
-| `bunx wrangler dev`    | Mostly usable. DO hang fixed (bun#16240)                 |
+| `bunx alchemy deploy`  | alchemy is a Bun CLI (deploy/dev/tail) — no bun#10464 issue |
+| `bunx wrangler dev`    | Mostly usable. DO hang fixed (bun#16240) — used for worker-test/bench only |
 | CI/CD                  | Use Node.js                                              |
 
 Sources: bun#10464, bun#16240, workers-sdk#9699

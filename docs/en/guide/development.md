@@ -36,21 +36,23 @@ just test            # devenv shell -- bun test
 just test-frontend   # devenv shell -- bunx rstest (frontend Rsbuild pipeline)
 devenv shell -- bun test --watch   # TDD mode
 devenv shell -- vitest run         # Integration tests (workerd)
-devenv shell -- bunx playwright test   # E2E tests (requires wrangler dev)
+devenv shell -- bunx playwright test   # E2E tests (requires alchemy dev)
 ```
 
 ## Database
 
 ```bash
-devenv shell -- bunx wrangler d1 migrations create <name>    # Create a new migration
-devenv shell -- bunx wrangler d1 migrations apply <name> --local  # Apply migrations locally
+devenv shell -- devenv tasks run db:generate   # Generate a new migration from src/server/db/schema.ts (drizzle-kit generate)
 ```
+
+D1 migrations are applied automatically by `alchemy deploy` (the `DB` resource
+in `alchemy.run.ts` declares `migrationsDir: './drizzle'`).
 
 ## Binding Types
 
-```bash
-devenv shell -- bunx wrangler types     # Generate TypeScript types for Cloudflare bindings
-```
+Binding types come from `alchemy.run.ts` — `Cloudflare.InferEnv<typeof Website>`
+flows into `WebsiteEnv` (`src/env.d.ts` augments `cloudflare:workers`), so there
+is no generated `wrangler types` step.
 
 ## Pre-push Gate
 

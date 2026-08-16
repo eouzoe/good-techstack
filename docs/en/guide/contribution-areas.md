@@ -37,11 +37,11 @@ macOS is the second most common development environment. The following need atte
 
 **Cloudflare Workers local development**
 
-- `wrangler dev`, `wrangler d1`, `wrangler types`: verify all work on macOS
+- `alchemy dev`, `alchemy deploy`: verify all work on macOS (binds D1/KV/DO via `alchemy.run.ts`)
 - `vitest-pool-workers`: verify integration tests run on macOS
 - `playwright`: verify E2E tests run on macOS
 
-**Scope of work:** moderate. Most tools (Bun, Wrangler, Playwright) officially support macOS. The work is primarily in `scripts/start.sh`, documentation updates, and platform-specific testing.
+**Scope of work:** moderate. Most tools (Bun, alchemy, Playwright) officially support macOS. The work is primarily in `scripts/start.sh`, documentation updates, and platform-specific testing.
 
 ---
 
@@ -59,7 +59,7 @@ The stack currently requires WSL2 on Windows. Full native Windows support (Git B
 
 - Bun has native Windows support (since Bun 1.2). Test `bun install`, `bun run dev`, `bun test` directly in Windows.
 - Nix does not run natively on Windows. The stack would need an alternative environment manager (or Docker).
-- Cloudflare Wrangler has native Windows support. Test `wrangler dev`, `wrangler deploy` directly in Windows PowerShell.
+- Cloudflare alchemy has native Windows support (Bun CLI). Test `alchemy dev`, `alchemy deploy` directly in Windows PowerShell.
 - Playwright has native Windows support.
 - Document the differences and trade-offs for users who cannot or will not use WSL.
 
@@ -83,9 +83,9 @@ The stack is developed on Ubuntu via WSL. Other distributions may differ.
 
 | Distribution        | Likely issues                                                                           | What to test                                            |
 | ------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| Fedora / RHEL       | `nix install` method differs; SELinux may block wrangler; `dnf` vs `apt`                | `start.sh` package detection, Nix install, wrangler dev |
+| Fedora / RHEL       | `nix install` method differs; SELinux may block alchemy; `dnf` vs `apt`                | `start.sh` package detection, Nix install, alchemy dev |
 | Arch Linux          | Rolling release may have newer (incompatible) versions; `sudo` vs `doas`                | Tool version consistency, permission model              |
-| Alpine Linux        | musl libc instead of glibc; some binaries may not work                                  | Bun (officially supports musl), Nix, wrangler           |
+| Alpine Linux        | musl libc instead of glibc; some binaries may not work                                  | Bun (officially supports musl), Nix, alchemy            |
 | NixOS               | Nix is native but `devenv shell` behaviour differs; `/usr/bin/env` not always available | `devenv.nix`, shebangs, path assumptions                |
 | non-systemd distros | Some tools assume systemd for service management                                        | Not typically relevant (stack does not use systemd)     |
 
@@ -152,7 +152,7 @@ This is an ongoing responsibility, not a one-time task.
 
 - Current E2E coverage is minimal
 - Write tests for: registration, login, OAuth flow, password reset, CRUD operations, form validation errors, error boundaries, loading states
-- Run against a local `wrangler dev` instance in CI
+- Run against a local `alchemy dev` instance in CI
 
 **Property-based testing**
 
