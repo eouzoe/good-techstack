@@ -35,14 +35,15 @@ interface SuiteOptions {
   now?: () => number;
 }
 
-const computeCounts = (
-  runs: VerificationRun<unknown>[],
-): { verified: number; failed: number } => {
+const computeCounts = (runs: VerificationRun<unknown>[]): { verified: number; failed: number } => {
   const verified = runs.filter((run) => run.status === 'ok').length;
   return { failed: runs.length - verified, verified };
 };
 
-const runSuite = (cases: VerifyOptions<unknown, unknown>[], options: SuiteOptions = {}): SuiteRun => {
+const runSuite = (
+  cases: VerifyOptions<unknown, unknown>[],
+  options: SuiteOptions = {},
+): SuiteRun => {
   const { now = Date.now } = options;
   const startedAt = now();
   const runId = createRunId();

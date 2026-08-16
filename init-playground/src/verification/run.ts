@@ -1,6 +1,11 @@
 import { Result, type Result as ResultType } from 'better-result';
 
-import { type VerificationEvent, verificationRunCompleted, verificationRunFailed, verificationRunStarted } from './observation';
+import {
+  type VerificationEvent,
+  verificationRunCompleted,
+  verificationRunFailed,
+  verificationRunStarted,
+} from './observation';
 import { type VerificationFailed } from './result';
 import { type VerifyOptions, verify } from './verify';
 
@@ -75,10 +80,7 @@ const runVerification = <TValue, TObservation>(
 
   return {
     durationMs: finishedAt - startedAt,
-    events: [
-      verificationRunStarted(runId, startedAt),
-      verificationRunFailed(runId, finishedAt),
-    ],
+    events: [verificationRunStarted(runId, startedAt), verificationRunFailed(runId, finishedAt)],
     invariant: options.invariant,
     result,
     runId,

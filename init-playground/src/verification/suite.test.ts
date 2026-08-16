@@ -32,10 +32,7 @@ describe('suite: timing', () => {
   it('pins duration from the injected clock across a failing suite', () => {
     expect.hasAssertions();
     const { now } = createClock();
-    const suite = runSuite(
-      [caseWithBalance(BALANCE_AFTER_DEPOSIT), caseWithBalance(0)],
-      { now },
-    );
+    const suite = runSuite([caseWithBalance(BALANCE_AFTER_DEPOSIT), caseWithBalance(0)], { now });
     expect(suite.startedAt).toBe(START_MS);
     expect(suite.finishedAt).toBe(START_MS + TICK_MS * SUITE_CALL_COUNT);
     expect(suite.durationMs).toBe(TICK_MS * SUITE_CALL_COUNT);
@@ -52,7 +49,11 @@ describe('suite: timing', () => {
 describe('suite: aggregation', () => {
   it('sums verified and failed across cases', () => {
     expect.hasAssertions();
-    const suite = runSuite([caseWithBalance(BALANCE_AFTER_DEPOSIT), caseWithBalance(0), caseWithBalance(BALANCE_AFTER_DEPOSIT)]);
+    const suite = runSuite([
+      caseWithBalance(BALANCE_AFTER_DEPOSIT),
+      caseWithBalance(0),
+      caseWithBalance(BALANCE_AFTER_DEPOSIT),
+    ]);
     expect(suite.verified).toBe(VERIFIED_COUNT);
     expect(suite.failed).toBe(1);
     expect(suite.runs).toHaveLength(RUN_COUNT);

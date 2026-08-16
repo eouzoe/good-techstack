@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { verificationRunCompleted, verificationRunFailed, verificationRunStarted } from './observation';
+import {
+  verificationRunCompleted,
+  verificationRunFailed,
+  verificationRunStarted,
+} from './observation';
 
 const RUN_ID = '1f8f5b2a-5d4a-4c3b-9a2e-6b7c8d9e0f10';
 const STARTED_AT = 1_600_000_000_000;
