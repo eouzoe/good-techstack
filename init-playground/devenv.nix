@@ -57,10 +57,10 @@
     };
 
     dev = {
-      exec = "node node_modules/vite/bin/vite.js dev";
+      exec = "secretspec run --scope deploy -- alchemy dev";
       after = [ "devenv:processes:router-watcher@started" ];
       ready.http.get = {
-        port = 5173;
+        port = 1337;
         path = "/";
       };
     };
@@ -98,14 +98,8 @@
       execIfModified = [ "src/server/db/schema.ts" ];
     };
 
-    "db:migrate" = {
-      exec = "bunx wrangler d1 migrations apply gstack";
-      after = [ "db:generate" ];
-    };
-
     "db:seed" = {
       exec = "bun run cli/seed.ts";
-      after = [ "db:migrate" ];
       description = "Seed the database with initial data (Brocli)";
     };
 
