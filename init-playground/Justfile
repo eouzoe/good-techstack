@@ -84,7 +84,7 @@ observe:
 
 # ── DB ───────────────────────────────────────────────────
 migrate:
-    bunx wrangler d1 migrations apply gstack
+    bunx wrangler d1 migrations apply gstack-db --local
 
 seed:
     bun run cli/seed.ts

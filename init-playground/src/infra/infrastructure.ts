@@ -22,7 +22,7 @@ const app = await alchemy('gstack', { stage: process.env.STAGE ?? 'dev' });
 
 // ── Storage ──────────────────────────────────────────────
 const db = await D1Database('gstack-db', {
-  migrationsDir: './migrations',
+  migrationsDir: './drizzle',
   name: `gstack-${app.stage}-db`,
   primaryLocationHint: 'wnam',
 });

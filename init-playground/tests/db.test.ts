@@ -36,12 +36,11 @@ const expectConstraintRejection = async (
   );
 };
 
-/// Read-modify-write that bumps the counter by one, INLINE (not SQL-atomic). Any
-/// concurrency that interleaves two of these loses an update (§6.9); here it is a
-/// single operator so the arithmetic is deterministic.
-const bumpInline = async (db: LocalDb): Promise<void> => {
-  const current = await db.select().from(visitCounters).get();
-  await db.update(visitCounters).set({ counter: (current?.counter ?? 0) + 1 }).run();
+/// SQL-atomic increment: a single `UPDATE` bumps the counter in place. Unlike the
+/// read-modify-write form, interleaved calls can never lose an update (§6.9); the
+/// naive non-atomic form is demonstrated deliberately in db-concurrency.test.ts.
+const bumpAtomic = async (db: LocalDb): Promise<void> => {
+  await db.run(sql`UPDATE visit_counters SET counter = counter + 1`);
 };
 
 /// Module-level oracle (no conditionals inside `it` — Phase C pattern). The row
@@ -155,7 +154,7 @@ describe('db integrity invariants (§6.4 Integrity)', () => {
     expect.hasAssertions();
     const { db } = await createTestDb();
     await db.insert(visitCounters).values({ name: 'hits', counter: 10 }).run();
-    await bumpInline(db);
+    await bumpAtomic(db);
     const row = await db.select().from(visitCounters).get();
     expect(row?.counter).toBe(11);
   });

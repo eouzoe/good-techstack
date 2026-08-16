@@ -43,7 +43,7 @@ devenv shell -- bunx playwright test   # E2E tests (requires wrangler dev)
 
 ```bash
 devenv shell -- bunx wrangler d1 migrations create <name>    # Create a new migration
-devenv shell -- bunx wrangler d1 migrations apply <name>     # Apply migrations locally
+devenv shell -- bunx wrangler d1 migrations apply <name> --local  # Apply migrations locally
 ```
 
 ## Binding Types
