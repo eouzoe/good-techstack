@@ -1,24 +1,38 @@
-import { Result, TaggedError } from 'better-result';
+import { Context, Data, Effect, type Cause } from 'effect';
 
-import { getDB } from '../db';
+import { D1, getDB } from '../db';
 import { techs as techsTable } from '../db/schema';
 
-/// Domain layer (service boundary): expected business failures are modelled as
-/// values, not throws, so call sites must handle them explicitly.
-///
-/// Procedures stay thin: they translate this Result into transport errors
-/// (`errors.NOT_FOUND()`). As the product grows past 0→10 QPS, this is where
-/// business rules and workflows accumulate.
-// oxlint-disable-next-line unicorn/throw-new-error -- TaggedError is the better-result class factory, not a thrown error.
-class TechsNotFoundError extends TaggedError('TechsNotFoundError') {}
+/// Expected failure: an empty technologies table. Procedures translate this
+/// into the transport error (`NOT_FOUND`) so the domain layer never depends on
+/// HTTP concerns.
+export class TechsNotFoundError extends Data.TaggedError('TechsNotFoundError') {}
 
-const listTechs = async (env: { DB: D1Database }) => {
-  const db = getDB(env.DB);
-  const rows = await db.select().from(techsTable).orderBy(techsTable.sortOrder);
-  if (rows.length === 0) {
-    return Result.err(new TechsNotFoundError());
+export class TechsService extends Context.Service<
+  TechsService,
+  {
+    readonly list: () => Effect.Effect<
+      (typeof techsTable.$inferSelect)[],
+      TechsNotFoundError | Cause.UnknownError,
+      D1
+    >;
   }
-  return Result.ok(rows);
-};
+>()('gstack/server/services/TechsService') {}
 
-export { TechsNotFoundError, listTechs };
+export const TechsServiceLive = TechsService.of({
+  list: Effect.fn('TechsService.list')(function* (): Effect.fn.Return<
+    (typeof techsTable.$inferSelect)[],
+    TechsNotFoundError | Cause.UnknownError,
+    D1
+  > {
+    const d1 = yield* D1;
+    const db = getDB(d1);
+    const rows = yield* Effect.tryPromise(() =>
+      db.select().from(techsTable).orderBy(techsTable.sortOrder),
+    );
+    if (rows.length === 0) {
+      return yield* Effect.fail(new TechsNotFoundError());
+    }
+    return rows;
+  }),
+});

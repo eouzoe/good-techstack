@@ -70,4 +70,4 @@ const contract = {
   },
 };
 
-export { contract, eventsContract, featuresContract, pageMetaContract, techsContract };
+export { contract, eventsContract, eventSchema, featuresContract, pageMetaContract, techsContract };
