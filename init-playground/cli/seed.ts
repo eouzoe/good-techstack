@@ -1,3 +1,7 @@
+import { Database } from 'bun:sqlite';
+import { copyFileSync, existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { boolean, command, run, string } from '@drizzle-team/brocli';
 
 import { getLocalDb } from '../src/server/db/local';
@@ -26,7 +30,7 @@ const FEATURES_SEED = [
     title: 'better-auth',
   },
   { description: 'SSR with React', icon: '⚛️', sortOrder: 5, title: 'TanStack Start' },
-  { description: 'Rust-native bundler', icon: '🦀', sortOrder: 6, title: 'Rsbuild' },
+  { description: 'Lightning-fast build tool', icon: '⚡', sortOrder: 6, title: 'Vite' },
 ];
 
 const TECHS_SEED = [
@@ -78,14 +82,56 @@ const seedDevDb = (opts: { force?: boolean }): void => {
   console.log('Seed complete: 6 features + 3 techs inserted.');
 };
 
-const seedLocalSnapshot = async (opts: { force?: boolean; snapshot?: string }): Promise<void> => {
-  const snapshotPath = opts.snapshot ?? '.dev.snapshot.db';
-  if (opts.force === undefined) {
-    seedDevDb({});
-  } else {
-    seedDevDb({ force: opts.force });
+const seedAlchemyD1 = (): void => {
+  const dir = join(process.cwd(), '.alchemy/local/d1/cloudflare-runtime-D1DatabaseObject');
+  if (!existsSync(dir)) {
+    console.log('alchemy local D1 not found — skipping');
+    return;
   }
-  const { copyFileSync, existsSync } = await import('node:fs');
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith('.sqlite') || file === 'metadata.sqlite') {
+      continue;
+    }
+    const db = new Database(join(dir, file));
+    const existing = db.query('SELECT COUNT(*) AS c FROM features').get() as { c: number };
+    if (existing.c > 0) {
+      console.log(`alchemy D1 ${file}: already seeded`);
+      db.close();
+      continue;
+    }
+    const insertFeature = db.prepare(
+        'INSERT INTO features (title, description, icon, sort_order) VALUES (?, ?, ?, ?)',
+      ),
+      insertTech = db.prepare(
+        'INSERT INTO techs (name, description, url, version, sort_order) VALUES (?, ?, ?, ?, ?)',
+      );
+    for (const f of FEATURES_SEED) {
+      insertFeature.run(f.title, f.description, f.icon, f.sortOrder);
+    }
+    for (const t of TECHS_SEED) {
+      insertTech.run(t.name, t.description, t.url, t.version, t.sortOrder);
+    }
+    db.close();
+    console.log(
+      `alchemy D1 ${file}: seeded (${FEATURES_SEED.length} features, ${TECHS_SEED.length} techs)`,
+    );
+  }
+};
+
+const seedLocalSnapshot = (opts: { force?: boolean; snapshot?: string }): void => {
+  const snapshotPath = opts.snapshot ?? '.dev.snapshot.db';
+  try {
+    if (opts.force === undefined) {
+      seedDevDb({});
+    } else {
+      seedDevDb({ force: opts.force });
+    }
+  } catch (error) {
+    console.log(
+      `gstack.db not available — skipping (alchemy D1 still seeded): ${(error as Error).message}`,
+    );
+  }
+  seedAlchemyD1();
   if (!existsSync(snapshotPath) || opts.force === true) {
     copyFileSync('gstack.db', snapshotPath);
     console.log(`Snapshot saved to ${snapshotPath}`);
@@ -107,12 +153,12 @@ const buildLocalOpts = (
 };
 
 const seed = command({
-  handler: async (opts) => {
+  handler: (opts) => {
     const env = opts.env ?? 'dev';
     console.log(`Seeding database: env=${env}`);
 
     if (env === 'dev') {
-      await seedLocalSnapshot(buildLocalOpts(opts.force, opts.snapshot));
+      seedLocalSnapshot(buildLocalOpts(opts.force, opts.snapshot));
       return;
     }
 
