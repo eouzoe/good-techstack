@@ -11,7 +11,7 @@ const mockFeatures: InferRouterContractOutputs<typeof contract>['info']['feature
   { description: 'Serverless SQLite', icon: '🗄️', title: 'Drizzle ORM + D1' },
   { description: 'Auth with email, OAuth, SSO', icon: '🔐', title: 'better-auth' },
   { description: 'SSR with React', icon: '⚛️', title: 'TanStack Start' },
-  { description: 'Rust-native bundler', icon: '🦀', title: 'Rsbuild' },
+  { description: 'Lightning-fast build tool', icon: '⚡', title: 'Vite' },
 ];
 
 const mockTechs: InferRouterContractOutputs<typeof contract>['info']['techs'] = [

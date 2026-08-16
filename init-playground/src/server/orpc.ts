@@ -2,17 +2,13 @@ import { createRouterClient } from '@orpc/server';
 import { env } from 'cloudflare:workers';
 
 import { appRouter } from '../routers/_app';
-import { type HandlerContext } from './os';
+import { type AppEnv } from './env';
+import { effectContext } from './os';
 
-const contextEnv: HandlerContext['env'] = {
-  BETTER_AUTH_SECRET: env.BETTER_AUTH_SECRET,
-  BETTER_AUTH_URL: env.BETTER_AUTH_URL,
-  DB: env.DB,
-  EVENTS_DO: env.EVENTS_DO,
-  KV: env.KV,
-  RATELIMIT: env.RATELIMIT,
-  USE_MOCKS: env.USE_MOCKS,
-};
+/// The router client runs inside the Worker itself, so the `cloudflare:workers`
+/// `env` *is* the deployed environment (it is the same binding object, typed as
+/// `any` by the runtime).
+const contextEnv: AppEnv = env;
 
 type ServerORPCClient = ReturnType<typeof createRouterClient<typeof appRouter>>;
 
@@ -23,7 +19,7 @@ const getServerClient = (): ServerORPCClient => {
     return cached;
   }
   cached = createRouterClient<typeof appRouter>(appRouter, {
-    context: { env: contextEnv },
+    context: { 'effect/context': effectContext(contextEnv), env: contextEnv },
   });
   return cached;
 };

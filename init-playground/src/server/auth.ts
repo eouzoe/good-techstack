@@ -4,6 +4,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { betterAuth } from 'better-auth/minimal';
 
 import { getDB } from './db/index';
+import * as schema from './db/schema';
 
 interface AuthEnv {
   BETTER_AUTH_SECRET: string;
@@ -115,6 +116,7 @@ export const createAuth = (env: AuthEnv) =>
     },
     database: drizzleAdapter(getDB(env.DB), {
       provider: 'sqlite',
+      schema,
     }),
     emailAndPassword: {
       enabled: true,

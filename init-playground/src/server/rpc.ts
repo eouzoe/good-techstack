@@ -7,6 +7,7 @@ import { setGlobalConfig } from 'valibot';
 
 import { appRouter } from '../routers/_app';
 import { type AppEnv } from './env';
+import { effectContext } from './os';
 
 setGlobalConfig({ abortEarly: true, abortPipeEarly: true });
 
@@ -40,24 +41,31 @@ const isExpectedError = (error: unknown): error is ORPCError<string, unknown> =>
 /// Unexpected errors (5xx, uncaught throws) are traced and logged as errors.
 /// Expected errors (validation, typed errors, 4xx) are part of the RPC contract:
 /// the client receives them in-band, so the server only logs them at debug level.
+const traceError = (span: InstanceType<typeof tracing.Span>, error: unknown): void => {
+  if (isExpectedError(error)) {
+    logger.debug('RPC error', { code: error.code, message: error.message });
+  } else {
+    span.setAttribute('error.message', errorMessage(error));
+    span.setAttribute('error.type', 'unexpected');
+    logger.error('Unhandled RPC error', { error: errorMessage(error) });
+  }
+};
+
 const rpcHandler = new RPCHandler(appRouter, {
   interceptors: [
-    async (options) => {
-      try {
-        return await options.next();
-      } catch (error) {
-        if (isExpectedError(error)) {
-          logger.debug('RPC error', { code: error.code, message: error.message });
-        } else {
-          tracing.enterSpan('server.error', (span) => {
-            span.setAttribute('error.message', errorMessage(error));
-            span.setAttribute('error.type', 'unexpected');
-          });
-          logger.error('Unhandled RPC error', { error: errorMessage(error) });
+    (options) =>
+      tracing.enterSpan('server.rpc', async (span) => {
+        span.setAttribute('rpc.path', options.path.join('/'));
+        try {
+          const result = await options.next();
+          span.setAttribute('rpc.status', 'success');
+          return result;
+        } catch (error) {
+          span.setAttribute('rpc.status', 'error');
+          traceError(span, error);
+          throw error;
         }
-        throw error;
-      }
-    },
+      }),
   ],
   plugins: [new CORSHandlerPlugin({ credentials: true }), new RequestHeadersHandlerPlugin()],
 });
@@ -67,7 +75,7 @@ const rpcHandler = new RPCHandler(appRouter, {
 /// instead of letting oRPC fall through (see fetch adapter docs).
 export const handleRPC = async (request: Request, env: AppEnv): Promise<Response> => {
   const { matched, response } = await rpcHandler.handle(request, {
-    context: { env },
+    context: { 'effect/context': effectContext(env), env },
     prefix: '/api/rpc',
   });
   if (matched) {
