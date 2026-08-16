@@ -29,7 +29,10 @@ const run = async () => {
     d1: data.d1,
     note: 'post-write read latency distribution (KV eventual vs D1 strong)',
   };
-  writeFileSync(join(process.cwd(), 'bench', 'consistency.json'), `${JSON.stringify(summary, null, 2)}\n`);
+  writeFileSync(
+    join(process.cwd(), 'bench', 'consistency.json'),
+    `${JSON.stringify(summary, null, 2)}\n`,
+  );
   console.log(JSON.stringify(summary, null, 2));
 };
 

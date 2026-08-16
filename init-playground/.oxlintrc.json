@@ -29,20 +29,14 @@
     "no-magic-numbers": [
       "error",
       {
-        "ignore": [
-          0,
-          1
-        ],
+        "ignore": [0, 1],
         "ignoreArrayIndexes": true
       }
     ],
     "no-underscore-dangle": [
       "error",
       {
-        "allow": [
-          "_errors",
-          "_tag"
-        ]
+        "allow": ["_errors", "_tag"]
       }
     ],
     "unicorn/no-null": "off",
@@ -62,8 +56,9 @@
           "D1Database",
           "DurableObjectNamespace",
           "R2Bucket",
-          "TanStackStart",
-          "TaggedError"
+          "Service",
+          "TaggedError",
+          "TanStackStart"
         ]
       }
     ],
@@ -87,10 +82,7 @@
         "preferInline": true
       }
     ],
-    "import/consistent-type-specifier-style": [
-      "error",
-      "prefer-inline"
-    ],
+    "import/consistent-type-specifier-style": ["error", "prefer-inline"],
     "import/max-dependencies": [
       "error",
       {
@@ -125,61 +117,67 @@
   },
   "overrides": [
     {
-      "files": [
-        "*.test.ts",
-        "*.test.tsx",
-        "*.spec.ts"
-      ],
+      "files": ["*.test.ts", "*.test.tsx", "*.spec.ts"],
       "rules": {
         "typescript/no-explicit-any": "off",
         "no-console": "off"
       }
     },
     {
-      "files": [
-        "src/client/**/*.tsx",
-        "src/client/**/*.ts"
-      ],
+      "files": ["src/client/**/*.tsx", "src/client/**/*.ts"],
       "rules": {
         "react/react-in-jsx-scope": "off",
-        "vitest/require-hook": "off"
+        "vitest/require-hook": "off",
+        "eslint/one-var": "off"
       }
     },
     {
-      "files": [
-        "**/*.tsx"
-      ],
+      "files": ["**/*.tsx"],
       "rules": {
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "eslint/one-var": "off"
       }
     },
     {
-      "files": [
-        "src/server/**/*.ts"
-      ],
+      "files": ["src/server/**/*.ts"],
       "rules": {
-        "import/no-nodejs-modules": "off"
+        "import/no-nodejs-modules": "off",
+        "eslint/one-var": "off",
+        "eslint/max-classes-per-file": [
+          "error",
+          {
+            "max": 2
+          }
+        ],
+        "import/group-exports": "off",
+        "import/exports-last": "off",
+        "import/no-unassigned-import": "off",
+        "unicorn/throw-new-error": "off",
+        "eslint/func-names": "off",
+        "import/no-namespace": "off"
       }
     },
     {
-      "files": [
-        "tests/**/*.ts"
-      ],
+      "files": ["src/shared/**/*.ts"],
+      "rules": {
+        "eslint/one-var": "off"
+      }
+    },
+    {
+      "files": ["tests/**/*.ts"],
       "rules": {
         "eslint/max-lines": "off",
         "eslint/max-lines-per-function": "off",
         "eslint/max-statements": "off",
         "eslint/no-magic-numbers": "off",
         "eslint/sort-keys": "off",
+        "eslint/one-var": "off",
         "import/no-nodejs-modules": "off",
         "node/no-sync": "off"
       }
     },
     {
-      "files": [
-        "cli/**/*.ts",
-        "scripts/**/*.ts"
-      ],
+      "files": ["cli/**/*.ts", "scripts/**/*.ts"],
       "rules": {
         "no-console": "off",
         "eslint/max-lines": "off",
@@ -190,6 +188,7 @@
         "eslint/capitalized-comments": "off",
         "eslint/id-length": "off",
         "eslint/no-continue": "off",
+        "eslint/one-var": "off",
         "typescript/no-explicit-any": "off",
         "typescript/array-type": "off",
         "typescript/no-unsafe-assignment": "off",
@@ -210,26 +209,28 @@
       }
     },
     {
-      "files": [
-        "*.config.ts"
-      ],
+      "files": ["*.config.ts"],
       "rules": {
         "import/no-nodejs-modules": "off"
       }
     },
     {
-      "files": [
-        "src/procedures/**/*.ts"
-      ],
+      "files": ["src/procedures/**/*.ts"],
       "rules": {
         "import/no-anonymous-default-export": "off",
-        "import/prefer-default-export": "off"
+        "import/prefer-default-export": "off",
+        "eslint/func-names": "off",
+        "eslint/one-var": "off",
+        "new-cap": [
+          "error",
+          {
+            "properties": false
+          }
+        ]
       }
     },
     {
-      "files": [
-        "src/components/ui/**"
-      ],
+      "files": ["src/components/ui/**"],
       "rules": {
         "eslint/sort-keys": "off",
         "eslint/func-style": "off",
@@ -241,25 +242,42 @@
       }
     },
     {
-      "files": [
-        "src/lib/utils.ts"
-      ],
+      "files": ["src/lib/utils.ts"],
       "rules": {
         "eslint/func-style": "off"
       }
     },
     {
-      "files": [
-        "src/entry-client.tsx"
-      ],
+      "files": ["src/entry-client.tsx"],
       "rules": {
         "import/no-unassigned-import": "off"
       }
     },
     {
-      "files": [
-        "tests/worker/**/*.ts"
-      ],
+      "files": ["src/server/env.ts", "src/server/do-events.ts"],
+      "rules": {
+        "import/consistent-type-specifier-style": "off"
+      }
+    },
+    {
+      "files": ["src/env.d.ts"],
+      "rules": {
+        "typescript/no-empty-interface": "off"
+      }
+    },
+    {
+      "files": ["alchemy.run.ts"],
+      "rules": {
+        "eslint/func-names": "off",
+        "import/no-namespace": "off",
+        "eslint/new-cap": "off",
+        "eslint/sort-keys": "off",
+        "eslint/capitalized-comments": "off",
+        "import/consistent-type-specifier-style": "off"
+      }
+    },
+    {
+      "files": ["tests/worker/**/*.ts"],
       "rules": {
         "vitest/no-hooks": "off",
         "eslint/init-declarations": "off",
@@ -267,14 +285,12 @@
         "typescript/no-unsafe-assignment": "off",
         "vitest/no-conditional-in-test": "off",
         "vitest/no-conditional-tests": "off",
-        "typescript/no-unnecessary-type-assertion": "off"
+        "typescript/no-unnecessary-type-assertion": "off",
+        "eslint/one-var": "off"
       }
     },
     {
-      "files": [
-        "tests/property*.test.ts",
-        "tests/worker/property*.test.ts"
-      ],
+      "files": ["tests/property*.test.ts", "tests/worker/property*.test.ts"],
       "rules": {
         "eslint/no-await-in-loop": "off",
         "vitest/no-conditional-in-test": "off",
@@ -288,9 +304,7 @@
       }
     },
     {
-      "files": [
-        "tests/meta-suite/**/*.ts"
-      ],
+      "files": ["tests/meta-suite/**/*.ts"],
       "rules": {
         "vitest/prefer-expect-assertions": "off",
         "vitest/no-conditional-in-test": "off",
@@ -304,13 +318,18 @@
       }
     },
     {
-      "files": [
-        "src/bench/**/*.ts"
-      ],
+      "files": ["src/bench/**/*.ts"],
       "rules": {
         "eslint/no-await-in-loop": "off",
         "eslint/id-length": "off",
-        "eslint/no-magic-numbers": "off"
+        "eslint/no-magic-numbers": "off",
+        "eslint/one-var": "off"
+      }
+    },
+    {
+      "files": ["src/verification/**/*.ts"],
+      "rules": {
+        "eslint/one-var": "off"
       }
     }
   ]

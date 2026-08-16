@@ -8,6 +8,15 @@
 #           phase-d-adapter | phase-f | all (default)
 set -euo pipefail
 
+NODE_BIN="$(command -v node || true)"
+if [ -z "$NODE_BIN" ]; then
+  NODE_BIN="$(ls -d /nix/store/*nodejs-26*/bin/node 2>/dev/null | head -1 || true)"
+fi
+if [ -z "$NODE_BIN" ]; then
+  echo "✗ node not found (Stryker's vitest-runner needs Node, not bun)" >&2
+  exit 1
+fi
+
 scope="${1:-all}"
 
 if [ "$scope" = "all" ]; then
@@ -20,7 +29,7 @@ fi
 
 for c in "${cfgs[@]}"; do
   echo "── mutate: $c"
-  node node_modules/@stryker-mutator/core/bin/stryker.js run "$c"
+  "$NODE_BIN" node_modules/@stryker-mutator/core/bin/stryker.js run "$c"
 done
 
 echo "✓ mutation institutionalized: all scopes green"

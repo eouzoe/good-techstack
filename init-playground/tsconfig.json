@@ -14,7 +14,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["@types/bun"],
+    "types": ["@types/bun", "@cloudflare/workers-types", "vite/client"],
     "paths": {
       "#shared/*": ["./src/shared/*"],
       "@/*": ["./src/*"]
@@ -35,7 +35,7 @@
     "tests/**/*.test.ts",
     "tests/db-common.ts",
     "tests/contract-common.ts",
-    "worker-configuration.d.ts"
+    "src/env.d.ts"
   ],
   "exclude": ["tests/worker"]
 }

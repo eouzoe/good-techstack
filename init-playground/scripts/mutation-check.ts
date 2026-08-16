@@ -205,7 +205,7 @@ const MUTATIONS: Mutation[] = [
   },
   {
     file: `${VERIFICATION_DIR}/report.ts`,
-    from: "const summaryLine = JSON.stringify(report);",
+    from: 'const summaryLine = JSON.stringify(report);',
     id: 'report-summary-line-constant',
     note: 'JSONL 最後一行失去 report 內容',
     replaceAll: false,
@@ -214,7 +214,7 @@ const MUTATIONS: Mutation[] = [
   // --- suite.ts: 彙總語義 ---
   {
     file: `${VERIFICATION_DIR}/suite.ts`,
-    from: 'const verified = runs.filter((run) => run.status === \'ok\').length;',
+    from: "const verified = runs.filter((run) => run.status === 'ok').length;",
     id: 'suite-verified-inverted',
     note: 'verified 數到的是 failed runs',
     replaceAll: false,
@@ -222,7 +222,7 @@ const MUTATIONS: Mutation[] = [
   },
   {
     file: `${VERIFICATION_DIR}/suite.ts`,
-    from: 'status: \'failed\',',
+    from: "status: 'failed',",
     id: 'suite-status-always-ok',
     note: '有失敗 case 也標成 ok',
     replaceAll: false,

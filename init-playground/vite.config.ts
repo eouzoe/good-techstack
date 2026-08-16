@@ -1,6 +1,5 @@
 import { fileURLToPath, URL } from 'node:url';
 
-import { cloudflare } from '@cloudflare/vite-plugin';
 import babel from '@rolldown/plugin-babel';
 import tailwindcss from '@tailwindcss/vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
@@ -14,7 +13,6 @@ export default defineConfig({
   },
   envPrefix: ['PUBLIC_'],
   plugins: [
-    cloudflare({ viteEnvironment: { name: 'ssr' } }),
     tailwindcss(),
     tanstackStart({
       server: {

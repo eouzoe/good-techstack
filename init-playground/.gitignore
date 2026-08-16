@@ -17,6 +17,9 @@ coverage/
 # ── Cloudflare ──
 .wrangler/
 
+# alchemy local plan state (localState) — regenerated on every plan/deploy
+.alchemy/
+
 # ── Nix / devenv ──
 .devenv/
 devenv.local.nix

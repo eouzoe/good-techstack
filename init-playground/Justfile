@@ -3,13 +3,9 @@
 dev:
     devenv processes up
 
-# Dev server only (vite dev, foreground)
+# Dev server only (alchemy dev, foreground)
 dev-server:
     bun run dev
-
-# Cloudflare-native dev (wrangler with in-memory persistence)
-dev-cf: build
-    bunx wrangler dev --persist-to=:memory:
 
 # Stop detached dev processes
 dev-down:
@@ -20,8 +16,9 @@ dev-status:
     devenv processes list
 
 # ── Build ─────────────────────────────────────────────────
-build:
-    bun run build
+# NOTE: builds are driven by alchemy (`alchemy deploy` runs the Vite build
+# with its Cloudflare plugin injected). There is no standalone `vite build`
+# script — see the local dev workflow TODO in the session notes.
 
 # ── DB Local (bun:sqlite) ────────────────────────────────
 drizzle-push:
@@ -41,7 +38,7 @@ codegen-watch:
     bun --watch scripts/codegen-router.ts
 
 # ── Quality ──────────────────────────────────────────────
-typecheck: cf-typegen
+typecheck:
     bunx tsc --noEmit
 
 lint:
@@ -83,20 +80,32 @@ observe:
     bun run scripts/observe.ts
 
 # ── DB ───────────────────────────────────────────────────
-migrate:
-    bunx wrangler d1 migrations apply gstack-db --local
+# NOTE: D1 migrations are applied automatically by `alchemy deploy` (the DB
+# resource declares `migrationsDir`). There is no manual `migrate` recipe.
 
 seed:
     bun run cli/seed.ts
 
 # ── Deploy ───────────────────────────────────────────────
-# Injects only the deploy-scoped secrets (SecretSpec 0.17+).
+# Injects deploy-scoped secrets (SecretSpec 0.17+): CF token + account id +
+# the auth secrets alchemy binds at deploy time. alchemy runs the Vite build
+# itself and applies D1 migrations.
 deploy:
-    bun run build && secretspec run --scope deploy -- bunx wrangler deploy
+    secretspec run --scope deploy -- bunx alchemy deploy
 
-# Profile Worker cold-start (bundle size + CPU summary → worker-startup.cpuprofile)
-startup: build
-    bunx wrangler check startup
+# ── Production observability ─────────────────────────────
+# Stream live logs from the deployed Worker in real time (alchemy tail).
+# Requires `just deploy` first; Ctrl+C to stop. `filter` is the alchemy
+# logical resource ID — only the Website Worker is tailable (DB/KV are not).
+tail filter='Website':
+    secretspec run --scope deploy -- bunx alchemy tail --filter {{ filter }}
+
+# Fetch a batch of past log entries from the deployed Worker (alchemy logs).
+# NOTE: needs a token with the `workers_observability:read` scope — OAuth
+# tokens minted by older `alchemy login` calls and many API tokens lack it.
+# Re-run `alchemy login` (or grant the scope on your API token) to unblock.
+logs filter='Website' limit='100' since='':
+    secretspec run --scope deploy -- bunx alchemy logs --filter {{ filter }} --limit {{ limit }} {{ if since != "" { "--since " + since } else { "" } }}
 
 # ── Security ─────────────────────────────────────────────
 secrets-scan:
@@ -109,10 +118,6 @@ secrets-check:
 # Show the SecretSpec audit log of secret access
 secrets-audit:
     secretspec audit
-
-# ── CF types ─────────────────────────────────────────────
-cf-typegen:
-    bunx wrangler types
 
 # ── Mutation (F+1 §46.11-A) ──────────────────────────────
 # Institutionalized mutation: runs every scoped Stryker config against the
@@ -148,8 +153,7 @@ perf run='':
     RUN_DIR="bench/.run"
     mkdir -p "$RUN_DIR"
 
-    echo "── build"
-    bun run build >/dev/null
+    echo "── bench worker bootstrap (no app build needed — wrangler dev bundles the bench worker)"
 
     NODE_BIN="$(command -v node || true)"
     if [ -z "$NODE_BIN" ]; then

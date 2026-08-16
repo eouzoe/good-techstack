@@ -1,9 +1,6 @@
 {
   "$schema": "node_modules/@stryker-mutator/core/schema/stryker-schema.json",
-  "mutate": [
-    "src/verification/*.ts",
-    "!src/verification/*.test.ts"
-  ],
+  "mutate": ["src/verification/*.ts", "!src/verification/*.test.ts"],
   "testRunner": "vitest",
   "concurrency": 4,
   "coverageAnalysis": "perTest",

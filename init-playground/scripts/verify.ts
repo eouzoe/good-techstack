@@ -18,8 +18,7 @@ const BALANCE_INVARIANT = 'balance never drops below zero after a deposit';
 const RATE_LIMIT_INVARIANT = 'rate limit stays below the allowed burst';
 const RATE_LIMIT_COUNT = 3;
 const RATE_LIMIT_BURST = 5;
-const HASH_CONTENT =
-  'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
+const HASH_CONTENT = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
 const HASH_INVARIANT = 'content hash stays a stable 64-hex digest';
 const HASH_DIGEST_PATTERN = /^[0-9a-f]{64}$/u;
 
@@ -40,8 +39,7 @@ const cases: VerifyOptions<unknown, unknown>[] = [
     execute: () => HASH_CONTENT,
     invariant: HASH_INVARIANT,
     observe: (value: unknown) => value,
-    oracle: (value: unknown) =>
-      typeof value === 'string' && HASH_DIGEST_PATTERN.test(value),
+    oracle: (value: unknown) => typeof value === 'string' && HASH_DIGEST_PATTERN.test(value),
   },
 ];
 
