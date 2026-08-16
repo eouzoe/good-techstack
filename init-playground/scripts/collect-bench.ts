@@ -142,7 +142,9 @@ const DRIFT_SOURCES = ['p50Ms', 'directMeanMs', 'hyperfineMedianMs', 'hyperfineM
 /// Pick the single metric key to compare for a component, anchored on the
 /// baseline: baseline and current must use the same source or the comparison is
 /// meaningless. Returns `null` when no metric exists on the baseline side.
-const driftSourceOf = (base: BaselineComponent | undefined): (typeof DRIFT_SOURCES)[number] | null => {
+const driftSourceOf = (
+  base: BaselineComponent | undefined,
+): (typeof DRIFT_SOURCES)[number] | null => {
   if (!base) {
     return null;
   }
@@ -194,7 +196,9 @@ const failIfRegressed = () => {
     process.stderr.write(`⚠ inconclusive:${line}\n`);
   }
   if (regressions.length > 0) {
-    process.stderr.write(`✗ regression > ${Math.round(DRIFT * 100)}%:\n  ${regressions.join('\n  ')}\n`);
+    process.stderr.write(
+      `✗ regression > ${Math.round(DRIFT * 100)}%:\n  ${regressions.join('\n  ')}\n`,
+    );
     process.exit(1);
   }
   process.stdout.write('✓ no regression drift vs baseline\n');

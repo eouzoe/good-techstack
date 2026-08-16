@@ -5,8 +5,15 @@
 /// *measured* endpoint. The JSON shape is stable:
 /// `{ op, count, deltasMs: number[], p50, p95, p99, mean }`.
 ///
-/// Environment is the generated `Env` (wrangler types) — same bindings the
-/// production worker uses, so results represent the real boundary.
+/// Environment is declared locally (mirroring `wrangler.bench.jsonc`) — the
+/// bench worker is standalone, so it does not share the production Env.
+
+interface Env {
+  DB: D1Database;
+  EVENTS_DO: DurableObjectNamespace;
+  KV: KVNamespace;
+  R2: R2Bucket;
+}
 
 interface BenchResult {
   op: string;
@@ -83,9 +90,9 @@ const benchR2 = async (env: Env, count: number): Promise<BenchResult> => {
   const deltas: number[] = [];
   for (let i = 0; i < count; i++) {
     const key = `bench:${crypto.randomUUID()}`;
-    await env.R2.put(key, new TextEncoder().encode("bench"));
+    await env.R2.put(key, new TextEncoder().encode('bench'));
     const t0 = performance.now();
-    await env.R2.put(key, new TextEncoder().encode("bench"));
+    await env.R2.put(key, new TextEncoder().encode('bench'));
     const obj = await env.R2.get(key);
     await obj?.arrayBuffer();
     deltas.push(performance.now() - t0);
@@ -130,7 +137,7 @@ const benchKVConsistency = async (env: Env, count: number) => {
 
 const benchD1Consistency = async (env: Env, count: number): Promise<BenchResult> => {
   await env.DB.prepare(
-    "create table if not exists bench_consistency (k text primary key, v int)",
+    'create table if not exists bench_consistency (k text primary key, v int)',
   ).run();
   const key = `consistency-${crypto.randomUUID()}`;
   await env.DB.prepare('insert into bench_consistency (k, v) values (?, 1)').bind(key).run();
