@@ -10,15 +10,15 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
-    "hono": "^4.12.30"
+    "hono": "^4.13.2"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260726.1",
+    "@cloudflare/workers-types": "^5.20260816.1",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
-    "oxlint": "^1.75.0",
+    "oxlint": "^1.78.0",
     "oxlint-tsgolint": "^7.0.2001",
     "typescript": "^7.0.2",
-    "wrangler": "^4.112.0"
+    "wrangler": "^4.123.0"
   }
 }
