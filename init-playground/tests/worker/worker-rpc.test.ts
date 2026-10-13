@@ -121,6 +121,38 @@ describe('§6.9 RPC request boundary through real D1', () => {
       buffer += decoder.decode(second.value as Uint8Array, { stream: true });
     }
     expect(buffer).toContain('data:');
-    expect(buffer).toContain('event:');
+    // ORPC v2 beta.43 (via @standard-server/core `encodeEventStreamMessage`)
+    // Omits `event: message` for default-named events — spec-compliant SSE,
+    // Restored to "message" by the official decoder — so the contract shape
+    // Plus the stable `id:`/`retry:` meta below carry the assertion instead.
+    const field = (name: string): string | undefined =>
+      buffer
+        .split('\n')
+        .find((line) => line.startsWith(`${name}:`))
+        ?.slice(name.length + 1)
+        .trim();
+    expect({
+      id: field('id'),
+      payload: JSON.parse(field('data')!) as {
+        json?: {
+          data?: { message?: unknown; severity?: unknown; title?: unknown };
+          type?: unknown;
+        };
+      },
+      retry: field('retry'),
+    }).toStrictEqual({
+      id: 'notif-0',
+      payload: {
+        json: {
+          data: {
+            message: 'All systems operational',
+            severity: 'info',
+            title: 'Server Status Update',
+          },
+          type: 'notification',
+        },
+      },
+      retry: '5000',
+    });
   }, 15_000);
 });
