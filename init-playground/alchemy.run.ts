@@ -41,9 +41,9 @@ export const Website = Cloudflare.Website.Vite('Website', {
     },
   },
   env: {
-    BETTER_AUTH_SECRET: Config.redacted('BETTER_AUTH_SECRET'),
-    BETTER_AUTH_URL: Config.string('BETTER_AUTH_URL'),
-    USE_MOCKS: Config.withDefault(Config.string('USE_MOCKS'), 'false'),
+    BETTER_AUTH_SECRET: Config.Redacted('BETTER_AUTH_SECRET'),
+    BETTER_AUTH_URL: Config.String('BETTER_AUTH_URL'),
+    USE_MOCKS: Config.withDefault(Config.String('USE_MOCKS'), 'false'),
     DB: Cloudflare.D1.Database('DB', {
       // alchemy 2.0-beta.74: unified `migrations` prop (was migrationsDir/Table)
       migrations: { dir: './drizzle', table: 'drizzle_migrations' },
