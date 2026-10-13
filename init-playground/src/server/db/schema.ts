@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { index, integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
+import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 const features = sqliteTable('features', {
   description: text('description').notNull(),
@@ -73,7 +73,6 @@ const account = sqliteTable(
       .notNull(),
     id: text('id').primaryKey(),
     idToken: text('id_token'),
-    issuer: text('issuer').notNull(),
     password: text('password'),
     providerId: text('provider_id').notNull(),
     refreshToken: text('refresh_token'),
@@ -88,10 +87,7 @@ const account = sqliteTable(
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
   },
-  (table) => [
-    uniqueIndex('account_issuer_accountId_uidx').on(table.issuer, table.accountId),
-    index('account_userId_idx').on(table.userId),
-  ],
+  (table) => [index('account_userId_idx').on(table.userId)],
 );
 
 const verification = sqliteTable(

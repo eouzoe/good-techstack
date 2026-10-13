@@ -46,7 +46,7 @@ let migrationsPromise: Promise<D1Migration[]> | undefined;
 
 const loadMigrations = (): Promise<D1Migration[]> => {
   migrationsPromise ??= (async () => {
-    const [rawInit, rawInviteCounters, rawAuthTables] = await Promise.all([
+    const [rawInit, rawInviteCounters, rawAuthTables, rawDropIssuer] = await Promise.all([
       import('../../../drizzle/20260805204740_init/migration.sql?raw').then(
         (module) => module.default,
       ),
@@ -56,11 +56,15 @@ const loadMigrations = (): Promise<D1Migration[]> => {
       import('../../../drizzle/20260819065621_auth-tables/migration.sql?raw').then(
         (module) => module.default,
       ),
+      import('../../../drizzle/20261013194054_unknown_betty_brant/migration.sql?raw').then(
+        (module) => module.default,
+      ),
     ]);
     return [
       { name: '20260805204740_init.sql', queries: splitSql(rawInit) },
       { name: '20260805204942_invite-counters.sql', queries: splitSql(rawInviteCounters) },
       { name: '20260819065621_auth-tables.sql', queries: splitSql(rawAuthTables) },
+      { name: '20261013194054_unknown_betty_brant.sql', queries: splitSql(rawDropIssuer) },
     ];
   })();
   return migrationsPromise;
