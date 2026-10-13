@@ -106,6 +106,7 @@
     "import/default": "off",
     "vitest/require-hook": "off",
     "typescript/prefer-readonly-parameter-types": "off",
+    "typescript/no-generated-empty-object-type": "off",
     "import/no-named-export": "off",
     "import/no-default-export": "off",
     "import/prefer-default-export": "off"
