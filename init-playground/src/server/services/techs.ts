@@ -1,7 +1,8 @@
 import { Context, Data, Effect, type Cause } from 'effect';
 
-import { D1, getDB } from '../db';
-import { techs as techsTable } from '../db/schema';
+import { D1 } from '../db';
+import { getBetterDb } from '../db/better';
+import { type techs as techsTable } from '../db/schema';
 
 /// Expected failure: an empty technologies table. Procedures translate this
 /// into the transport error (`NOT_FOUND`) so the domain layer never depends on
@@ -26,9 +27,9 @@ export const TechsServiceLive = TechsService.of({
     D1
   > {
     const d1 = yield* D1;
-    const db = getDB(d1);
+    const db = getBetterDb(d1);
     const rows = yield* Effect.tryPromise(() =>
-      db.select().from(techsTable).orderBy(techsTable.sortOrder),
+      db.techs.findMany({ orderBy: { sortOrder: 'asc' } }),
     );
     if (rows.length === 0) {
       return yield* Effect.fail(new TechsNotFoundError());

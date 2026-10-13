@@ -1,7 +1,8 @@
 import { Context, Effect, type Cause } from 'effect';
 
-import { D1, getDB } from '../db';
-import { features as featuresTable } from '../db/schema';
+import { D1 } from '../db';
+import { getBetterDb } from '../db/better';
+import { type features as featuresTable } from '../db/schema';
 
 export class FeaturesService extends Context.Service<
   FeaturesService,
@@ -21,9 +22,9 @@ export const FeaturesServiceLive = FeaturesService.of({
     D1
   > {
     const d1 = yield* D1;
-    const db = getDB(d1);
+    const db = getBetterDb(d1);
     return yield* Effect.tryPromise(() =>
-      db.select().from(featuresTable).orderBy(featuresTable.sortOrder),
+      db.features.findMany({ orderBy: { sortOrder: 'asc' } }),
     );
   }),
 });
