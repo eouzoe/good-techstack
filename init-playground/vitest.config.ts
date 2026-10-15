@@ -2,15 +2,15 @@ import { defineConfig } from 'vitest/config';
 
 // 純 Node 環境的單元測試設定。
 //
-// 之後要寫「跑在 Workers runtime 裡」的測試時,
-// 改用 @cloudflare/vitest-pool-workers 的 cloudflareTest() 插件:
+// 「跑在 Workers runtime 裡」的測試走獨立 config(vitest.worker.config.ts),
+// 使用 @cloudflare/vitest-plugin 的 cloudflareTest() 插件:
 //
-//   Import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
+//   Import { cloudflareTest } from "@cloudflare/vitest-plugin";
 //   Export default defineConfig({
-//     Plugins: [cloudflareTest({ wrangler: { configPath: "./wrangler.jsonc" } })],
+//     Plugins: [cloudflareTest({ wrangler: { configPath: "./wrangler.worker-test.toml" } })],
 //   });
 //
-// 注意:v0.19 已沒有 defineWorkersConfig 這個匯出。
+// 注意:此整合已沒有 defineWorkersConfig 這個匯出。
 export default defineConfig({
   test: {
     coverage: {

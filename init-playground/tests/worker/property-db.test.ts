@@ -15,8 +15,8 @@ import { getMigratedDb, resetWorkerDb } from './worker-common';
 /// that `n` awaited bumps land exactly at `start + n`.
 ///
 /// Uses fast-check's `asyncProperty` (pure JS, so it runs inside
-/// vitest-pool-workers). No kernel mutation — the kernel stays the single host
-/// of §1.6 semantics.
+/// `@cloudflare/vitest-plugin`). No kernel mutation — the kernel stays the
+/// single host of §1.6 semantics.
 
 describe('§6.10 property-based D1 arithmetic over the real W1 store', () => {
   let drawId = 0;

@@ -6,9 +6,10 @@
 # in `src/server/auth.ts` consumes) plus the main fetch worker. The production
 # stack also binds DO/KV/R2/Queues — those pull in service plumbing
 # (`EVENTS_DO -> script:gstack`) that workerd must materialise as services, the
-# vitest-pool-workers runner does not provide out of the box, and Phase E does
-# not need. Keeping this minimal is itself a §6.8/ship-what-you-use call at the
-# boundary: the D1 path is the one the kernel replicates to the Worker runtime.
+# @cloudflare/vitest-plugin runner does not provide out of the box, and Phase E
+# does not need. Keeping this minimal is itself a §6.8/ship-what-you-use call
+# at the boundary: the D1 path is the one the kernel replicates to the Worker
+# runtime.
 name = "gstack"
 main = "./tests/worker/worker-stub.ts"
 compatibility_date = "2026-07-29"

@@ -58,10 +58,10 @@ test-unit:
     bun run test
 
 # ── Worker-boundary suite (Phase E/F) ────────────────────
-# Runs the @cloudflare/vitest-pool-workers suite inside real workerd against the
+# Runs the @cloudflare/vitest-plugin suite inside real workerd against the
 # D1 binding. Separate gate from `test-unit` (node env) — the Worker boundary
 # gets its own runtime, config, and typecheck, so `just test` stays node-only.
-# NOTE: vitest-pool-workers hosts a Node process that talks to the workerd binary
+# NOTE: vitest-plugin hosts a Node process that talks to the workerd binary
 # over WebSockets. Bun's ws.WebSocket lacks the upgrade/unexpected-response
 # events the pool needs, so this gate MUST run under Node (devenv `nodejs_26`),
 # not bun — exactly why devenv installs both `bun` and `nodejs_26`.

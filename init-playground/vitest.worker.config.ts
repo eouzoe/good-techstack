@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 
-import { cloudflareTest } from '@cloudflare/vitest-pool-workers';
+import { cloudflareTest } from '@cloudflare/vitest-plugin';
 import { defineConfig } from 'vitest/config';
 
 // Worker runtime 測試設定(Phase E)。
@@ -14,7 +14,7 @@ import { defineConfig } from 'vitest/config';
 // 與 `vitest.config.ts`(純 node 單元)互斥,不相混 ——
 // 這個 config 是 Phase E 專用,`bun run test` 不會碰它。
 //
-// 注意:v0.20 直接從根匯出 `readD1Migrations`(無 `/config` 子路徑);
+// 注意:v1.x 直接從根匯出 `readD1Migrations`(無 `/config` 子路徑);
 // Worker-configuration.d.ts 提供 `Cloudflare.Env` 綁定型別(currently
 // 由 `wrangler types` 生成)。
 export default defineConfig({

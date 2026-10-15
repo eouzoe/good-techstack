@@ -5,7 +5,7 @@ import { getMigratedDb, resetWorkerDb, runAsyncInvariant } from './worker-common
 
 /// Phase E — Worker boundary, real-workerd runtime (§6.8 Worker runtime
 /// correctness). Every claim runs inside Miniflare's workerd via
-/// `@cloudflare/vitest-pool-workers`, not the node/bun runtime.
+/// `@cloudflare/vitest-plugin`, not the node/bun runtime.
 ///
 /// The item under test is the REAL D1 binding (`env.DB` from wrangler.jsonc),
 /// migrated through the D1-native batch path (`applyD1Migrations`) — the

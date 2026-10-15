@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@babel/core": "^8.0.7",
-    "@cloudflare/vitest-pool-workers": "^0.23.0",
+    "@cloudflare/vitest-plugin": "^1.4.3",
     "@cloudflare/workers-types": "^5.20261015.1",
     "@effect/platform-node": "4.0.5",
     "@fast-check/vitest": "^0.5.0",
