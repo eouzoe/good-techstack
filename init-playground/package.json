@@ -81,8 +81,5 @@
     "last 2 firefox versions",
     "last 2 safari versions",
     "last 2 edge versions"
-  ],
-  "patchedDependencies": {
-    "miniflare@5.20260730.0-alpha": "patches/miniflare@5.20260730.0-alpha.patch"
-  }
+  ]
 }
