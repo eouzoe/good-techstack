@@ -23,8 +23,6 @@ export const FeaturesServiceLive = FeaturesService.of({
   > {
     const d1 = yield* D1;
     const db = getBetterDb(d1);
-    return yield* Effect.tryPromise(() =>
-      db.features.findMany({ orderBy: { sortOrder: 'asc' } }),
-    );
+    return yield* Effect.tryPromise(() => db.features.findMany({ orderBy: { sortOrder: 'asc' } }));
   }),
 });
