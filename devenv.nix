@@ -25,7 +25,7 @@
   dotenv.enable = false;
 
   enterTest = ''
-    devenv tasks run --mode all deps:lint
+    devenv tasks run --mode all deps:lint docs:check docs:build
   '';
 
   tasks."deps:lint" = {
@@ -37,6 +37,23 @@
     exec = "bun install";
     execIfModified = [ "bun.lock" ];
     before = [ "devenv:enterShell" ];
+  };
+
+  # Docs site (Nimbus, in docs/): install from the lockfile, run the
+  # authoring checks (`nimbus-docs check` — frontmatter + internal links),
+  # then a production build. Both are gated in CI.
+  tasks."deps:install-docs" = {
+    exec = "cd docs && bun install --frozen-lockfile";
+  };
+
+  tasks."docs:check" = {
+    exec = "cd docs && bunx @cloudflare/nimbus-docs check";
+    after = [ "deps:install-docs" ];
+  };
+
+  tasks."docs:build" = {
+    exec = "cd docs && bun run build";
+    after = [ "deps:install-docs" ];
   };
 
   claude.code.mcpServers = {

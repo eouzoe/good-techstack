@@ -32,21 +32,28 @@ This installs Nix + devenv, enters the development shell, and runs `bun install`
 | Scaffold a new feature                           | `en/agent/scaffolding.md`                   |
 | Contribute to the project                        | `en/guide/contribution-areas.md`            |
 
+Paths in this table are relative to `docs/src/content/docs/`.
+
 ---
 
 ## Directory Layout
 
 ```
 docs/
-  getting-started.md          ← you are here
-  en/                         ← English documentation
-    guide/                    ← how-to guides
-    reference/                ← technical reference per layer
-    agent/                    ← AI agent configuration
-  zh-Hant/                    ← Traditional Chinese documentation
-    guide/
-    reference/
-    agent/
+  astro.config.ts              ← Nimbus site configuration
+  package.json                 ← docs-site dependencies (bun install / bun run build)
+  src/content/docs/            ← the rendered site content
+    index.mdx                  ← site home
+    en/                        ← English documentation
+      getting-started.md       ← you are here
+      guide/                   ← how-to guides
+      reference/               ← technical reference per layer
+      agent/                   ← AI agent configuration
+    zh-Hant/                   ← Traditional Chinese documentation
+      guide/
+      reference/
+      agent/
+      todo/
 ```
 
 ---

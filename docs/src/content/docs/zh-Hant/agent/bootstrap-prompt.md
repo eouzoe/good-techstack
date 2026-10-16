@@ -73,7 +73,7 @@ sidebar:
 
 ## Step 4 — 讀取 scaffold 協議
 
-仔細閱讀 `docs/agent/scaffolding.md`。這定義了如何探索使用者的產品點子並產生程式碼。
+仔細閱讀 `docs/src/content/docs/en/agent/scaffolding.md`。這定義了如何探索使用者的產品點子並產生程式碼。
 
 ---
 

@@ -7,7 +7,7 @@ sidebar:
 
 > depends_on: [00-runtime.md, 06-infra.md]
 > tags: [test, quality, ci, verification]
-> Checklist at: `docs/en/guide/testing.md`
+> Checklist at: `docs/src/content/docs/en/guide/testing.md`
 > Last updated: 2026-07-10
 
 ## Principle

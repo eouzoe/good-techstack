@@ -116,8 +116,8 @@ This is an ongoing responsibility, not a one-time task.
 **Monthly version audit**
 
 - Every 4-6 weeks, run the version checker and update:
-  - `docs/en/reference/*.md` if behaviour changed between versions
-  - `docs/en/getting-started.md` if the setup or prerequisites changed between versions
+  - `docs/src/content/docs/en/reference/*.md` if behaviour changed between versions
+  - `docs/src/content/docs/en/getting-started.md` if the setup or prerequisites changed between versions
 - This is the kind of maintenance that does not require deep context. Anyone can do it.
 
 ---
@@ -126,14 +126,14 @@ This is an ongoing responsibility, not a one-time task.
 
 **Translate reference docs**
 
-- `docs/en/reference/typescript.md` has no Chinese version yet
-- `docs/en/reference/design-decisions.md` has no Chinese version yet
-- `docs/en/guide/development.md`, `docs/en/guide/deployment.md`, `docs/en/guide/testing.md` have no Chinese versions
+- `docs/src/content/docs/en/reference/typescript.md` has no Chinese version yet
+- `docs/src/content/docs/en/reference/design-decisions.md` has no Chinese version yet
+- `docs/src/content/docs/en/guide/development.md`, `docs/src/content/docs/en/guide/deployment.md`, `docs/src/content/docs/en/guide/testing.md` have no Chinese versions
 - Translation should be technical and accurate, not creative
 
 **Agent documentation**
 
-- `docs/en/agent/scaffolding.md` has no Chinese version yet
+- `docs/src/content/docs/en/agent/scaffolding.md` has no Chinese version yet
 - The forced review mechanism could use more concrete examples in both languages
 
 **Tutorial by example**

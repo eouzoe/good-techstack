@@ -137,7 +137,7 @@ secretspec set --profile production BETTER_AUTH_URL https://<your-domain>
 secretspec run --scope deploy --profile production -- bunx alchemy deploy
 ```
 
-`production` 繼承 default profile，只需覆寫 `BETTER_AUTH_URL`；此變更觸發 `[Website] update`（不動 D1/KV）。fresh live D1 只有 migrations 沒有資料，需先 seed（見 `docs/en/guide/deployment.md` 的 `cli/seed-live.sql`）。
+`production` 繼承 default profile，只需覆寫 `BETTER_AUTH_URL`；此變更觸發 `[Website] update`（不動 D1/KV）。fresh live D1 只有 migrations 沒有資料，需先 seed（見 `docs/src/content/docs/en/guide/deployment.md` 的 `cli/seed-live.sql`）。
 
 ### 遷移
 

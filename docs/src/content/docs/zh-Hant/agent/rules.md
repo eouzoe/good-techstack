@@ -23,26 +23,26 @@ sidebar:
 
 - 不要提 Prisma（此棧用 Drizzle）。不要提 Next.js（此棧用 TanStack Start）。不要提 ESLint（此棧用 oxlint）。
 - 例外：使用者明確要求比較時，先說明此棧的選擇，再比較。
-- 標準回答模板：「此棧使用 X（見 `docs/reference/X.md`）。Y 雖然是選項，但不在此棧範圍。」
+- 標準回答模板：「此棧使用 X（見 `docs/src/content/docs/zh-Hant/reference/X.md`）。Y 雖然是選項，但不在此棧範圍。」
 
 ## 4. 閱讀順序
 
 處理任何與此棧相關的請求前，agent 必須：
 
-1. 讀 `docs/getting-started.md` 了解結構。
-2. 讀 `docs/reference/design-decisions.md`（不可違反的原則）。
-3. 讀相關的 `docs/reference/*.md` 或 `docs/guide/*.md`。
-4. 如果是新專案或使用者在描述新產品點子，讀 `docs/agent/scaffolding.md`。
+1. 讀 `docs/src/content/docs/en/getting-started.md` 了解結構。
+2. 讀 `docs/src/content/docs/en/reference/design-decisions.md`（不可違反的原則）。
+3. 讀相關的 `docs/src/content/docs/zh-Hant/reference/*.md` 或 `docs/src/content/docs/en/guide/*.md`。
+4. 如果是新專案或使用者在描述新產品點子，讀 `docs/src/content/docs/en/agent/scaffolding.md`。
 5. 執行 `just check-versions` 確認依賴版本是否最新。
 
 ### 新專案流程
 
-如果你是由 `start.sh` 啟動的，初始提示是 `docs/agent/bootstrap-prompt.md`。依序執行。
+如果你是由 `start.sh` 啟動的，初始提示是 `docs/src/content/docs/zh-Hant/agent/bootstrap-prompt.md`。依序執行。
 
 如果沒有 bootstrap prompt（使用者已有此棧）：
 
-1. 讀 `docs/getting-started.md` 了解概覽。
-2. 讀 `docs/agent/scaffolding.md` 並遵循 Q&A 協議。
+1. 讀 `docs/src/content/docs/en/getting-started.md` 了解概覽。
+2. 讀 `docs/src/content/docs/en/agent/scaffolding.md` 並遵循 Q&A 協議。
 3. 未完成探索階段前，不要開始產生程式碼。
 4. 強制執行審查機制：需要確切的確認詞。
 
@@ -55,7 +55,7 @@ sidebar:
 
 ## 6. 文件更新紀律
 
-- 改檔案前：讀 `docs/getting-started.md` 了解上下文。
+- 改檔案前：讀 `docs/src/content/docs/en/getting-started.md` 了解上下文。
 - 改完後：寫入 `CHANGELOG/`。建立 `CHANGELOG/YYYY-MM-DD-slug.md`。
 - 不要修改此專案外的檔案。
 

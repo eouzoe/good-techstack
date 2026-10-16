@@ -73,7 +73,7 @@ If it fails, read the error and try to fix it. If you cannot fix it, explain the
 
 ## Step 4 — Read the scaffold protocol
 
-Read `docs/en/agent/scaffolding.md` carefully. This defines how to discover the user's product idea and generate code.
+Read `docs/src/content/docs/en/agent/scaffolding.md` carefully. This defines how to discover the user's product idea and generate code.
 
 ---
 

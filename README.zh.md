@@ -70,7 +70,7 @@ just dev
 
 6. **初始化專案：** 在 `devenv shell` 中執行 `just init`——產生 D1 型別繫結、型別檢查、設定開發密鑰。
 
-7. **閱讀引導協議：** 開啟 `docs/en/agent/bootstrap-prompt.md` 逐步執行。接著閱讀 `docs/en/agent/scaffolding.md` 了解產品探索協議。
+7. **閱讀引導協議：** 開啟 `docs/src/content/docs/en/agent/bootstrap-prompt.md` 逐步執行。接著閱讀 `docs/src/content/docs/en/agent/scaffolding.md` 了解產品探索協議。
 
 8. **開始對話：** 對使用者進行 7 道產品探索提問。在實體地圖經過確認之前，不要產生任何程式碼。
 ````
@@ -118,12 +118,11 @@ packages/shared/ → Zod schema
 
 完整技術文件在 `docs/`。
 
-- [技術參考](docs/zh-Hant/reference/00-runtime.md)
-- [設計決策](docs/en/reference/design-decisions.md)（英文）
-- [AI 助手](docs/zh-Hant/agent/)
-- [版本檢查](docs/zh-Hant/guide/version-check.md)
-- [本機環境檢查](docs/zh-Hant/guide/env-check.md)
-- [英文文件](docs/en/)
+- [技術參考](docs/src/content/docs/zh-Hant/reference/00-runtime.md)
+- [設計決策](docs/src/content/docs/en/reference/design-decisions.md)（英文）
+- [AI 助手](docs/src/content/docs/zh-Hant/agent/)
+- [本機環境檢查](docs/src/content/docs/zh-Hant/guide/env-check.md)
+- [英文文件](docs/src/content/docs/en/)
 
 ---
 

@@ -19,7 +19,7 @@ just typecheck     # tsc --noEmit
 ## Code style
 
 - No unnecessary comments. Code should be self-documenting.
-- Follow the patterns in `docs/reference/`.
+- Follow the patterns in `docs/src/content/docs/en/reference/`.
 - All new features must include tests.
 
 ---
@@ -32,7 +32,7 @@ All tool and library versions live in the lockfiles, not in a hand-written list.
 just check-versions
 ```
 
-This compares every direct dependency (declared in a `package.json`) against the latest version on npm. Full detail — including the version-less package list and how to check non-npm packages (node, devenv, nix, secretspec) — is in [`docs/guide/version-check.md`](docs/guide/version-check.md). The Traditional Chinese version is [`docs/guide/version-check.zh.md`](docs/guide/version-check.zh.md).
+This compares every direct dependency (declared in a `package.json`) against the latest version on npm. The script at `scripts/check-versions.mjs` is the source of truth for what it covers (including non-npm packages: node, devenv, nix, secretspec).
 
 If a dependency is outdated, report it (see the good first issue below). A maintainer bumps the version, syncs `bun.lock` / `devenv.lock`, runs the tests, and merges. You do not need to build or test anything.
 
@@ -46,7 +46,7 @@ These are tasks suitable for first-time contributors. They require minimal conte
 
 **Report an outdated dependency (no code required)**
 
-Run `just check-versions`. If it reports an outdated **DIRECT** dependency, or you notice a non-npm package has a newer release, open an issue that says which package, the latest version, and the link you checked. Full steps and the package list: [`docs/guide/version-check.md`](docs/guide/version-check.md) (中文: [`docs/guide/version-check.zh.md`](docs/guide/version-check.zh.md)). Maintainers handle the bump and the tests.
+Run `just check-versions`. If it reports an outdated **DIRECT** dependency, or you notice a non-npm package has a newer release, open an issue that says which package, the latest version, and the link you checked. Full steps and the package list live in `scripts/check-versions.mjs`. Maintainers handle the bump and the tests.
 
 **Version consistency checker (improve the existing script)**
 
@@ -78,7 +78,7 @@ Improve `.github/workflows/ci.yml` so it runs the two-layer gate (Layer 1: lint 
 
 Document the `devenv` workflow for developers who do not use plain Nix. Cover `devenv shell`, `devenv process up`, `just` targets, and git-hooks.
 
-**Files:** `devenv.nix`, `Justfile`, update `docs/guide/development.md`
+**Files:** `devenv.nix`, `Justfile`, update `docs/src/content/docs/en/guide/development.md`
 
 ---
 
@@ -92,7 +92,7 @@ Test the bootstrap prompt with each supported agent (Claude Code, opencode, Code
 
 ## Larger Contribution Areas
 
-Some contributions span the entire stack and cannot be reduced to a single issue. These are documented in [`docs/guide/contribution-areas.md`](docs/guide/contribution-areas.md).
+Some contributions span the entire stack and cannot be reduced to a single issue. These are documented in [`docs/src/content/docs/en/guide/contribution-areas.md`](docs/src/content/docs/en/guide/contribution-areas.md).
 
 **Platform compatibility:**
 

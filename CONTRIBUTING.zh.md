@@ -19,7 +19,7 @@ just typecheck     # tsc --noEmit
 ## 程式碼風格
 
 - 不要寫多餘的註解。程式碼要能自我說明。
-- 遵循 `docs/reference/` 裡的模式。
+- 遵循 `docs/src/content/docs/zh-Hant/reference/` 裡的模式。
 - 所有新功能都要有測試。
 
 ---
@@ -32,7 +32,7 @@ just typecheck     # tsc --noEmit
 just check-versions
 ```
 
-這會把每個直接依賴（`package.json` 裡宣告的）對照 npm 上的最新版本。完整說明——包含不含版本的套件清單，以及如何檢查非 npm 套件（node、devenv、nix、secretspec）——在 [`docs/guide/version-check.zh.md`](docs/guide/version-check.zh.md)。英文版是 [`docs/guide/version-check.md`](docs/guide/version-check.md)。
+這會把每個直接依賴（`package.json` 裡宣告的）對照 npm 上的最新版本。涵蓋範圍（含非 npm 套件：node、devenv、nix、secretspec）以 `scripts/check-versions.mjs` 為準。
 
 如果有依賴過時，請回報（見下面的 good first issue）。維護者會升級版本、同步 `bun.lock` / `devenv.lock`、跑測試，然後合併。你不需要建置或測試任何東西。
 
@@ -46,7 +46,7 @@ just check-versions
 
 **回報過時的依賴（不需要寫程式）**
 
-執行 `just check-versions`。如果它回報某個過時的 **DIRECT** 依賴，或你發現某個非 npm 套件有更新的釋出版本，請開一個 issue，說明是哪個套件、最新版本是多少、你查閱的連結。完整步驟與套件清單：[`docs/guide/version-check.zh.md`](docs/guide/version-check.zh.md)（英文：[`docs/guide/version-check.md`](docs/guide/version-check.md)）。升級與測試由維護者處理。
+執行 `just check-versions`。如果它回報某個過時的 **DIRECT** 依賴，或你發現某個非 npm 套件有更新的釋出版本，請開一個 issue，說明是哪個套件、最新版本是多少、你查閱的連結。完整步驟與套件清單見 `scripts/check-versions.mjs`。升級與測試由維護者處理。
 
 **版本一致性檢查器（改進現有腳本）**
 
@@ -78,7 +78,7 @@ just check-versions
 
 為不使用原生 Nix 的開發者記錄 `devenv` 工作流程。涵蓋 `devenv shell`、`devenv process up`、`just` 指令、git hooks。
 
-**檔案：** `devenv.nix`、`Justfile`，更新 `docs/guide/development.md`
+**檔案：** `devenv.nix`、`Justfile`，更新 `docs/src/content/docs/en/guide/development.md`
 
 ---
 
@@ -92,7 +92,7 @@ just check-versions
 
 ## 較大的貢獻方向
 
-有些貢獻橫跨整個技術堆疊，無法濃縮成單一 issue。這些記錄在 [`docs/guide/contribution-areas.md`](docs/guide/contribution-areas.md)。
+有些貢獻橫跨整個技術堆疊，無法濃縮成單一 issue。這些記錄在 [`docs/src/content/docs/en/guide/contribution-areas.md`](docs/src/content/docs/en/guide/contribution-areas.md)。
 
 **平台相容性：**
 

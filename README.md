@@ -72,7 +72,7 @@ You are setting up a good-techstack project. Detect your environment and work au
 
 6. **Initialise the project:** run `just init` inside `devenv shell` — generates D1 bindings, typechecks, seeds dev secrets.
 
-7. **Read the bootstrap protocol:** open `docs/en/agent/bootstrap-prompt.md` and follow it step by step. Then read `docs/en/agent/scaffolding.md` for the product discovery protocol.
+7. **Read the bootstrap protocol:** open `docs/src/content/docs/en/agent/bootstrap-prompt.md` and follow it step by step. Then read `docs/src/content/docs/en/agent/scaffolding.md` for the product discovery protocol.
 
 8. **Start the conversation:** run the 7-question product discovery with the user. Do not write code until the entity map is confirmed.
 ````
@@ -118,16 +118,16 @@ packages/shared/ → Zod schema
 
 ## For developers
 
-Full technical reference in `docs/en/`.
+Full technical reference in `docs/src/content/docs/en/`.
 
-- [Getting started](docs/en/getting-started.md)
-- [Development guide](docs/en/guide/development.md)
-- [Deployment guide](docs/en/guide/deployment.md)
-- [Testing guide](docs/en/guide/testing.md)
-- [Reference docs](docs/en/reference/)
-- [Design decisions](docs/en/reference/design-decisions.md)
-- [Agent docs](docs/en/agent/)
-- [Contribution areas](docs/en/guide/contribution-areas.md)
+- [Getting started](docs/src/content/docs/en/getting-started.md)
+- [Development guide](docs/src/content/docs/en/guide/development.md)
+- [Deployment guide](docs/src/content/docs/en/guide/deployment.md)
+- [Testing guide](docs/src/content/docs/en/guide/testing.md)
+- [Reference docs](docs/src/content/docs/en/reference/)
+- [Design decisions](docs/src/content/docs/en/reference/design-decisions.md)
+- [Agent docs](docs/src/content/docs/en/agent/)
+- [Contribution areas](docs/src/content/docs/en/guide/contribution-areas.md)
 
 ---
 

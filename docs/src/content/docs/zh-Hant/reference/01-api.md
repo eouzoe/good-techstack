@@ -5,7 +5,7 @@ sidebar:
 ---
 
 
-> depends_on: [/en/reference/00-runtime.md, /en/reference/05-schema.md]
+> depends_on: [00-runtime.md, 05-schema.md]
 > 最後更新：2026-07-10
 
 ## Hono — Web Standards HTTP 框架

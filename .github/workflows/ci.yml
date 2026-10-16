@@ -21,6 +21,7 @@ jobs:
           set -e
           echo "typecheck exit code: $EXIT_CODE"
           if [ "$EXIT_CODE" -gt 1 ]; then exit "$EXIT_CODE"; fi
+      - run: devenv shell -- devenv tasks run docs:check docs:build
 
   typecheck-macos:
     runs-on: macos-latest
@@ -39,6 +40,7 @@ jobs:
           set -e
           echo "typecheck exit code: $EXIT_CODE"
           if [ "$EXIT_CODE" -gt 1 ]; then exit "$EXIT_CODE"; fi
+      - run: devenv shell -- devenv tasks run docs:check docs:build
 
   check-windows:
     runs-on: windows-latest

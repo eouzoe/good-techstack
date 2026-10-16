@@ -35,7 +35,7 @@ Hono uses Web Standards API (`Request`, `Response`, `fetch`, `URL`). Shared logi
 
 ### 6. Documentation is the harness
 
-Every technical decision is recorded. An agent reads the relevant documentation before changing code, and updates it after. Dependency versions are locked in `devenv.lock` and `bun.lock`; check currency with `just check-versions` (see `docs/en/guide/version-check.md`).
+Every technical decision is recorded. An agent reads the relevant documentation before changing code, and updates it after. Dependency versions are locked in `devenv.lock` and `bun.lock`; check currency with `just check-versions`.
 
 ### 7. Simplicity over everything
 
