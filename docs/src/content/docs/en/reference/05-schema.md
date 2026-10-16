@@ -1,4 +1,9 @@
-# Schema: Zod v4
+---
+title: "Schema: Zod v4"
+sidebar:
+  order: 6
+---
+
 
 > depends_on: []
 > tags: [schema, validation, types, zod]

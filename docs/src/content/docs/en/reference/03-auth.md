@@ -1,4 +1,9 @@
-# Auth: better-auth
+---
+title: "Auth: better-auth"
+sidebar:
+  order: 4
+---
+
 
 > depends_on: [01-api.md, 02-db.md, 05-schema.md]
 > tags: [auth, session, oauth, security]

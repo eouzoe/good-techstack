@@ -1,4 +1,9 @@
-# MCP Usage Map — Intent to MCP Server
+---
+title: "MCP Usage Map — Intent to MCP Server"
+sidebar:
+  order: 3
+---
+
 
 > Purpose: when the agent receives a request, select the correct MCP server based on intent.
 > Last updated: 2026-07-12

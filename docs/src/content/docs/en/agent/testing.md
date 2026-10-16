@@ -1,4 +1,9 @@
-# Testing Contract
+---
+title: "Testing Contract"
+sidebar:
+  order: 5
+---
+
 
 How tests are wired in this project. Two classes — read both before adding tests.
 

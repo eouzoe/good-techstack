@@ -1,4 +1,9 @@
-# Test Strategy: Seven-Layer Matrix
+---
+title: "Test Strategy: Seven-Layer Matrix"
+sidebar:
+  order: 8
+---
+
 
 > depends_on: [00-runtime.md, 06-infra.md]
 > tags: [test, quality, ci, verification]

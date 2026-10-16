@@ -1,4 +1,9 @@
-# TypeScript
+---
+title: "TypeScript"
+sidebar:
+  order: 9
+---
+
 
 How we write TypeScript in this project. Covers configuration, patterns, and pitfalls regardless of the current TypeScript version.
 

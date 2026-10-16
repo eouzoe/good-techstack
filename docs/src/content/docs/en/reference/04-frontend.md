@@ -1,4 +1,9 @@
-# Frontend: TanStack Start
+---
+title: "Frontend: TanStack Start"
+sidebar:
+  order: 5
+---
+
 
 > depends_on: [01-api.md, 05-schema.md]
 > tags: [frontend, react, ssr, tanstack]

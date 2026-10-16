@@ -1,4 +1,9 @@
-# Scaffolding
+---
+title: "Scaffolding"
+sidebar:
+  order: 4
+---
+
 
 A structured protocol for the AI agent to discover the user's business requirements and generate the corresponding application scaffold.
 

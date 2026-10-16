@@ -1,4 +1,9 @@
-# Getting Started
+---
+title: "Getting Started"
+sidebar:
+  order: 1
+---
+
 
 Good-techstack is an opinionated full-stack template for shipping products on Cloudflare Workers.
 

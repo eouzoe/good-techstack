@@ -1,4 +1,9 @@
-# API: Hono + oRPC
+---
+title: "API: Hono + oRPC"
+sidebar:
+  order: 2
+---
+
 
 > depends_on: [00-runtime.md, 05-schema.md]
 > tags: [api, http, rpc, workers]

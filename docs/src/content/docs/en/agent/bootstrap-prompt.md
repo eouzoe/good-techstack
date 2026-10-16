@@ -1,4 +1,9 @@
-# Agent Bootstrap — New Project
+---
+title: "Agent Bootstrap — New Project"
+sidebar:
+  order: 1
+---
+
 
 > This is the first prompt you receive when starting a good-techstack project.
 > Read this entire file before taking any action.

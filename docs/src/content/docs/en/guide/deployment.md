@@ -1,4 +1,7 @@
-# Deployment
+---
+title: "Deployment"
+---
+
 
 Deploy to Cloudflare Workers via **alchemy**. `alchemy.run.ts` is the IaC
 layer: it declares every Cloudflare binding (D1, KV, DO, Rate Limit, auth

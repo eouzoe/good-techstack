@@ -1,4 +1,7 @@
-# Environment alignment
+---
+title: "Environment alignment"
+---
+
 
 The `devenv shell` automatically provides the pinned tool versions
 (bun, node, oxlint, oxfmt, wrangler, just, etc.) from the lock files.

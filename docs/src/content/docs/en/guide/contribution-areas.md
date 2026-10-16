@@ -1,4 +1,7 @@
-# Contribution Areas
+---
+title: "Contribution Areas"
+---
+
 
 This file describes long-term, ongoing, and large-scope contributions. Unlike the issues tagged "good first issue", these areas require more context, span multiple parts of the stack, or involve platform-specific testing that the core team cannot do alone.
 

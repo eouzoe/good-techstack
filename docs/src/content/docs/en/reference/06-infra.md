@@ -1,4 +1,9 @@
-# Infrastructure: Cloudflare + Nix
+---
+title: "Infrastructure: Cloudflare + Nix"
+sidebar:
+  order: 7
+---
+
 
 > depends_on: []
 > tags: [cloudflare, nix, infra, deployment, dev-environment]
