@@ -17,7 +17,7 @@ devenv shell -- bun test --coverage         # Coverage
 devenv shell -- bunx rstest                 # Frontend tests (Rsbuild pipeline)
 
 # CI gate (workerd correctness)
-devenv shell -- vitest run                  # vitest-pool-workers integration
+devenv shell -- vitest run                  # @cloudflare/vitest-plugin integration
 
 # Before deployment
 devenv shell -- bunx playwright test        # E2E (against alchemy dev)
@@ -34,7 +34,7 @@ devenv shell -- bunx alchemy tail           # Real-time error monitoring
 |    2. Unit     | `bun test`                      | Bun JSC      | <200ms  |    Yes     | Pure functions, business logic               |
 |  3. Contract   | `bun test`                      | Bun JSC      | <500ms  |    Yes     | oRPC contract consistency                    |
 |  4. Property   | `fast-check`                    | Bun JSC      |   <1s   |    Yes     | Fuzzing edge cases                           |
-| 5. Integration | `vitest-pool-workers`           | workerd      |  5-30s  | Local only | D1, R2, KV, DO bindings                      |
+| 5. Integration | `@cloudflare/vitest-plugin`     | workerd      |  5-30s  | Local only | D1, R2, KV, DO bindings                      |
 |     6. E2E     | `@playwright/test`              | Real browser | 30-120s | No, manual | Happy path, auth, security                   |
 | 7. Production  | `wrangler tail` + Observability | Production   |   N/A   |     No     | Error rate, p99                              |
 
@@ -88,5 +88,5 @@ Type-aware linting via `tsgolint`: `oxlint --type-aware`. Supports 59/61 typescr
 - Rstest: https://rstest.rs
 - Playwright: https://playwright.dev
 - fast-check: https://fast-check.dev
-- CF vitest-pool-workers: https://developers.cloudflare.com/workers/testing/vitest-integration/
+- @cloudflare/vitest-plugin: https://developers.cloudflare.com/workers/testing/vitest-integration/
 - oxc: https://oxc.rs/docs/guide/usage.html

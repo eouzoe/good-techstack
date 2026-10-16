@@ -18,7 +18,7 @@ Daily development uses Bun. Node.js is used only in CI (Cloudflare officially su
 
 ### 3. Cloudflare native, do not bypass
 
-Use Workers runtime bindings (D1, R2, KV, Queues, DO) directly. No abstraction layer. Test with `@cloudflare/vitest-pool-workers` on real workerd. No mocks.
+Use Workers runtime bindings (D1, R2, KV, Queues, DO) directly. No abstraction layer. Test with `@cloudflare/vitest-plugin` on real workerd. No mocks.
 
 ### 4. Type safety is not optional
 

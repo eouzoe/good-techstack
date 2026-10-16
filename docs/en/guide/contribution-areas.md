@@ -38,7 +38,7 @@ macOS is the second most common development environment. The following need atte
 **Cloudflare Workers local development**
 
 - `alchemy dev`, `alchemy deploy`: verify all work on macOS (binds D1/KV/DO via `alchemy.run.ts`)
-- `vitest-pool-workers`: verify integration tests run on macOS
+- `@cloudflare/vitest-plugin`: verify integration tests run on macOS
 - `playwright`: verify E2E tests run on macOS
 
 **Scope of work:** moderate. Most tools (Bun, alchemy, Playwright) officially support macOS. The work is primarily in `scripts/start.sh`, documentation updates, and platform-specific testing.

@@ -16,7 +16,7 @@ devenv shell -- bun test --coverage         # 涵蓋率
 devenv shell -- bunx rstest                 # 前端測試（Rsbuild 管線）
 
 # CI 閘門（workerd 正確性）
-devenv shell -- vitest run                  # vitest-pool-workers 整合測試
+devenv shell -- vitest run                  # @cloudflare/vitest-plugin 整合測試
 
 # 部屬前
 devenv shell -- bunx playwright test        # E2E（對 alchemy dev）
@@ -33,7 +33,7 @@ devenv shell -- bunx alchemy tail          # 即時錯誤監控
 | 2. 單元 | `bun test`                      | Bun JSC    | <200ms  |   ✅    | Pure function、business logic       |
 | 3. 合約 | `bun test`                      | Bun JSC    | <500ms  |   ✅    | oRPC contract 一致性                |
 | 4. 屬性 | `fast-check`                    | Bun JSC    |   <1s   |   ✅    | Fuzzing edge case                   |
-| 5. 整合 | `vitest-pool-workers`           | workerd    |  5-30s  |   ✅    | D1/R2/KV/DO binding                 |
+| 5. 整合 | `@cloudflare/vitest-plugin`     | workerd    |  5-30s  |   ✅    | D1/R2/KV/DO binding                 |
 | 6. E2E  | `@playwright/test`              | 真實瀏覽器 | 30-120s | ❌ 手動 | 黃金路徑、auth、security            |
 | 7. 生產 | `wrangler tail` + Observability | 生產       |   N/A   |   ❌    | Error rate、p99                     |
 
@@ -80,5 +80,5 @@ Type-aware linting via `tsgolint` (Go-based TS type checker): `oxlint --type-awa
 - Rstest: https://rstest.rs
 - Playwright: https://playwright.dev
 - fast-check: https://fast-check.dev
-- CF vitest-pool-workers: https://developers.cloudflare.com/workers/testing/vitest-integration/
+- @cloudflare/vitest-plugin: https://developers.cloudflare.com/workers/testing/vitest-integration/
 - oxc: https://oxc.rs/docs/guide/usage.html
