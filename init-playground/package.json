@@ -7,7 +7,7 @@
     "dev": "alchemy dev",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint --type-aware",
-    "format": "oxfmt --write .",
+    "format": "oxfmt --write . \"!**/*.gen.ts\"",
     "test": "vitest run",
     "deploy": "secretspec run --scope deploy -- bunx alchemy deploy",
     "seed": "bun run cli/seed.ts",

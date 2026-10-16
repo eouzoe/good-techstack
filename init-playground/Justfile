@@ -45,7 +45,7 @@ lint:
     bunx oxlint --type-aware
 
 format:
-    bunx oxfmt --write .
+    bunx oxfmt --write . "!**/*.gen.ts"
 
 # ── Test ─────────────────────────────────────────────────
 # THE verification entry: runs the Kernel suite, prints summary + §1.4 JSON.

@@ -14,4 +14,4 @@ typecheck:
 
 # Run formatter
 format:
-    oxfmt --write .
+    bunx oxfmt --write . "!**/*.gen.ts"

@@ -16,7 +16,6 @@
     just
     nodejs_26
     oha
-    oxfmt
     wrangler
     zstd
     (pkgs.stdenv.mkDerivation {

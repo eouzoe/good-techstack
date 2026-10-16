@@ -8,7 +8,6 @@
     nodejs_26
     zsh
     just
-    oxfmt
     git jujutsu
     wrangler
     curl
@@ -18,7 +17,15 @@
   cachix.pull = [ "devenv" ];
 
   git-hooks.hooks = {
-    oxfmt.enable = true;
+    # Route the hook through the repo-pinned formatter (the init-playground
+    # devDependency, aligned with vite-plus) instead of nixpkgs' oxfmt, so the
+    # hook can never disagree with the committed formatting. Generated
+    # `*.gen.ts` files are excluded.
+    oxfmt = {
+      enable = true;
+      entry = "scripts/oxfmt-hook.sh";
+      excludes = [ "\\.gen\\.ts$" ];
+    };
     oxlint.enable = true;
   };
 
@@ -121,7 +128,6 @@
     echo "│  good-techstack dev environment     │"
     echo "│  bun:  $(bun --version)                    │"
     echo "│  node: $(node --version)                   │"
-    echo "│  oxfmt: $(oxfmt --version 2>/dev/null || echo 'N/A') │"
     echo "└────────────────────────────────────┘"
     echo ""
     echo "  devenv tasks: lint, typecheck"

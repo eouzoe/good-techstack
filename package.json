@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "lint": "oxlint",
-    "format": "oxfmt --write .",
+    "format": "oxfmt --write . \"!**/*.gen.ts\"",
     "typecheck": "tsc --noEmit",
     "deploy": "wrangler deploy"
   },
@@ -16,6 +16,7 @@
     "@cloudflare/workers-types": "^5.20260816.1",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
+    "oxfmt": "^0.73.0",
     "oxlint": "^1.78.0",
     "oxlint-tsgolint": "^7.0.2001",
     "typescript": "^7.0.2",
