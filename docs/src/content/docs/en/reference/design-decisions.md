@@ -19,7 +19,7 @@ Do not introduce a second schema language (TypeBox, Valibot, ArkType, etc.).
 
 ### 2. Bun first, Node only in CI
 
-Daily development uses Bun. Node.js is used only in CI (Cloudflare officially supports only Node.js). The CI runs `devenv tasks run typecheck:backend typecheck:frontend` across three OSes (typecheck-linux, typecheck-macos, check-windows). There is no lint, test, or vitest step in CI.
+Daily development uses Bun. Node.js is used only in CI (Cloudflare officially supports only Node.js). The CI runs `devenv tasks run typecheck:app typecheck:worker` across three OSes (typecheck-linux, typecheck-macos, check-windows). There is no lint, test, or vitest step in CI.
 
 ### 3. Cloudflare native, do not bypass
 

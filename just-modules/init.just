@@ -1,7 +1,7 @@
 # One-shot project initialisation (run after start.sh or clone)
 init:
     @echo "  -> Type checking …"
-    @devenv tasks run typecheck:backend typecheck:frontend
+    @devenv tasks run typecheck:app typecheck:worker
     @echo "  -> Checking secrets …"
     @secretspec check 2>/dev/null || echo "  (SecretSpec: set missing values with 'secretspec set <KEY>' — see docs/src/content/docs/en/reference/06-infra.md)"
     @echo ""

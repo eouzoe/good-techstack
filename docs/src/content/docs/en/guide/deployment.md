@@ -92,6 +92,6 @@ just test                # vitest run (+ vitest.worker.config for workerd)
 
 ## CI/CD
 
-CI runs `devenv tasks run typecheck:backend typecheck:frontend` on three OSes.
+CI runs `devenv tasks run typecheck:app typecheck:worker` on three OSes.
 Lint and test are run locally before push but are not part of the CI pipeline.
 Deploy is manual — no CI pipeline includes it.

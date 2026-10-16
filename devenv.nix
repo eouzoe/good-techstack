@@ -25,7 +25,7 @@
   dotenv.enable = false;
 
   enterTest = ''
-    devenv tasks run --mode all deps:lint docs:check docs:build
+    devenv tasks run --mode all deps:lint typecheck:app typecheck:worker docs:check docs:build
   '';
 
   tasks."deps:lint" = {
@@ -37,6 +37,25 @@
     exec = "bun install";
     execIfModified = [ "bun.lock" ];
     before = [ "devenv:enterShell" ];
+  };
+
+  tasks."deps:install-playground" = {
+    exec = "cd init-playground && bun install --frozen-lockfile";
+    execIfModified = [ "init-playground/bun.lock" ];
+  };
+
+  # Legacy `typecheck:backend` / `typecheck:frontend` names dated from the old
+  # apps/{backend,frontend} split that the refresh consolidated into a single
+  # init-playground project; the two real checks now are the app typecheck
+  # and the worker-project (tests/worker) tsc pass.
+  tasks."typecheck:app" = {
+    exec = "cd init-playground && bun run typecheck";
+    after = [ "deps:install-playground" ];
+  };
+
+  tasks."typecheck:worker" = {
+    exec = "cd init-playground && node node_modules/typescript/bin/tsc --noEmit -p tests/worker/tsconfig.json";
+    after = [ "deps:install-playground" ];
   };
 
   # Docs site (Nimbus, in docs/): install from the lockfile, run the

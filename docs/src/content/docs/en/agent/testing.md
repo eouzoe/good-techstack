@@ -15,9 +15,8 @@ and are **not** product tests:
 | Task                                       | Tool                | What it proves                                   |
 | ------------------------------------------ | ------------------- | ------------------------------------------------ |
 | `deps:install`                             | bun                 | lockfile resolves, deps present                  |
-| `typecheck`                                | tsc --noEmit        | types compile incl. `InferEnv` bindings from `alchemy.run.ts` |
+| `typecheck:app` / `typecheck:worker`       | tsc --noEmit        | app + worker-project types compile (incl. `InferEnv`, Zod4 contracts) |
 | `lint`                                     | oxlint --type-aware | no lint errors                                   |
-| `typecheck:backend` / `typecheck:frontend` | tsc --noEmit        | types compile (incl. Zod4 contract types)        |
 | `test:backend`                             | bun test            | backend unit tests (see below)                   |
 | `test:frontend`                            | rstest              | frontend tests through Rsbuild pipeline          |
 

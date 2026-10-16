@@ -80,7 +80,7 @@ devenv shell -- bunx wrangler tail
 
 ## CI Gate
 
-CI runs only `devenv tasks run typecheck:backend typecheck:frontend`. All other layers are run locally.
+CI runs only `devenv tasks run typecheck:app typecheck:worker`. All other layers are run locally.
 
 The full local gate before push:
 

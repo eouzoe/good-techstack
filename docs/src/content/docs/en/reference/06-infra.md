@@ -97,7 +97,7 @@ separate flake — toolchain versions live entirely in `devenv.lock`.
 - run: devenv shell -- secretspec run --scope deploy -- bunx alchemy deploy
 ```
 
-CI runs `devenv tasks run typecheck:backend typecheck:frontend` on three OSes (typecheck-linux, typecheck-macos, check-windows). Alchemy deploy is manual — no CI pipeline includes it.
+CI runs `devenv tasks run typecheck:app typecheck:worker` on three OSes (typecheck-linux, typecheck-macos, check-windows). Alchemy deploy is manual — no CI pipeline includes it.
 
 ## SecretSpec
 

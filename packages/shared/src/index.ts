@@ -1,1 +1,1 @@
-export { object, string, type InferOutput } from "valibot";
+export { object, string, type InferOutput } from 'valibot';

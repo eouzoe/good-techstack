@@ -45,10 +45,10 @@ devenv shell -- bunx alchemy tail           # Real-time error monitoring
 
 ## CI gate matrix
 
-CI runs `devenv tasks run typecheck:backend typecheck:frontend` on three OSes. All other layers (lint, unit, contract, property, integration) are run locally before push.
+CI runs `devenv tasks run typecheck:app typecheck:worker` on three OSes. All other layers (lint, unit, contract, property, integration) are run locally before push.
 
 ```
-PR → just typecheck     (devenv tasks run typecheck:backend typecheck:frontend)
+PR → just typecheck     (devenv tasks run typecheck:app typecheck:worker)
    → PASS ✅
 ```
 
