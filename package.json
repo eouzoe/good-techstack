@@ -17,8 +17,8 @@
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
     "oxfmt": "^0.73.0",
-    "oxlint": "^1.78.0",
-    "oxlint-tsgolint": "^7.0.2001",
+    "oxlint": "^1.88.0",
+    "oxlint-tsgolint": "^7.0.2004",
     "typescript": "^7.0.2",
     "wrangler": "^4.123.0"
   }
