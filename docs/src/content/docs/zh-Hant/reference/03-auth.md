@@ -1,4 +1,9 @@
-# Auth: better-auth
+---
+title: "Auth: better-auth"
+sidebar:
+  order: 4
+---
+
 
 > depends_on: [/en/reference/01-api.md, /en/reference/02-db.md, /en/reference/05-schema.md]
 > 最後更新：2026-07-10

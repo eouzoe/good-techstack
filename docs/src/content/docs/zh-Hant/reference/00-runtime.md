@@ -1,4 +1,9 @@
-# Runtime: Bun
+---
+title: "Runtime: Bun"
+sidebar:
+  order: 1
+---
+
 
 > depends_on: []
 > tags: [runtime, javascript, typescript, dev-tool]

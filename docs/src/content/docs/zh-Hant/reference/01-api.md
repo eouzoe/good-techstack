@@ -1,4 +1,9 @@
-# API: Hono + oRPC
+---
+title: "API: Hono + oRPC"
+sidebar:
+  order: 2
+---
+
 
 > depends_on: [/en/reference/00-runtime.md, /en/reference/05-schema.md]
 > 最後更新：2026-07-10

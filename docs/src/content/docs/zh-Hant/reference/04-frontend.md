@@ -1,4 +1,9 @@
-# Frontend: TanStack Start
+---
+title: "Frontend: TanStack Start"
+sidebar:
+  order: 5
+---
+
 
 > depends_on: [/en/reference/01-api.md, /en/reference/05-schema.md]
 > 最後更新：2026-07-10

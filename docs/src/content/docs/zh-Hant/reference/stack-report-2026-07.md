@@ -1,4 +1,9 @@
-# gstack 技術棧報告 — 2026 年 7 月
+---
+title: "gstack 技術棧報告 — 2026 年 7 月"
+sidebar:
+  order: 10
+---
+
 
 > 全域架構評估：邊緣 SSR + 型別全鏈閉環 + 零 DSL IaC
 
