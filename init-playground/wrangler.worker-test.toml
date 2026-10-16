@@ -13,6 +13,14 @@
 name = "gstack"
 main = "./tests/worker/worker-stub.ts"
 compatibility_date = "2026-07-29"
+# Vitest 5 pushes a >1 MiB payload through workerd's WebSocket channel when a
+# worker test file with a large module graph (auth-smoke, whose graph includes
+# better-auth) runs after another file in the same session; workerd then kills
+# the worker with `1009 Message is too large`. `increase_websocket_message_size`
+# is the workerd-intended escape hatch for this class of error (workerd#4649),
+# and it is local-test-only (not deployable) — which is why it lives here
+# rather than in the production stack.
+compatibility_flags = ["increase_websocket_message_size"]
 
 [[d1_databases]]
 binding = "DB"
