@@ -1,9 +1,8 @@
 ---
-title: "Schema: Zod v4"
+title: 'Schema: Zod v4'
 sidebar:
   order: 6
 ---
-
 
 > depends_on: []
 > tags: [schema, validation, types, zod]
@@ -41,7 +40,7 @@ Zod v4 performance (official benchmark, node v22 arm64):
 ### Zod Mini (frontend optimisation)
 
 ```ts
-import * as z from "zod/mini"; // 2.1kb gzip vs 5.9kb
+import * as z from 'zod/mini'; // 2.1kb gzip vs 5.9kb
 ```
 
 ## Zod v4 breaking changes
@@ -58,7 +57,7 @@ import * as z from "zod/mini"; // 2.1kb gzip vs 5.9kb
 const EnvSchema = z.object({
   DATABASE_URL: z.string().url(),
   PORT: z.coerce.number().int().positive().default(8080),
-  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
 ```
 

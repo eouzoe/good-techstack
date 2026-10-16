@@ -1,9 +1,8 @@
 ---
-title: "Infrastructure: Cloudflare + Nix"
+title: 'Infrastructure: Cloudflare + Nix'
 sidebar:
   order: 7
 ---
-
 
 > depends_on: []
 > tags: [cloudflare, nix, infra, deployment, dev-environment]
@@ -82,13 +81,13 @@ separate flake — toolchain versions live entirely in `devenv.lock`.
 
 ### Before and after devenv
 
-| Aspect            | Before (flake only)                    | After (devenv)                              |
-| ----------------- | -------------------------------------- | ------------------------------------------- |
-| Shell activation  | _Formerly_ `nix develop` (3.8s cached) | `devenv shell` (3.2s cached)                |
-| Secret management | `.env` (no audit)                      | `secretspec.toml` (audit log, 23 providers, scopes) |
-| Git hooks         | Manual `oxlint` on CI only             | Pre-commit blocks unformatted code          |
-| Agent integration | None                                   | MCP server + commands auto-configured       |
-| CI                | `nixbuild/nix-quick-install-action@v35` + `devenv tasks run` | 3 jobs across Linux/macOS/Windows |
+| Aspect            | Before (flake only)                                          | After (devenv)                                      |
+| ----------------- | ------------------------------------------------------------ | --------------------------------------------------- |
+| Shell activation  | _Formerly_ `nix develop` (3.8s cached)                       | `devenv shell` (3.2s cached)                        |
+| Secret management | `.env` (no audit)                                            | `secretspec.toml` (audit log, 23 providers, scopes) |
+| Git hooks         | Manual `oxlint` on CI only                                   | Pre-commit blocks unformatted code                  |
+| Agent integration | None                                                         | MCP server + commands auto-configured               |
+| CI                | `nixbuild/nix-quick-install-action@v35` + `devenv tasks run` | 3 jobs across Linux/macOS/Windows                   |
 
 ### CI usage
 

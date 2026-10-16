@@ -1,7 +1,6 @@
 ---
-title: "環境對齊"
+title: '環境對齊'
 ---
-
 
 `devenv shell` 會自動提供鎖定的工具版本（bun、node、oxlint、oxfmt、
 wrangler、just 等），不需手動檢查環境。

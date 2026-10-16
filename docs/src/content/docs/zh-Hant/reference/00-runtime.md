@@ -1,9 +1,8 @@
 ---
-title: "Runtime: Bun"
+title: 'Runtime: Bun'
 sidebar:
   order: 1
 ---
-
 
 > depends_on: []
 > tags: [runtime, javascript, typescript, dev-tool]
@@ -50,11 +49,11 @@ project/
 
 ## Bun + alchemy/wrangler 相容性
 
-| 場景                   | 結果                                       |
-| ---------------------- | ------------------------------------------ |
-| `bunx alchemy deploy`  | alchemy 是 Bun CLI (deploy/dev/tail) — 無 bun#10464 問題 |
-| `bunx wrangler dev`    | 基本可用。DO hang 已修復 (bun#16240) — 僅 worker-test/bench 用 |
-| CI/CD                  | 建議用 Node.js                             |
+| 場景                  | 結果                                                           |
+| --------------------- | -------------------------------------------------------------- |
+| `bunx alchemy deploy` | alchemy 是 Bun CLI (deploy/dev/tail) — 無 bun#10464 問題       |
+| `bunx wrangler dev`   | 基本可用。DO hang 已修復 (bun#16240) — 僅 worker-test/bench 用 |
+| CI/CD                 | 建議用 Node.js                                                 |
 
 來源：bun#10464, bun#16240, workers-sdk#9699
 

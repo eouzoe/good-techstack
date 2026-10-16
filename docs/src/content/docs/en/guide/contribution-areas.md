@@ -1,7 +1,6 @@
 ---
-title: "Contribution Areas"
+title: 'Contribution Areas'
 ---
-
 
 This file describes long-term, ongoing, and large-scope contributions. Unlike the issues tagged "good first issue", these areas require more context, span multiple parts of the stack, or involve platform-specific testing that the core team cannot do alone.
 
@@ -84,13 +83,13 @@ The stack currently requires WSL2 on Windows. Full native Windows support (Git B
 
 The stack is developed on Ubuntu via WSL. Other distributions may differ.
 
-| Distribution        | Likely issues                                                                           | What to test                                            |
-| ------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| Fedora / RHEL       | `nix install` method differs; SELinux may block alchemy; `dnf` vs `apt`                | `start.sh` package detection, Nix install, alchemy dev |
-| Arch Linux          | Rolling release may have newer (incompatible) versions; `sudo` vs `doas`                | Tool version consistency, permission model              |
-| Alpine Linux        | musl libc instead of glibc; some binaries may not work                                  | Bun (officially supports musl), Nix, alchemy            |
-| NixOS               | Nix is native but `devenv shell` behaviour differs; `/usr/bin/env` not always available | `devenv.nix`, shebangs, path assumptions                |
-| non-systemd distros | Some tools assume systemd for service management                                        | Not typically relevant (stack does not use systemd)     |
+| Distribution        | Likely issues                                                                           | What to test                                           |
+| ------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Fedora / RHEL       | `nix install` method differs; SELinux may block alchemy; `dnf` vs `apt`                 | `start.sh` package detection, Nix install, alchemy dev |
+| Arch Linux          | Rolling release may have newer (incompatible) versions; `sudo` vs `doas`                | Tool version consistency, permission model             |
+| Alpine Linux        | musl libc instead of glibc; some binaries may not work                                  | Bun (officially supports musl), Nix, alchemy           |
+| NixOS               | Nix is native but `devenv shell` behaviour differs; `/usr/bin/env` not always available | `devenv.nix`, shebangs, path assumptions               |
+| non-systemd distros | Some tools assume systemd for service management                                        | Not typically relevant (stack does not use systemd)    |
 
 For each distribution, the test procedure is:
 

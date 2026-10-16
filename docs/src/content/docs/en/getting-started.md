@@ -1,9 +1,8 @@
 ---
-title: "Getting Started"
+title: 'Getting Started'
 sidebar:
   order: 1
 ---
-
 
 Good-techstack is an opinionated full-stack template for shipping products on Cloudflare Workers.
 
@@ -21,16 +20,16 @@ This installs Nix + devenv, enters the development shell, and runs `bun install`
 
 ## Reading Guide
 
-| If you want to...                                | Start here                                  |
-| ------------------------------------------------ | ------------------------------------------- |
-| Understand the architecture and tech choices     | `en/reference/design-decisions.md`          |
-| Set up your local development environment        | `en/guide/development.md`                   |
-| Deploy to production                             | `en/guide/deployment.md`                    |
-| Write and run tests                              | `en/guide/testing.md`                       |
-| Understand a specific layer (Bun, API, DB, etc.) | `en/reference/` (pick the relevant file)    |
-| Set up the AI agent                              | `en/agent/rules.md`                         |
-| Scaffold a new feature                           | `en/agent/scaffolding.md`                   |
-| Contribute to the project                        | `en/guide/contribution-areas.md`            |
+| If you want to...                                | Start here                               |
+| ------------------------------------------------ | ---------------------------------------- |
+| Understand the architecture and tech choices     | `en/reference/design-decisions.md`       |
+| Set up your local development environment        | `en/guide/development.md`                |
+| Deploy to production                             | `en/guide/deployment.md`                 |
+| Write and run tests                              | `en/guide/testing.md`                    |
+| Understand a specific layer (Bun, API, DB, etc.) | `en/reference/` (pick the relevant file) |
+| Set up the AI agent                              | `en/agent/rules.md`                      |
+| Scaffold a new feature                           | `en/agent/scaffolding.md`                |
+| Contribute to the project                        | `en/guide/contribution-areas.md`         |
 
 Paths in this table are relative to `docs/src/content/docs/`.
 

@@ -1,9 +1,8 @@
 ---
-title: "Agent Bootstrap — 新專案啟動"
+title: 'Agent Bootstrap — 新專案啟動'
 sidebar:
   order: 1
 ---
-
 
 > 這是你在 good-techstack 專案中收到的第一個提示。
 > 請完整閱讀此文件後再採取任何行動。

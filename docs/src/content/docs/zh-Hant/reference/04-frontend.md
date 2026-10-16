@@ -1,9 +1,8 @@
 ---
-title: "Frontend: TanStack Start"
+title: 'Frontend: TanStack Start'
 sidebar:
   order: 5
 ---
-
 
 > depends_on: [01-api.md, 05-schema.md]
 > 最後更新：2026-07-10
@@ -25,9 +24,9 @@ sidebar:
 ### Rsbuild 配置
 
 ```ts
-import { defineConfig } from "@rsbuild/core";
-import { pluginReact } from "@rsbuild/plugin-react";
-import { tanstackStart } from "@tanstack/react-start/plugin/rsbuild";
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { tanstackStart } from '@tanstack/react-start/plugin/rsbuild';
 
 export default defineConfig({
   plugins: [pluginReact(), tanstackStart()],

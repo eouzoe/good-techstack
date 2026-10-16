@@ -1,9 +1,8 @@
 ---
-title: "Auth: better-auth"
+title: 'Auth: better-auth'
 sidebar:
   order: 4
 ---
-
 
 > depends_on: [01-api.md, 02-db.md, 05-schema.md]
 > 最後更新：2026-07-10

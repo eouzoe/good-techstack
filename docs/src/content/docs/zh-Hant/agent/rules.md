@@ -1,9 +1,8 @@
 ---
-title: "Agent 行為規則"
+title: 'Agent 行為規則'
 sidebar:
   order: 2
 ---
-
 
 > 本文檔寫給 agent。違反這些規則會產出不可接受的結果。
 > 最後更新：2026-07-12

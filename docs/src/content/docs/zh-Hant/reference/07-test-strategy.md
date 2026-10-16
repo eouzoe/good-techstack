@@ -1,9 +1,8 @@
 ---
-title: "測試策略：7 層分層矩陣"
+title: '測試策略：7 層分層矩陣'
 sidebar:
   order: 8
 ---
-
 
 > depends_on: [00-runtime.md, 06-infra.md]
 > 核對表見：`docs/src/content/docs/en/guide/testing.md`

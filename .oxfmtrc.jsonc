@@ -12,10 +12,10 @@
       ["internal", "subpath"],
       ["parent", "sibling", "index"],
       "style",
-      "unknown"
+      "unknown",
     ],
     "newlinesBetween": true,
-    "ignoreCase": true
+    "ignoreCase": true,
   },
-  "sortPackageJson": true
+  "sortPackageJson": true,
 }

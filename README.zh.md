@@ -42,7 +42,7 @@ just dev
 
 把這段提示詞當作初始指令給 Claude Code、Codex、opencode 或其他程式設計助手。AI 會自行處理後續一切。
 
-````markdown
+```markdown
 你正在設定一個 good-techstack 專案。請自行偵測環境後獨立完成以下步驟。
 
 1. **識別作業系統** — 執行 `uname -s` 和 `uname -m`，根據結果決定行為：
@@ -73,24 +73,24 @@ just dev
 7. **閱讀引導協議：** 開啟 `docs/src/content/docs/en/agent/bootstrap-prompt.md` 逐步執行。接著閱讀 `docs/src/content/docs/en/agent/scaffolding.md` 了解產品探索協議。
 
 8. **開始對話：** 對使用者進行 7 道產品探索提問。在實體地圖經過確認之前，不要產生任何程式碼。
-````
+```
 
 ---
 
 ## 這組工具包含了什麼
 
-| 項目         | 說明                                                                    |
-| ------------ | ----------------------------------------------------------------------- |
-| 執行引擎     | Bun — 冷啟動 1.2 毫秒                                                   |
-| API          | Hono + oRPC — contract-first，從邊緣到資料庫全程型別安全                  |
-| 資料庫       | D1（SQLite）+ Drizzle ORM — 零管理                                      |
-| 身分驗證     | better-auth — 信箱、OAuth、SSO、工作階段                                 |
-| 前端         | TanStack Start — React、SSR、RSC                                        |
-| UI 元件      | shadcn/ui — Tailwind CSS 4                                              |
-| 程式碼檢查   | oxlint — 840+ 規則，比 ESLint 快 50 倍                                   |
-| 格式化       | oxfmt — Rust 實作，比 Prettier 快 30 倍                                  |
-| 基礎設施     | Cloudflare Workers — D1、R2、KV、Queues、DO、Email                      |
-| 開發環境     | Nix + devenv 2.x — 可重現的 shell，一行指令                              |
+| 項目       | 說明                                                     |
+| ---------- | -------------------------------------------------------- |
+| 執行引擎   | Bun — 冷啟動 1.2 毫秒                                    |
+| API        | Hono + oRPC — contract-first，從邊緣到資料庫全程型別安全 |
+| 資料庫     | D1（SQLite）+ Drizzle ORM — 零管理                       |
+| 身分驗證   | better-auth — 信箱、OAuth、SSO、工作階段                 |
+| 前端       | TanStack Start — React、SSR、RSC                         |
+| UI 元件    | shadcn/ui — Tailwind CSS 4                               |
+| 程式碼檢查 | oxlint — 840+ 規則，比 ESLint 快 50 倍                   |
+| 格式化     | oxfmt — Rust 實作，比 Prettier 快 30 倍                  |
+| 基礎設施   | Cloudflare Workers — D1、R2、KV、Queues、DO、Email       |
+| 開發環境   | Nix + devenv 2.x — 可重現的 shell，一行指令              |
 
 全部 TypeScript。全部型別安全到邊緣。
 

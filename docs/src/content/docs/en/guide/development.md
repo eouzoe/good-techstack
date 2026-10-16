@@ -1,7 +1,6 @@
 ---
-title: "Development"
+title: 'Development'
 ---
-
 
 Daily development workflow, commands, and conventions.
 

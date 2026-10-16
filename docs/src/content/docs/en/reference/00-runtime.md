@@ -1,9 +1,8 @@
 ---
-title: "Runtime: Bun"
+title: 'Runtime: Bun'
 sidebar:
   order: 1
 ---
-
 
 > depends_on: []
 > tags: [runtime, javascript, typescript, dev-tool]
@@ -39,11 +38,11 @@ Not choosing Turborepo or Nx: Bun workspace + `bun test` is fast enough. Extra c
 
 ## Bun + alchemy/wrangler compatibility
 
-| Scenario               | Result                                                   |
-| ---------------------- | -------------------------------------------------------- |
-| `bunx alchemy deploy`  | alchemy is a Bun CLI (deploy/dev/tail) — no bun#10464 issue |
-| `bunx wrangler dev`    | Mostly usable. DO hang fixed (bun#16240) — used for worker-test/bench only |
-| CI/CD                  | Use Node.js                                              |
+| Scenario              | Result                                                                     |
+| --------------------- | -------------------------------------------------------------------------- |
+| `bunx alchemy deploy` | alchemy is a Bun CLI (deploy/dev/tail) — no bun#10464 issue                |
+| `bunx wrangler dev`   | Mostly usable. DO hang fixed (bun#16240) — used for worker-test/bench only |
+| CI/CD                 | Use Node.js                                                                |
 
 Sources: bun#10464, bun#16240, workers-sdk#9699
 

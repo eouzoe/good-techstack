@@ -14,31 +14,29 @@
  * rely on `offsetParent` layout.
  */
 
-import { mount } from "@cloudflare/nimbus-docs/client";
+import { mount } from '@cloudflare/nimbus-docs/client';
 
 // Ignore the top 10% and bottom 70% of the viewport so the "active" heading is
 // whatever sits near the top of the reading area. The reading band is [10%,
 // 30%] of the viewport height; BAND_TOP is its upper edge, reused by the
 // first/last clamp below.
 const BAND_TOP = 0.1;
-const ROOT_MARGIN = "-10% 0px -70% 0px";
+const ROOT_MARGIN = '-10% 0px -70% 0px';
 const SUPPRESS_MS = 1000;
 
 function prefersReducedMotion(): boolean {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 function initMobileToc(root: HTMLElement): () => void {
-  const select = root.querySelector<HTMLSelectElement>(
-    "[data-nb-mobile-toc-select]",
-  );
+  const select = root.querySelector<HTMLSelectElement>('[data-nb-mobile-toc-select]');
   if (!select) return () => {};
 
   // Paired so slug/element indices stay aligned; `inBand` indexes into this.
   type Heading = { slug: string; el: HTMLElement };
   const headings: Heading[] = Array.from(select.options)
     .map((o) => o.value)
-    .filter((v) => v !== "_top")
+    .filter((v) => v !== '_top')
     .map((slug) => ({ slug, el: document.getElementById(slug) }))
     .filter((h): h is Heading => h.el !== null);
 
@@ -55,7 +53,7 @@ function initMobileToc(root: HTMLElement): () => void {
 
   // select → page
   select.addEventListener(
-    "change",
+    'change',
     () => {
       const slug = select.value;
       suppress = true;
@@ -64,10 +62,8 @@ function initMobileToc(root: HTMLElement): () => void {
         suppress = false;
       }, SUPPRESS_MS);
 
-      const behavior: ScrollBehavior = prefersReducedMotion()
-        ? "auto"
-        : "smooth";
-      if (slug === "_top") {
+      const behavior: ScrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
+      if (slug === '_top') {
         window.scrollTo({ top: 0, behavior });
         return;
       }
@@ -101,10 +97,9 @@ function initMobileToc(root: HTMLElement): () => void {
     // current value (we're mid-section between two headings).
     const bandTop = window.innerHeight * BAND_TOP;
     const firstTop = headings[0].el.getBoundingClientRect().top;
-    const lastTop =
-      headings[headings.length - 1].el.getBoundingClientRect().top;
+    const lastTop = headings[headings.length - 1].el.getBoundingClientRect().top;
     if (firstTop > bandTop) {
-      setActive("_top");
+      setActive('_top');
     } else if (lastTop < bandTop) {
       setActive(headings[headings.length - 1].slug);
     }
@@ -133,4 +128,4 @@ function initMobileToc(root: HTMLElement): () => void {
   };
 }
 
-mount("[data-nb-mobile-toc]", initMobileToc);
+mount('[data-nb-mobile-toc]', initMobileToc);

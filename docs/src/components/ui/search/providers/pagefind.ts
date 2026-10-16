@@ -1,5 +1,5 @@
-import type { SearchProvider, SearchResult } from "@cloudflare/nimbus-docs/types";
-import { config } from "virtual:nimbus/config";
+import type { SearchProvider, SearchResult } from '@cloudflare/nimbus-docs/types';
+import { config } from 'virtual:nimbus/config';
 
 interface PagefindSubResult {
   title?: string;
@@ -29,9 +29,9 @@ interface PagefindApi {
 let pagefind: PagefindApi | undefined;
 
 function withBase(url: string): string {
-  if (!url.startsWith("/")) return url;
-  const base = `/${(import.meta.env.BASE_URL ?? "/").replace(/^\/+|\/+$/g, "")}`;
-  if (base === "/" || url === base || url.startsWith(`${base}/`)) return url;
+  if (!url.startsWith('/')) return url;
+  const base = `/${(import.meta.env.BASE_URL ?? '/').replace(/^\/+|\/+$/g, '')}`;
+  if (base === '/' || url === base || url.startsWith(`${base}/`)) return url;
   return `${base}${url}`;
 }
 
@@ -52,7 +52,7 @@ function withBase(url: string): string {
  */
 const defaultFilters: PagefindFilters | undefined =
   config.versions && config.versions.deprecated && config.versions.deprecated.length > 0
-    ? { status: { none: "deprecated" } }
+    ? { status: { none: 'deprecated' } }
     : undefined;
 
 export const provider: SearchProvider = {
@@ -60,7 +60,7 @@ export const provider: SearchProvider = {
     if (pagefind) return;
     // Not `new URL("pagefind/pagefind.js", BASE_URL)`: with `base: "/docs"`
     // (no trailing slash) that resolves to `/pagefind/pagefind.js`.
-    const pagefindUrl = new URL(withBase("/pagefind/pagefind.js"), window.location.origin);
+    const pagefindUrl = new URL(withBase('/pagefind/pagefind.js'), window.location.origin);
     pagefind = (await import(/* @vite-ignore */ pagefindUrl.href)) as PagefindApi;
     await pagefind.init();
   },
@@ -75,7 +75,7 @@ export const provider: SearchProvider = {
     );
     const results = await Promise.all(search.results.slice(0, 10).map((result) => result.data()));
     return results.map((result): SearchResult => ({
-      title: result.meta?.title ?? "Untitled",
+      title: result.meta?.title ?? 'Untitled',
       url: withBase(result.url),
       snippet: result.excerpt,
       subResults: result.sub_results

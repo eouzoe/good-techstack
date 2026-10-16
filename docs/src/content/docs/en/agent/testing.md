@@ -1,9 +1,8 @@
 ---
-title: "Testing Contract"
+title: 'Testing Contract'
 sidebar:
   order: 5
 ---
-
 
 How tests are wired in this project. Two classes — read both before adding tests.
 
@@ -12,13 +11,13 @@ How tests are wired in this project. Two classes — read both before adding tes
 Run by `devenv test` (enterTest, `--mode all`). These gate every commit/CI run
 and are **not** product tests:
 
-| Task                                       | Tool                | What it proves                                   |
-| ------------------------------------------ | ------------------- | ------------------------------------------------ |
-| `deps:install`                             | bun                 | lockfile resolves, deps present                  |
-| `typecheck:app` / `typecheck:worker`       | tsc --noEmit        | app + worker-project types compile (incl. `InferEnv`, Zod4 contracts) |
-| `lint`                                     | oxlint --type-aware | no lint errors                                   |
-| `test:backend`                             | bun test            | backend unit tests (see below)                   |
-| `test:frontend`                            | rstest              | frontend tests through Rsbuild pipeline          |
+| Task                                 | Tool                | What it proves                                                        |
+| ------------------------------------ | ------------------- | --------------------------------------------------------------------- |
+| `deps:install`                       | bun                 | lockfile resolves, deps present                                       |
+| `typecheck:app` / `typecheck:worker` | tsc --noEmit        | app + worker-project types compile (incl. `InferEnv`, Zod4 contracts) |
+| `lint`                               | oxlint --type-aware | no lint errors                                                        |
+| `test:backend`                       | bun test            | backend unit tests (see below)                                        |
+| `test:frontend`                      | rstest              | frontend tests through Rsbuild pipeline                               |
 
 Run a single gate: `devenv tasks run lint`. Run the full graph: `devenv test`.
 

@@ -1,7 +1,6 @@
 ---
-title: "Devenv Optimization Guide"
+title: 'Devenv Optimization Guide'
 ---
-
 
 ## Binary Caching (Cachix)
 

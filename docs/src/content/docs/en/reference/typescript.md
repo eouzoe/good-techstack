@@ -1,9 +1,8 @@
 ---
-title: "TypeScript"
+title: 'TypeScript'
 sidebar:
   order: 9
 ---
-
 
 How we write TypeScript in this project. Covers configuration, patterns, and pitfalls regardless of the current TypeScript version.
 
@@ -40,8 +39,8 @@ type User = z.infer<typeof UserSchema>; // ✓
 ### Use branded types for IDs
 
 ```typescript
-type UserId = string & { readonly __brand: "UserId" };
-type PostId = string & { readonly __brand: "PostId" };
+type UserId = string & { readonly __brand: 'UserId' };
+type PostId = string & { readonly __brand: 'PostId' };
 ```
 
 This prevents passing the wrong ID to a function at compile time.
@@ -49,7 +48,7 @@ This prevents passing the wrong ID to a function at compile time.
 ### Prefer `const` assertions for literals
 
 ```typescript
-const ROLES = ["admin", "user"] as const;
+const ROLES = ['admin', 'user'] as const;
 type Role = (typeof ROLES)[number];
 ```
 

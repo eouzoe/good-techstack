@@ -122,7 +122,9 @@
   color: var(--nb-muted-foreground);
   text-decoration: none;
   opacity: 0;
-  transition: opacity 0.15s, color 0.15s;
+  transition:
+    opacity 0.15s,
+    color 0.15s;
 }
 
 .docs-content :where(h2[id], h3[id], h4[id]):hover .heading-anchor,
@@ -308,7 +310,7 @@
 
 /* Trailing chevron — label left, indicator right, matching Collapsible. */
 .docs-content :where(details:not([class]):not(.file-tree *) > summary)::after {
-  content: "";
+  content: '';
   flex-shrink: 0;
   width: 0.4375em;
   height: 0.4375em;

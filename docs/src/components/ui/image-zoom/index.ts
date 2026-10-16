@@ -1,1 +1,1 @@
-export { default as ImageZoom } from "./ImageZoom.astro";
+export { default as ImageZoom } from './ImageZoom.astro';

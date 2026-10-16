@@ -59,7 +59,7 @@
       "files": ["init-playground/src/client/**/*.tsx", "init-playground/src/client/**/*.ts"],
       "rules": {
         "react/react-in-jsx-scope": "off",
-        "vitest/require-hook": "off",
+        "vitest/require-hook": "off"
       }
     },
     {

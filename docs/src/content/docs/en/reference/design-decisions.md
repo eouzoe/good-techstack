@@ -1,9 +1,8 @@
 ---
-title: "Design Decisions"
+title: 'Design Decisions'
 sidebar:
   order: 10
 ---
-
 
 Why we chose what we chose, what we avoid, and the principles that guide both.
 

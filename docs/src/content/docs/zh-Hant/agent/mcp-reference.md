@@ -1,9 +1,8 @@
 ---
-title: "MCP Usage Map — 意圖 → MCP Server 對照"
+title: 'MCP Usage Map — 意圖 → MCP Server 對照'
 sidebar:
   order: 3
 ---
-
 
 > 用途：當 agent 收到 user 請求時，根據意圖選擇對應的 MCP server。
 > 最後更新：2026-07-12

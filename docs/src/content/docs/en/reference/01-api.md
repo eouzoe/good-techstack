@@ -1,9 +1,8 @@
 ---
-title: "API: Hono + oRPC"
+title: 'API: Hono + oRPC'
 sidebar:
   order: 2
 ---
-
 
 > depends_on: [00-runtime.md, 05-schema.md]
 > tags: [api, http, rpc, workers]
@@ -14,9 +13,9 @@ sidebar:
 Bun detects the `fetch` export automatically and calls `Bun.serve()`:
 
 ```ts
-import { Hono } from "hono";
+import { Hono } from 'hono';
 const app = new Hono();
-app.get("/", (c) => c.text("Hello"));
+app.get('/', (c) => c.text('Hello'));
 export default app;
 ```
 
@@ -44,7 +43,7 @@ export default app;
 const getPost = os
   .use(dbProvider)
   .use(requireAuth)
-  .route({ method: "GET", path: "/post/{id}" })
+  .route({ method: 'GET', path: '/post/{id}' })
   .input(z.object({ id: z.string() }))
   .errors({ NOT_FOUND: { data: z.object({ id: z.string() }) } })
   .handler(async ({ input, context }) => {

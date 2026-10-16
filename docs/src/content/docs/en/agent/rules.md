@@ -1,9 +1,8 @@
 ---
-title: "Agent Behaviour Rules"
+title: 'Agent Behaviour Rules'
 sidebar:
   order: 2
 ---
-
 
 > This document is written for the agent. Violating these rules produces unacceptable output.
 > Last updated: 2026-07-12

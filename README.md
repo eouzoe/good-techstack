@@ -44,7 +44,7 @@ Run `just agent` to hand over to an AI. It will detect your environment, install
 
 Copy this block as the initial instruction for Claude Code, Codex, opencode, or any coding agent. The AI handles everything from here.
 
-````markdown
+```markdown
 You are setting up a good-techstack project. Detect your environment and work autonomously.
 
 1. **Identify the OS** — run `uname -s` and `uname -m`. Match behaviour:
@@ -75,24 +75,24 @@ You are setting up a good-techstack project. Detect your environment and work au
 7. **Read the bootstrap protocol:** open `docs/src/content/docs/en/agent/bootstrap-prompt.md` and follow it step by step. Then read `docs/src/content/docs/en/agent/scaffolding.md` for the product discovery protocol.
 
 8. **Start the conversation:** run the 7-question product discovery with the user. Do not write code until the entity map is confirmed.
-````
+```
 
 ---
 
 ## What's in the box
 
-| Layer          | What you get                                                |
-| -------------- | ----------------------------------------------------------- |
-| Runtime        | Bun — cold start in 1.2 ms                                  |
-| API            | Hono + oRPC — contract-first, type-safe edge to DB          |
-| Database       | D1 (SQLite) + Drizzle ORM — zero management                 |
-| Auth           | better-auth — email, OAuth, SSO, sessions                   |
-| Frontend       | TanStack Start — React, SSR, RSC                            |
-| UI             | shadcn/ui — Tailwind CSS 4                                  |
-| Linter         | oxlint — 840+ rules, 50× faster than ESLint                 |
-| Formatter      | oxfmt — Rust-based, 30× faster than Prettier                |
-| Infrastructure | Cloudflare Workers — D1, R2, KV, Queues, DO, Email          |
-| Environment    | Nix + devenv 2.x — reproducible shells, one command         |
+| Layer          | What you get                                        |
+| -------------- | --------------------------------------------------- |
+| Runtime        | Bun — cold start in 1.2 ms                          |
+| API            | Hono + oRPC — contract-first, type-safe edge to DB  |
+| Database       | D1 (SQLite) + Drizzle ORM — zero management         |
+| Auth           | better-auth — email, OAuth, SSO, sessions           |
+| Frontend       | TanStack Start — React, SSR, RSC                    |
+| UI             | shadcn/ui — Tailwind CSS 4                          |
+| Linter         | oxlint — 840+ rules, 50× faster than ESLint         |
+| Formatter      | oxfmt — Rust-based, 30× faster than Prettier        |
+| Infrastructure | Cloudflare Workers — D1, R2, KV, Queues, DO, Email  |
+| Environment    | Nix + devenv 2.x — reproducible shells, one command |
 
 Everything is TypeScript. Everything is typed to the edge.
 

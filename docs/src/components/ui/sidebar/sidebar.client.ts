@@ -5,9 +5,9 @@
  * (captured on the root — `toggle` doesn't bubble). No click simulation.
  */
 
-import { mount } from "@cloudflare/nimbus-docs/client";
+import { mount } from '@cloudflare/nimbus-docs/client';
 
-const STORAGE_KEY = "sidebar-state";
+const STORAGE_KEY = 'sidebar-state';
 
 interface SidebarState {
   hash: string;
@@ -16,14 +16,12 @@ interface SidebarState {
 }
 
 function groupsOf(root: HTMLElement): HTMLDetailsElement[] {
-  return Array.from(
-    root.querySelectorAll<HTMLDetailsElement>("details[data-nb-sidebar-group]"),
-  );
+  return Array.from(root.querySelectorAll<HTMLDetailsElement>('details[data-nb-sidebar-group]'));
 }
 
 function initSidebar(root: HTMLElement): () => void {
   const teardowns: Array<() => void> = [];
-  const persist = root.hasAttribute("data-nb-sidebar-persist");
+  const persist = root.hasAttribute('data-nb-sidebar-persist');
 
   const filterTeardown = initFilter(root);
   if (filterTeardown) teardowns.push(filterTeardown);
@@ -41,11 +39,13 @@ function initSidebar(root: HTMLElement): () => void {
 // ---------------------------------------------------------------------------
 
 function initFilter(root: HTMLElement): (() => void) | null {
-  const input = root.querySelector<HTMLInputElement>("[data-nb-sidebar-filter-input]");
+  const input = root.querySelector<HTMLInputElement>('[data-nb-sidebar-filter-input]');
   // SidebarFilter is rendered *next to* Sidebar (sibling), so also look in
   // the parent — preserves the existing layout where filter sits above.
   const inputElement =
-    input ?? root.parentElement?.querySelector<HTMLInputElement>("[data-nb-sidebar-filter-input]") ?? null;
+    input ??
+    root.parentElement?.querySelector<HTMLInputElement>('[data-nb-sidebar-filter-input]') ??
+    null;
   if (!inputElement) return null;
 
   function handleInput() {
@@ -58,68 +58,68 @@ function initFilter(root: HTMLElement): (() => void) | null {
   }
 
   function handleKeydown(e: KeyboardEvent) {
-    if (e.key === "Escape") {
-      inputElement!.value = "";
+    if (e.key === 'Escape') {
+      inputElement!.value = '';
       handleInput();
       inputElement!.blur();
     }
   }
 
-  inputElement.addEventListener("input", handleInput);
-  inputElement.addEventListener("keydown", handleKeydown);
+  inputElement.addEventListener('input', handleInput);
+  inputElement.addEventListener('keydown', handleKeydown);
 
   return () => {
-    inputElement.removeEventListener("input", handleInput);
-    inputElement.removeEventListener("keydown", handleKeydown);
+    inputElement.removeEventListener('input', handleInput);
+    inputElement.removeEventListener('keydown', handleKeydown);
     resetFilter(root);
   };
 }
 
 function resetFilter(root: HTMLElement): void {
-  root.querySelectorAll<HTMLElement>("[data-nb-sidebar-hidden]").forEach((el) => {
-    el.removeAttribute("data-nb-sidebar-hidden");
+  root.querySelectorAll<HTMLElement>('[data-nb-sidebar-hidden]').forEach((el) => {
+    el.removeAttribute('data-nb-sidebar-hidden');
   });
   // Close groups the filter opened, restoring the reader's previous state.
   root
-    .querySelectorAll<HTMLDetailsElement>("[data-nb-sidebar-group][data-nb-opened-by-filter]")
+    .querySelectorAll<HTMLDetailsElement>('[data-nb-sidebar-group][data-nb-opened-by-filter]')
     .forEach((group) => {
       group.open = false;
-      group.removeAttribute("data-nb-opened-by-filter");
+      group.removeAttribute('data-nb-opened-by-filter');
     });
 }
 
 function applyFilter(root: HTMLElement, query: string): void {
-  const links = root.querySelectorAll<HTMLElement>("[data-nb-sidebar-link]");
-  const groups = root.querySelectorAll<HTMLElement>("[data-nb-sidebar-group]");
+  const links = root.querySelectorAll<HTMLElement>('[data-nb-sidebar-link]');
+  const groups = root.querySelectorAll<HTMLElement>('[data-nb-sidebar-group]');
 
-  links.forEach((link) => link.setAttribute("data-nb-sidebar-hidden", ""));
-  groups.forEach((group) => group.setAttribute("data-nb-sidebar-hidden", ""));
+  links.forEach((link) => link.setAttribute('data-nb-sidebar-hidden', ''));
+  groups.forEach((group) => group.setAttribute('data-nb-sidebar-hidden', ''));
 
   links.forEach((link) => {
     // `data-nb-filter-text` adds words the link doesn't show, like a full HTTP verb.
-    const text =
-      `${link.textContent ?? ""} ${link.dataset.nbFilterText ?? ""}`.toLowerCase();
+    const text = `${link.textContent ?? ''} ${link.dataset.nbFilterText ?? ''}`.toLowerCase();
     if (!text.includes(query)) return;
-    link.removeAttribute("data-nb-sidebar-hidden");
+    link.removeAttribute('data-nb-sidebar-hidden');
     revealAncestors(link, root);
   });
 
   groups.forEach((group) => {
-    const label = group.querySelector("[data-nb-sidebar-group-label]");
-    const text = label?.textContent?.toLowerCase() ?? "";
+    const label = group.querySelector('[data-nb-sidebar-group-label]');
+    const text = label?.textContent?.toLowerCase() ?? '';
     if (!text.includes(query)) return;
-    group.removeAttribute("data-nb-sidebar-hidden");
+    group.removeAttribute('data-nb-sidebar-hidden');
     openGroup(group);
-    group.querySelectorAll<HTMLElement>("[data-nb-sidebar-link], [data-nb-sidebar-group]")
-      .forEach((child) => child.removeAttribute("data-nb-sidebar-hidden"));
+    group
+      .querySelectorAll<HTMLElement>('[data-nb-sidebar-link], [data-nb-sidebar-group]')
+      .forEach((child) => child.removeAttribute('data-nb-sidebar-hidden'));
   });
 }
 
 function revealAncestors(el: HTMLElement, scope: Element): void {
   let parent: HTMLElement | null = el.parentElement;
   while (parent && parent !== scope) {
-    if (parent.hasAttribute("data-nb-sidebar-group")) {
-      parent.removeAttribute("data-nb-sidebar-hidden");
+    if (parent.hasAttribute('data-nb-sidebar-group')) {
+      parent.removeAttribute('data-nb-sidebar-hidden');
       openGroup(parent);
     }
     parent = parent.parentElement;
@@ -128,7 +128,7 @@ function revealAncestors(el: HTMLElement, scope: Element): void {
 
 function openGroup(group: HTMLElement): void {
   if (!(group instanceof HTMLDetailsElement) || group.open) return;
-  group.setAttribute("data-nb-opened-by-filter", "");
+  group.setAttribute('data-nb-opened-by-filter', '');
   group.open = true;
 }
 
@@ -140,13 +140,13 @@ function initPersistence(root: HTMLElement): (() => void) | null {
   // The scrollable container: the movable tree wrapper (shared between the
   // desktop rail and the drawer), the enclosing <aside>, or the root itself.
   const scrollHost: HTMLElement =
-    root.closest<HTMLElement>("[data-nb-sidebar-tree]") ?? root.closest("aside") ?? root;
-  const hash = root.dataset.nbSidebarHash ?? "";
+    root.closest<HTMLElement>('[data-nb-sidebar-tree]') ?? root.closest('aside') ?? root;
+  const hash = root.dataset.nbSidebarHash ?? '';
 
   function savedScroll(): number | null {
     try {
-      const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? "null");
-      return saved?.hash === hash && typeof saved.scroll === "number" ? saved.scroll : null;
+      const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null');
+      return saved?.hash === hash && typeof saved.scroll === 'number' ? saved.scroll : null;
     } catch {
       return null;
     }
@@ -178,7 +178,7 @@ function initPersistence(root: HTMLElement): (() => void) | null {
 
   let visible = scrollHost.clientHeight > 0;
   const resize =
-    typeof ResizeObserver === "undefined"
+    typeof ResizeObserver === 'undefined'
       ? undefined
       : new ResizeObserver(() => {
           const nowVisible = scrollHost.clientHeight > 0;
@@ -197,31 +197,31 @@ function initPersistence(root: HTMLElement): (() => void) | null {
   // group the filter opened is transient state and not saved.
   const handleToggle = (event: Event) => {
     const group = event.target as HTMLElement | null;
-    if (!group?.matches?.("[data-nb-sidebar-group]")) return;
-    if (group.hasAttribute("data-nb-opened-by-filter")) return;
+    if (!group?.matches?.('[data-nb-sidebar-group]')) return;
+    if (group.hasAttribute('data-nb-opened-by-filter')) return;
     save();
   };
-  root.addEventListener("toggle", handleToggle, true);
+  root.addEventListener('toggle', handleToggle, true);
 
   function handleVisibility() {
-    if (document.visibilityState === "hidden") save();
+    if (document.visibilityState === 'hidden') save();
   }
-  document.addEventListener("visibilitychange", handleVisibility);
-  window.addEventListener("pagehide", save);
+  document.addEventListener('visibilitychange', handleVisibility);
+  window.addEventListener('pagehide', save);
 
   let raf = 0;
   function handleScroll() {
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(save);
   }
-  scrollHost.addEventListener("scroll", handleScroll);
+  scrollHost.addEventListener('scroll', handleScroll);
 
   return () => {
     resize?.disconnect();
-    root.removeEventListener("toggle", handleToggle, true);
-    document.removeEventListener("visibilitychange", handleVisibility);
-    window.removeEventListener("pagehide", save);
-    scrollHost.removeEventListener("scroll", handleScroll);
+    root.removeEventListener('toggle', handleToggle, true);
+    document.removeEventListener('visibilitychange', handleVisibility);
+    window.removeEventListener('pagehide', save);
+    scrollHost.removeEventListener('scroll', handleScroll);
     cancelAnimationFrame(raf);
   };
 }
@@ -231,24 +231,22 @@ function initPersistence(root: HTMLElement): (() => void) | null {
 // ---------------------------------------------------------------------------
 
 (function bindFilterShortcut() {
-  if (document.documentElement.hasAttribute("data-nb-sidebar-shortcut-bound")) return;
-  document.documentElement.setAttribute("data-nb-sidebar-shortcut-bound", "");
+  if (document.documentElement.hasAttribute('data-nb-sidebar-shortcut-bound')) return;
+  document.documentElement.setAttribute('data-nb-sidebar-shortcut-bound', '');
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "/") return;
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== '/') return;
     const active = document.activeElement as HTMLElement | null;
     if (
       active &&
-      (active.tagName === "INPUT" ||
-        active.tagName === "TEXTAREA" ||
-        active.isContentEditable)
+      (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)
     ) {
       return;
     }
     // One tree per page now: the filter input travels with it between the
     // rail and the drawer, so take the first visible input.
     const input = Array.from(
-      document.querySelectorAll<HTMLInputElement>("[data-nb-sidebar-filter-input]"),
+      document.querySelectorAll<HTMLInputElement>('[data-nb-sidebar-filter-input]'),
     ).find((candidate) => candidate.offsetParent !== null);
     if (!input) return;
     e.preventDefault();
@@ -256,4 +254,4 @@ function initPersistence(root: HTMLElement): (() => void) | null {
   });
 })();
 
-mount("[data-nb-sidebar]", initSidebar);
+mount('[data-nb-sidebar]', initSidebar);

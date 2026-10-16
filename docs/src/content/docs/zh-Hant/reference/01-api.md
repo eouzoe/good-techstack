@@ -1,9 +1,8 @@
 ---
-title: "API: Hono + oRPC"
+title: 'API: Hono + oRPC'
 sidebar:
   order: 2
 ---
-
 
 > depends_on: [00-runtime.md, 05-schema.md]
 > 最後更新：2026-07-10
@@ -15,9 +14,9 @@ sidebar:
 Bun 引擎自動偵測 default export 的 `fetch` 屬性，自動 `Bun.serve()`：
 
 ```ts
-import { Hono } from "hono";
+import { Hono } from 'hono';
 const app = new Hono();
-app.get("/", (c) => c.text("Hello"));
+app.get('/', (c) => c.text('Hello'));
 export default app;
 ```
 
@@ -47,7 +46,7 @@ RegExpRouter × JSC 共鳴：所有路由編譯成單一正則，JSC regex 顯�
 const getPost = os
   .use(dbProvider)
   .use(requireAuth)
-  .route({ method: "GET", path: "/post/{id}" })
+  .route({ method: 'GET', path: '/post/{id}' })
   .input(z.object({ id: z.string() }))
   .errors({ NOT_FOUND: { data: z.object({ id: z.string() }) } })
   .handler(async ({ input, context }) => {

@@ -1,33 +1,30 @@
-import { defineConfig } from "astro/config";
-import tailwindcss from "@tailwindcss/vite";
-import nimbus, {
-  defineConfig as defineNimbusConfig,
-} from "@cloudflare/nimbus-docs";
-import { tableScroll } from "@cloudflare/nimbus-docs/markdown";
+import nimbus, { defineConfig as defineNimbusConfig } from '@cloudflare/nimbus-docs';
+import { tableScroll } from '@cloudflare/nimbus-docs/markdown';
+import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'astro/config';
 
 const nimbusConfig = defineNimbusConfig({
   // CHANGE_ME: the site's canonical origin (no trailing slash) before
   // deploying. Drives canonical URLs, absolute OG image URLs, robots.txt,
   // sitemap, and the links in /llms.txt — the placeholder breaks all of
   // them. Kept as a placeholder until the deploy target is decided.
-  site: "https://docs.example.com",
+  site: 'https://docs.example.com',
   // Used for <title>, the home H1, and OG.
-  title: "good-techstack",
+  title: 'good-techstack',
   // One-line description of these docs — used for meta + OG.
   description:
-    "Documentation for the good-techstack template — a Cloudflare-native TypeScript stack.",
-  locale: "en",
-  github: "https://github.com/eouzoe/good-techstack",
+    'Documentation for the good-techstack template — a Cloudflare-native TypeScript stack.',
+  locale: 'en',
+  github: 'https://github.com/eouzoe/good-techstack',
   // `{path}` becomes the entry's source path relative to this project, e.g.
   // `src/content/docs/en/guide/testing.md`.
-  editPattern:
-    "https://github.com/eouzoe/good-techstack/edit/main/docs/{path}",
-  socialImageAlt: "good-techstack documentation",
+  editPattern: 'https://github.com/eouzoe/good-techstack/edit/main/docs/{path}',
+  socialImageAlt: 'good-techstack documentation',
 });
 
 export default defineConfig({
   // nimbus:adapter
-  output: "static",
+  output: 'static',
   // Tailwind v4 via its Vite plugin (the integration Astro recommends for
   // Tailwind v4 — replaces the PostCSS plugin, which doesn't build under
   // Astro 7's Vite 8 bundler).
@@ -38,7 +35,7 @@ export default defineConfig({
   // a client-side router.
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: "hover",
+    defaultStrategy: 'hover',
   },
   integrations: [
     nimbus(nimbusConfig, {
@@ -49,8 +46,8 @@ export default defineConfig({
       // (heading hierarchy, code-block language, style, etc.) when you're
       // ready to enforce them — see `nimbus-docs lint --help`.
       rules: {
-        "nimbus/frontmatter-shape": "error",
-        "nimbus/internal-link": "error",
+        'nimbus/frontmatter-shape': 'error',
+        'nimbus/internal-link': 'error',
       },
       markdown: {
         // Wrap wide tables so they scroll instead of overflowing the page

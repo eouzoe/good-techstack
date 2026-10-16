@@ -1,9 +1,8 @@
 ---
-title: "Infrastructure: Cloudflare + Nix"
+title: 'Infrastructure: Cloudflare + Nix'
 sidebar:
   order: 7
 ---
-
 
 > depends_on: []
 > tags: [cloudflare, nix, infra, deployment, dev-environment]
@@ -82,14 +81,14 @@ devenv 是單一事實源：`devenv.nix` 宣告 toolchain，`devenv.lock` 鎖定
 
 ### 加入 devenv 前後
 
-| 維度        | 之前 (純 flake)                | 之後 (devenv)                  |
-| ----------- | ------------------------------ | ------------------------------ |
-| Shell 啟動  | _過去_ `nix develop` (3.8s)    | `devenv shell` (3.2s)          |
+| 維度        | 之前 (純 flake)                | 之後 (devenv)                                       |
+| ----------- | ------------------------------ | --------------------------------------------------- |
+| Shell 啟動  | _過去_ `nix develop` (3.8s)    | `devenv shell` (3.2s)                               |
 | Secret 管理 | `.env` (無 audit)              | `secretspec.toml` (audit log, 23 providers, scopes) |
-| Git hooks   | 手動 CI 才跑 oxlint            | Pre-commit 阻擋未格式化程式碼  |
-| Agent 整合  | 無                             | MCP server + commands 自動配置 |
-| CI Layer 1  | `oven-sh/setup-bun` + 裸 `bun` | 不變 (快速 PR gate)            |
-| CI Layer 2  | —                              | `devenv test` (完整環境驗證)   |
+| Git hooks   | 手動 CI 才跑 oxlint            | Pre-commit 阻擋未格式化程式碼                       |
+| Agent 整合  | 無                             | MCP server + commands 自動配置                      |
+| CI Layer 1  | `oven-sh/setup-bun` + 裸 `bun` | 不變 (快速 PR gate)                                 |
+| CI Layer 2  | —                              | `devenv test` (完整環境驗證)                        |
 
 ### CI 用法
 
