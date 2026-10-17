@@ -60,7 +60,7 @@
       after = [ "devenv:processes:router-watcher@started" ];
       ready.http.get = {
         port = 1337;
-        path = "/";
+        path = "/health";
       };
     };
 
