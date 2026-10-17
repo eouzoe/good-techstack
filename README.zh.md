@@ -68,7 +68,7 @@ just dev
    - Cloudflare API 金鑰：引導使用者在 https://dash.cloudflare.com/profile/api-tokens 建立（範本：Workers:Edit），儲存至 `~/.cloudflare/mcp-token`。
    - 若 AI 助手需要自己的 API 金鑰，引導使用者註冊。
 
-6. **初始化專案：** 在 `devenv shell` 中執行 `just init`——產生 D1 型別繫結、型別檢查、設定開發密鑰。
+6. **初始化專案：** 在 `devenv shell` 中執行 `just init`——它會對 app 與 worker 做型別檢查，並回報缺少的密鑰。
 
 7. **閱讀引導協議：** 開啟 `docs/src/content/docs/en/agent/bootstrap-prompt.md` 逐步執行。接著閱讀 `docs/src/content/docs/en/agent/scaffolding.md` 了解產品探索協議。
 
@@ -79,18 +79,18 @@ just dev
 
 ## 這組工具包含了什麼
 
-| 項目       | 說明                                                     |
-| ---------- | -------------------------------------------------------- |
-| 執行引擎   | Bun — 冷啟動 1.2 毫秒                                    |
-| API        | Hono + oRPC — contract-first，從邊緣到資料庫全程型別安全 |
-| 資料庫     | D1（SQLite）+ Drizzle ORM — 零管理                       |
-| 身分驗證   | better-auth — 信箱、OAuth、SSO、工作階段                 |
-| 前端       | TanStack Start — React、SSR、RSC                         |
-| UI 元件    | shadcn/ui — Tailwind CSS 4                               |
-| 程式碼檢查 | oxlint — 840+ 規則，比 ESLint 快 50 倍                   |
-| 格式化     | oxfmt — Rust 實作，比 Prettier 快 30 倍                  |
-| 基礎設施   | Cloudflare Workers — D1、R2、KV、Queues、DO、Email       |
-| 開發環境   | Nix + devenv 2.x — 可重現的 shell，一行指令              |
+| 項目       | 說明                                               |
+| ---------- | -------------------------------------------------- |
+| 執行引擎   | Bun — 冷啟動 1.2 毫秒                              |
+| API        | oRPC — 合約優先，從邊緣到資料庫全程型別安全        |
+| 資料庫     | D1（SQLite）+ Drizzle ORM — 零管理                 |
+| 身分驗證   | better-auth — 信箱、OAuth、SSO、工作階段           |
+| 前端       | TanStack Start — React、SSR、RSC                   |
+| UI 元件    | shadcn/ui — Tailwind CSS 4                         |
+| 程式碼檢查 | oxlint — 840+ 規則，比 ESLint 快 50 倍             |
+| 格式化     | oxfmt — Rust 實作，比 Prettier 快 30 倍            |
+| 基礎設施   | Cloudflare Workers — D1、R2、KV、Queues、DO、Email |
+| 開發環境   | Nix + devenv 2.x — 可重現的 shell，一行指令        |
 
 全部 TypeScript。全部型別安全到邊緣。
 
@@ -98,17 +98,15 @@ just dev
 
 ## 為什麼選這套
 
-**Zod 4 是唯一的真相來源。** 一份綱要產生資料庫型別、API 合約、表單驗證、身分驗證設定。沒有重複，沒有偏差：
+**valibot 是 API 的唯一真相來源。** `init-playground/src/shared/contracts/` 的合約綱要同時餵給伺服器端 oRPC 程序與前端型別化客戶端——每個形狀只定義一次，沒有重複，沒有偏差：
 
 ```
-packages/shared/ → Zod schema
-  ├── Drizzle ORM：    z.infer<> → D1 資料列型別
-  ├── oRPC：           .input(UserCreate).output(UserResponse)
-  ├── TanStack Form：  zodResolver(UserCreate)
-  └── better-auth：    外掛設定也是 Zod
+src/shared/contracts/ → valibot 綱要
+  ├── 伺服器：oRPC 程序實作這些合約
+  └── 客戶端：型別化客戶端與 React 元件直接消費
 ```
 
-**全端型別安全。** `wrangler.toml` 繫結、D1 查詢、Hono 路由、前端元件、環境變數——編譯過就代表能跑。
+**全端型別安全。** `alchemy.run.ts` 繫結、D1 查詢、oRPC 程序、前端元件、環境變數——編譯過就代表能跑。
 
 **安全預設。** SecretSpec 取代 `.env`（密鑰絕不寫入版本控制）。相依版本鎖在 `devenv.lock` + `bun.lock`。Workers 沙箱隔離每個請求。better-auth 處理 Argon2id 雜湊、JWT 工作階段、CSRF、OAuth。
 

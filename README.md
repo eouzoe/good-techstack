@@ -70,7 +70,7 @@ You are setting up a good-techstack project. Detect your environment and work au
    - Cloudflare API token: guide the user to create one at https://dash.cloudflare.com/profile/api-tokens (template: Workers:Edit). Save to `~/.cloudflare/mcp-token`.
    - If the agent needs its own API key, guide the user through signup.
 
-6. **Initialise the project:** run `just init` inside `devenv shell` — generates D1 bindings, typechecks, seeds dev secrets.
+6. **Initialise the project:** run `just init` inside `devenv shell` — it typechecks the app and the worker, then reports any missing secrets.
 
 7. **Read the bootstrap protocol:** open `docs/src/content/docs/en/agent/bootstrap-prompt.md` and follow it step by step. Then read `docs/src/content/docs/en/agent/scaffolding.md` for the product discovery protocol.
 
@@ -84,7 +84,7 @@ You are setting up a good-techstack project. Detect your environment and work au
 | Layer          | What you get                                        |
 | -------------- | --------------------------------------------------- |
 | Runtime        | Bun — cold start in 1.2 ms                          |
-| API            | Hono + oRPC — contract-first, type-safe edge to DB  |
+| API            | oRPC — contract-first, type-safe edge to DB         |
 | Database       | D1 (SQLite) + Drizzle ORM — zero management         |
 | Auth           | better-auth — email, OAuth, SSO, sessions           |
 | Frontend       | TanStack Start — React, SSR, RSC                    |
@@ -100,17 +100,15 @@ Everything is TypeScript. Everything is typed to the edge.
 
 ## Why this stack
 
-**Zod 4 is the single source of truth.** One schema generates database types, API contracts, form validation, and auth config. No duplication, no drift:
+**valibot is the single source of truth for the API.** Contract schemas in `init-playground/src/shared/contracts/` are consumed by both the oRPC server procedures and the typed client — one definition per shape, no duplication, no drift:
 
 ```
-packages/shared/ → Zod schema
-  ├── Drizzle ORM:    z.infer<> → D1 row type
-  ├── oRPC:           .input(UserCreate).output(UserResponse)
-  ├── TanStack Form:  zodResolver(UserCreate)
-  └── better-auth:    plugin config is also Zod
+src/shared/contracts/ → valibot schemas
+  ├── Server:  oRPC procedures implement the contracts
+  └── Client:  the typed client and React components consume them
 ```
 
-**Full-stack type safety.** `wrangler.toml` bindings, D1 queries, Hono routes, frontend components, environment variables — if it compiles, it works.
+**Full-stack type safety.** `alchemy.run.ts` bindings, D1 queries, oRPC procedures, frontend components, environment variables — if it compiles, it works.
 
 **Security by default.** SecretSpec replaces `.env` (secrets never committed). Dependency versions locked in `devenv.lock` + `bun.lock`. Workers sandbox isolates every request. better-auth handles hashing (Argon2id), sessions (JWT), CSRF, and OAuth.
 

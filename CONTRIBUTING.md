@@ -10,10 +10,10 @@ Good-techstack is in its early stages. All contributions are welcome.
 - **Pull requests**: fix a bug, add a feature, improve documentation.
 - **Discussion**: share your experience using this stack.
 
-Before opening a PR, check that your change passes the CI gate:
+Before opening a PR, run the full gate:
 
 ```bash
-just typecheck     # tsc --noEmit
+devenv test        # lint, type checks, tests, docs (devenv.nix → enterTest)
 ```
 
 ## Code style
@@ -26,15 +26,13 @@ just typecheck     # tsc --noEmit
 
 ## Version maintenance
 
-All tool and library versions live in the lockfiles, not in a hand-written list. To check for outdated dependencies:
+All tool and library versions live in the lockfiles, not in a hand-written list. To move everything to the latest release:
 
 ```bash
-just check-versions
+just update    # bun update + devenv update
 ```
 
-This compares every direct dependency (declared in a `package.json`) against the latest version on npm. The script at `scripts/check-versions.mjs` is the source of truth for what it covers (including non-npm packages: node, devenv, nix, secretspec).
-
-If a dependency is outdated, report it (see the good first issue below). A maintainer bumps the version, syncs `bun.lock` / `devenv.lock`, runs the tests, and merges. You do not need to build or test anything.
+Outdated dependencies are a maintainer concern. If you notice something stale — an npm package, or a tool such as node, devenv, nix or secretspec — open an issue naming the package, the latest version, and the link you checked. A maintainer bumps the version, syncs `bun.lock` / `devenv.lock`, runs the tests, and merges. You do not need to build or test anything. See the docs: `docs/src/content/docs/en/guide/env-check.md`.
 
 ---
 
@@ -46,13 +44,7 @@ These are tasks suitable for first-time contributors. They require minimal conte
 
 **Report an outdated dependency (no code required)**
 
-Run `just check-versions`. If it reports an outdated **DIRECT** dependency, or you notice a non-npm package has a newer release, open an issue that says which package, the latest version, and the link you checked. Full steps and the package list live in `scripts/check-versions.mjs`. Maintainers handle the bump and the tests.
-
-**Version consistency checker (improve the existing script)**
-
-A script already exists at `scripts/check-versions.mjs` and runs via `just check-versions`. Improve it — for example, add a weekly GitHub Action (`.github/workflows/version-check.yml`) that runs it and opens an issue when something is outdated.
-
-**Files:** `scripts/check-versions.mjs`, `.github/workflows/version-check.yml`
+If you notice a dependency — an npm package or a tool such as node, devenv, nix or secretspec — has a newer release than the one in our lockfiles, open an issue that says which package, the latest version, and the link you checked. Maintainers handle the bump and the tests.
 
 ---
 
@@ -68,7 +60,7 @@ Set up a clean environment (fresh WSL, VM, or Docker), run the curl|sh command, 
 
 **GitHub Actions CI pipeline**
 
-Improve `.github/workflows/ci.yml` so it runs the two-layer gate (Layer 1: lint → type-check → unit test → integration test; Layer 2: `devenv test`) on every PR.
+Improve `.github/workflows/ci.yml`: the Linux job runs the full devenv task gate, macOS runs a subset, and Windows only checks the bootstrap scripts. Extend coverage and platform parity on every PR.
 
 **Files:** `.github/workflows/ci.yml`
 
@@ -76,7 +68,7 @@ Improve `.github/workflows/ci.yml` so it runs the two-layer gate (Layer 1: lint 
 
 **Devenv development environment**
 
-Document the `devenv` workflow for developers who do not use plain Nix. Cover `devenv shell`, `devenv process up`, `just` targets, and git-hooks.
+Document the `devenv` workflow for developers who do not use plain Nix. Cover `devenv shell`, `devenv processes up`, `just` targets, and git-hooks.
 
 **Files:** `devenv.nix`, `Justfile`, update `docs/src/content/docs/en/guide/development.md`
 
@@ -96,19 +88,19 @@ Some contributions span the entire stack and cannot be reduced to a single issue
 
 **Platform compatibility:**
 
-- **macOS**: verify and fix the entire stack (start.sh, Bun, Nix, Wrangler, Playwright) on both Intel and Apple Silicon
-- **Windows**: test native Windows support (Bun, Wrangler, Playwright) and document WSL1 vs WSL2 differences
+- **macOS**: verify and fix the entire stack (start.sh, Bun, Nix, alchemy) on both Intel and Apple Silicon
+- **Windows**: test native Windows support (Bun, Nix) and document WSL1 vs WSL2 differences
 - **Linux distributions**: test on Fedora, Arch, Alpine, NixOS and document distribution-specific issues
 
 **Ongoing maintenance:**
 
-- Monthly version audit: run `just check-versions`, then sync `bun.lock` / `devenv.lock` and update reference docs
+- Monthly version audit: run `just update` and refresh the reference docs
 - Translate documentation from English to Chinese
 
 **Infrastructure:**
 
 - Expand E2E test coverage (registration, login, OAuth, CRUD, form validation)
-- Add property-based testing with fast-check
+- Extend property-based testing (fast-check) coverage
 - Editor setup guides (VS Code, Neovim, JetBrains)
 
 Before starting any of these, open a discussion or issue to coordinate.
