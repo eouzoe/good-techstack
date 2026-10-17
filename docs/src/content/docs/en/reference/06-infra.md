@@ -35,6 +35,41 @@ standalone `vite build` script — builds happen inside `alchemy deploy`.
 | Email     | Email routing                   | 100/day                |
 | Turnstile | CAPTCHA                         | Free, unlimited        |
 
+### State layering
+
+A Worker is stateless: everything that outlives a request lives in a store,
+and the store is picked by its consistency story, not by convenience.
+
+| Store  | Consistency                   | Use                                         | Wired |
+| ------ | ----------------------------- | ------------------------------------------- | ----- |
+| D1     | Strong (single-region writes) | Business data, transactions, auth tables    | Yes   |
+| KV     | Eventual (edge cache)         | Caches, feature flags, derived session data | Yes   |
+| DO     | Strong, serialized per object | Coordination, live streams (`EventsDO`)     | Yes   |
+| R2     | Strong durability             | Objects, static assets                      | No    |
+| Queues | At-least-once                 | Background work, fan-out                    | No    |
+
+`alchemy.run.ts` declares only the bindings the server code actually consumes;
+R2 and Queues get added the day a feature consumes them — carrying a binding
+with no consumer is drift, not readiness.
+
+### Health checks
+
+The Worker has no long-running process for a load balancer to probe, so the
+template exposes an application-level probe:
+
+```bash
+curl -i https://<your-worker>/health
+# HTTP/2 200
+# {"checks":{"d1":"ok"},"status":"ok"}
+```
+
+`GET /health` runs `SELECT 1` through the same Drizzle → D1 path as production
+queries: `200` while the binding answers, `503` with `"status":"degraded"` when
+it does not. The devenv `dev` process uses it as its readiness probe, so
+`devenv up` reports the app ready only after the Worker _and_ its D1 binding
+answer. Platform-level routing health (edge availability, PoPs) never reaches
+the Worker and stays Cloudflare's concern.
+
 ### Vendor lock-in?
 
 - Hono: Web Standards, runs anywhere

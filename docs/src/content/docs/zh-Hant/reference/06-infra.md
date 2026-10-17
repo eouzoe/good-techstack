@@ -35,6 +35,38 @@ devenv shell -- bunx alchemy deploy      # 部屬（alchemy 內部執行 Vite bu
 | Email     | 郵件路由             | 100/day        |
 | Turnstile | CAPTCHA              | 完全免費       |
 
+### 狀態分層
+
+Worker 本身無狀態：所有比一次請求長命的東西都住在 store 裡，而選哪個 store
+取決於它的一致性故事，不是取決於方便。
+
+| Store  | 一致性               | 用途                                        | 已接線 |
+| ------ | -------------------- | ------------------------------------------- | ------ |
+| D1     | 強一致（單區寫入）   | 業務資料、交易、auth 表                     | 是     |
+| KV     | 最終一致（edge cache） | 快取、feature flag、session 衍生資料      | 是     |
+| DO     | 強一致（單物件串行） | 協調、即時串流（`EventsDO`）                | 是     |
+| R2     | 強耐用               | 物件、靜態資產                              | 否     |
+| Queues | at-least-once        | 背景工作、fan-out                           | 否     |
+
+`alchemy.run.ts` 只宣告 server 程式碼真的會消費的 binding；R2 與 Queues 在
+有功能消費它們的那天才加進去 —— 帶著沒有消費者的 binding 是漂移，不是準備好。
+
+### 健康檢查
+
+Worker 沒有常駐 process 可以讓 load balancer 探活，所以本模板提供應用層探針：
+
+```bash
+curl -i https://<your-worker>/health
+# HTTP/2 200
+# {"checks":{"d1":"ok"},"status":"ok"}
+```
+
+`GET /health` 走與正式查詢同一條 Drizzle → D1 路徑執行 `SELECT 1`：binding 有
+回應時回 `200`，沒回應時回 `503` 且 `"status":"degraded"`。devenv 的 `dev`
+process 用它當就緒探針，所以 `devenv up` 只有在 Worker「與」它的 D1 binding
+都回應之後才回報 app 就緒。平台層的 routing 健康（edge 可用性、PoP）不會進到
+Worker，屬 Cloudflare 的權責。
+
 ### 平台鎖定？不存在的
 
 - Hono → Web Standards, 到處可跑
