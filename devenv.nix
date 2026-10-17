@@ -27,12 +27,21 @@
       excludes = [ "\\.gen\\.ts$" ];
     };
     oxlint.enable = true;
+    # Architecture rules (dependency-cruiser) through the repo-pinned CLI, so
+    # the hook reads the same graph as `just lint` and CI. Only staged
+    # TypeScript under init-playground triggers it; the wrapper always cruises
+    # the full src tree.
+    depcruise = {
+      enable = true;
+      entry = "scripts/depcruise-hook.sh";
+      files = "^init-playground/(src|scripts)/.*\\.(ts|tsx)$";
+    };
   };
 
   dotenv.enable = false;
 
   enterTest = ''
-    devenv tasks run --mode all deps:lint typecheck:app typecheck:worker test:unit test:worker docs:check docs:build
+    devenv tasks run --mode all deps:lint lint:arch lint:arch:self codegen:check typecheck:app typecheck:worker test:unit test:worker docs:check docs:build
   '';
 
   tasks."deps:lint" = {
@@ -80,6 +89,27 @@
     after = [ "deps:install-playground" ];
   };
 
+  # Architecture gate (Phase E): dependency-cruiser layering rules, plus the
+  # self-test that proves the gate still catches a synthetic violation.
+  # The parser is swc — TypeScript 7 ships no compiler API for depcruise yet.
+  tasks."lint:arch" = {
+    exec = "cd init-playground && bunx depcruise src";
+    # The self-test briefly injects a violation into src/, so it must finish
+    # before the real cruise starts (tasks run in parallel by default).
+    after = [ "deps:install-playground" "lint:arch:self" ];
+  };
+
+  tasks."lint:arch:self" = {
+    exec = "cd init-playground && bun scripts/arch-selftest.ts";
+    after = [ "deps:install-playground" ];
+  };
+
+  # Codegen drift gate: regenerating the routers must leave the tree untouched.
+  tasks."codegen:check" = {
+    exec = "cd init-playground && bun scripts/codegen-router.ts && git diff --exit-code -- src/routers";
+    after = [ "deps:install-playground" ];
+  };
+
   # Docs site (Nimbus, in docs/): install from the lockfile, run the
   # authoring checks (`nimbus-docs check` — frontmatter + internal links),
   # then a production build. Both are gated in CI.
@@ -111,7 +141,7 @@
   claude.code.commands = {
     lint = {
       cmd = "devenv shell -- just lint";
-      description = "Run oxlint on the codebase";
+      description = "Run oxlint + the architecture rules on the codebase";
     };
     typecheck = {
       cmd = "devenv shell -- just typecheck";
