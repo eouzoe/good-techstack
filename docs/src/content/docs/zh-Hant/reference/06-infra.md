@@ -67,6 +67,19 @@ process 用它當就緒探針，所以 `devenv up` 只有在 Worker「與」它�
 都回應之後才回報 app 就緒。平台層的 routing 健康（edge 可用性、PoP）不會進到
 Worker，屬 Cloudflare 的權責。
 
+### 日誌
+
+Worker 的日誌經由 [LogTape](https://logtape.org/) 輸出，設定點只有一處：
+`init-playground/src/server/logging.ts`。
+
+- **開發環境**輸出人類可讀的 console 格式，等級下限為 `debug`。
+- **生產環境**輸出 JSON lines：Cloudflare Workers Logs 直接以欄位建立索引，
+  無須額外解析；等級下限收緊為 `info`。
+
+每個請求都配一個 request id：請求帶 `x-request-id` 就沿用，否則自行產生。這個
+id 會綁進 LogTape 的 context-local storage——同一請求的 RPC、auth、SSR 日誌不
+需層層傳參就能互相對齊——並在回應標頭以 `x-request-id` 回傳，方便跨系統串接。
+
 ### 平台鎖定？不存在的
 
 - Hono → Web Standards, 到處可跑

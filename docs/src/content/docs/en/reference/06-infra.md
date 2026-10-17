@@ -70,6 +70,21 @@ it does not. The devenv `dev` process uses it as its readiness probe, so
 answer. Platform-level routing health (edge availability, PoPs) never reaches
 the Worker and stays Cloudflare's concern.
 
+### Logs
+
+The Worker logs through [LogTape](https://logtape.org/) from one configuration
+point, `init-playground/src/server/logging.ts`:
+
+- **Dev** prints a human-readable console format with a `debug` floor.
+- **Production** emits JSON lines — Cloudflare Workers Logs indexes them by
+  field, no parsing needed — and clamps the floor to `info`.
+
+Every request carries a request id: an inbound `x-request-id` is forwarded,
+otherwise one is minted. The id is bound into LogTape's context-local storage,
+so RPC, auth and SSR lines of the same request correlate without threading the
+id through call signatures, and it is echoed on the response as
+`x-request-id` for cross-system alignment.
+
 ### Vendor lock-in?
 
 - Hono: Web Standards, runs anywhere
