@@ -26,7 +26,16 @@
       entry = "scripts/oxfmt-hook.sh";
       excludes = [ "\\.gen\\.ts$" ];
     };
-    oxlint.enable = true;
+    # Route the hook through the repo-pinned linter (the init-playground
+    # devDependency) instead of nixpkgs' oxlint, which cannot parse the
+    # current configuration; skips cleanly when the dependencies are absent.
+    # docs/ is excluded: the Astro app is guarded by `docs:check` (astro
+    # check), and oxlint over the Nimbus sources is pure noise.
+    oxlint = {
+      enable = true;
+      entry = "scripts/oxlint-hook.sh";
+      excludes = [ "^docs/" ];
+    };
     # Architecture rules (dependency-cruiser) through the repo-pinned CLI, so
     # the hook reads the same graph as `just lint` and CI. Only staged
     # TypeScript under init-playground triggers it; the wrapper always cruises
