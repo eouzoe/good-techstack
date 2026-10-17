@@ -55,7 +55,8 @@
 
   tasks."deps:lint" = {
     exec = "bunx oxlint --type-aware";
-    after = [ "deps:install" ];
+    # The arch self-test briefly injects a file into src/; wait for it (lint:arch).
+    after = [ "deps:install" "lint:arch:self" ];
   };
 
   tasks."deps:install" = {
@@ -75,7 +76,8 @@
   # and the worker-project (tests/worker) tsc pass.
   tasks."typecheck:app" = {
     exec = "cd init-playground && bun run typecheck";
-    after = [ "deps:install-playground" ];
+    # tsc scans src/ too — same self-test race as lint:arch.
+    after = [ "deps:install-playground" "lint:arch:self" ];
   };
 
   tasks."typecheck:worker" = {
