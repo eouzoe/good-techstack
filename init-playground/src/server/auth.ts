@@ -1,10 +1,10 @@
-import { getLogger } from '@logtape/logtape';
 import { CloudflareRateLimiter } from '@orpc/cloudflare';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { betterAuth } from 'better-auth/minimal';
 
 import { getDB } from './db/index';
 import * as schema from './db/schema';
+import { logger } from './logging';
 
 interface AuthEnv {
   BETTER_AUTH_SECRET: string;
@@ -20,8 +20,6 @@ const RATE_LIMIT_WINDOW_SECONDS = 60;
 const SECONDS_PER_MINUTE = 60;
 const SESSION_UPDATE_AGE_MINUTES = 15;
 const SESSION_UPDATE_AGE_SECONDS = SECONDS_PER_MINUTE * SESSION_UPDATE_AGE_MINUTES;
-
-const logger = getLogger('gstack');
 
 /// Auth boundary: sign-in abuse protection is better-auth's own concern,
 /// backed by Cloudflare's edge-native rate limiter (the same primitive the RPC

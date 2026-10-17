@@ -1,4 +1,3 @@
-import { configureSync, getConsoleSink, getLogger } from '@logtape/logtape';
 import { COMMON_ERROR_STATUS_MAP, ORPCError } from '@orpc/server';
 import { RPCHandler } from '@orpc/server/fetch';
 import { CORSHandlerPlugin, RequestHeadersHandlerPlugin } from '@orpc/server/plugins';
@@ -7,18 +6,10 @@ import { setGlobalConfig } from 'valibot';
 
 import { appRouter } from '../routers/_app';
 import { type AppEnv } from './env';
+import { logger } from './logging';
 import { effectContext } from './os';
 
 setGlobalConfig({ abortEarly: true, abortPipeEarly: true });
-
-// oxlint-disable-next-line node/no-sync -- configureSync is logtape's synchronous init API; there is no async equivalent for module-scope setup. reset keeps re-evaluation (Vite HMR) idempotent.
-configureSync({
-  loggers: [{ category: ['gstack'], lowestLevel: 'debug', sinks: ['console'] }],
-  reset: true,
-  sinks: { console: getConsoleSink() },
-});
-
-const logger = getLogger('gstack');
 
 const SERVER_ERROR_STATUS_MIN = 500;
 const STATUS_BY_CODE: Record<string, number | undefined> = { ...COMMON_ERROR_STATUS_MAP };

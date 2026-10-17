@@ -1,8 +1,8 @@
-import { dispose } from '@logtape/logtape';
 import { createStartHandler, defaultStreamHandler } from '@tanstack/react-start/server';
 
 import { createAuth } from './server/auth';
 import { type AppEnv } from './server/env';
+import { serveWithRequestLog } from './server/logging';
 import { handleRPC } from './server/rpc';
 
 const startHandler = createStartHandler(defaultStreamHandler);
@@ -15,21 +15,22 @@ const startHandler = createStartHandler(defaultStreamHandler);
 ///
 /// API routes are branched before the SSR handler so their request bodies are
 /// never consumed by `startHandler` (see Cloudflare's fetch-adapter routing
-/// guidance for the Worker fetch boundary).
+/// guidance for the Worker fetch boundary). Every branch runs inside
+/// `serveWithRequestLog`, so one request id scopes all of them.
 const workerEntry = {
-  async fetch(request: Request, env: AppEnv, ctx: ExecutionContext) {
-    const url = new URL(request.url);
+  fetch(request: Request, env: AppEnv, ctx: ExecutionContext) {
+    return serveWithRequestLog(request, ctx, () => {
+      const url = new URL(request.url);
 
-    if (url.pathname.startsWith('/api/auth')) {
-      return createAuth(env).handler(request);
-    }
-    if (url.pathname.startsWith('/api/rpc')) {
-      return handleRPC(request, env);
-    }
+      if (url.pathname.startsWith('/api/auth')) {
+        return createAuth(env).handler(request);
+      }
+      if (url.pathname.startsWith('/api/rpc')) {
+        return handleRPC(request, env);
+      }
 
-    const response = await startHandler(request);
-    ctx.waitUntil(dispose());
-    return response;
+      return startHandler(request);
+    });
   },
 };
 
