@@ -1,3 +1,3 @@
-# Run oxlint (CI lint check)
+# Run the test suites (vitest unit + workerd worker)
 test:
-    bunx oxlint
+    devenv tasks run test:unit test:worker

@@ -11,14 +11,6 @@ init:
 setup:
     devenv shell
 
-# Compare direct dependencies against latest npm versions
-check-versions:
-    bun scripts/check-versions.mjs
-
-# Verify local toolchain matches lock file (Linux only)
-check-env:
-    bun scripts/check-env.mjs
-
 # SecretSpec audit log
 audit:
     secretspec audit

@@ -1,11 +1,11 @@
-# Deploy to Cloudflare Workers (injects only the deploy-scoped secrets)
+# Deploy to Cloudflare Workers via alchemy (injects only the deploy-scoped secrets)
 deploy:
-    secretspec run --scope deploy -- wrangler deploy
+    cd init-playground && secretspec run --scope deploy -- bunx alchemy deploy
 
 # Drizzle — push schema changes to the database
 db-push:
-    bunx drizzle-kit push
+    cd init-playground && bunx drizzle-kit push
 
 # Drizzle — generate SQL migration from schema changes
 db-generate:
-    bunx drizzle-kit generate
+    cd init-playground && bunx drizzle-kit generate

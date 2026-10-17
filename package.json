@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "oxlint",
     "format": "oxfmt --write . \"!**/*.gen.ts\"",
-    "typecheck": "tsc --noEmit",
-    "deploy": "wrangler deploy"
+    "typecheck": "bun run --cwd init-playground typecheck",
+    "deploy": "bun run --cwd init-playground deploy"
   },
   "dependencies": {
     "hono": "^4.13.2"

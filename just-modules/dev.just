@@ -1,16 +1,16 @@
 alias d := dev
 
-# Start all dev servers (backend + frontend)
+# Start all dev processes (router watcher + alchemy dev + Drizzle Studio)
 dev:
-    devenv processes up
+    cd init-playground && devenv processes up
 
 # Run oxlint (includes type-aware checking via config)
 lint:
     bunx oxlint --type-aware
 
-# TypeScript type check (tsc --noEmit)
+# Type-check the app and the worker (devenv tasks)
 typecheck:
-    tsc --noEmit
+    devenv tasks run typecheck:app typecheck:worker
 
 # Run formatter
 format:
