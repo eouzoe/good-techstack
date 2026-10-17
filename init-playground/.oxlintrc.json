@@ -326,6 +326,12 @@
       "rules": {
         "eslint/one-var": "off"
       }
+    },
+    {
+      "files": ["src/routeTree.gen.ts"],
+      "rules": {
+        "unicorn/filename-case": "off"
+      }
     }
   ]
 }

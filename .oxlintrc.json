@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": ["docs/**"],
   "options": {
     "typeAware": true,
     "typeCheck": true,
@@ -79,6 +80,12 @@
         "typescript/no-unsafe-argument": "off",
         "import/no-nodejs-modules": "off",
         "node/no-sync": "off"
+      }
+    },
+    {
+      "files": ["init-playground/src/routeTree.gen.ts"],
+      "rules": {
+        "unicorn/filename-case": "off"
       }
     }
   ]
