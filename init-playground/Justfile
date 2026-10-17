@@ -43,6 +43,17 @@ typecheck:
 
 lint:
     bunx oxlint --type-aware
+    bunx depcruise src
+
+# Architecture rules only (dependency-cruiser): layer directions, runtime
+# cycles, dead imports. Same ruleset the pre-commit hook and CI run.
+lint-arch:
+    bunx depcruise src
+
+# Proves the architecture gate still catches violations (guards against the
+# silent zero-module false negative under new TypeScript versions).
+lint-arch-selftest:
+    bun scripts/arch-selftest.ts
 
 format:
     bunx oxfmt --write . "!**/*.gen.ts"
