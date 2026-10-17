@@ -32,10 +32,13 @@
     "src/**/*.tsx",
     "src/**/*.test.ts",
     "cli/**/*.ts",
+    "scripts/**/*.ts",
     "tests/**/*.test.ts",
     "tests/db-common.ts",
     "tests/contract-common.ts",
-    "src/env.d.ts"
+    "src/env.d.ts",
+    "*.config.ts",
+    "alchemy.run.ts"
   ],
   "exclude": ["tests/worker"]
 }

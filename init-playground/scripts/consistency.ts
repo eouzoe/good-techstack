@@ -18,10 +18,10 @@ const run = async () => {
   if (!res.ok) {
     throw new Error(`bench worker returned ${res.status}`);
   }
-  const data = (await res.json()) as {
+  const data: {
     kv: { op: string; p50: number; p95: number; p99: number; mean: number };
     d1: { op: string; p50: number; p95: number; p99: number; mean: number };
-  };
+  } = await res.json();
 
   const summary = {
     count,

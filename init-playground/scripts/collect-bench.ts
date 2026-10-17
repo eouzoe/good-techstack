@@ -175,6 +175,10 @@ const failIfRegressed = () => {
   const inconclusive: string[] = [];
   for (const [name, value] of Object.entries(current.components)) {
     const base = committed.components[name];
+    if (base === undefined) {
+      // Component missing from the committed baseline; nothing to compare.
+      continue;
+    }
     const metric = driftSourceOf(base);
     if (metric === null) {
       continue;
