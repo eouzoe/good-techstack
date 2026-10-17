@@ -32,7 +32,7 @@
   dotenv.enable = false;
 
   enterTest = ''
-    devenv tasks run --mode all deps:lint typecheck:app typecheck:worker docs:check docs:build
+    devenv tasks run --mode all deps:lint typecheck:app typecheck:worker test:unit test:worker docs:check docs:build
   '';
 
   tasks."deps:lint" = {
@@ -62,6 +62,21 @@
 
   tasks."typecheck:worker" = {
     exec = "cd init-playground && node node_modules/typescript/bin/tsc --noEmit -p tests/worker/tsconfig.json";
+    after = [ "deps:install-playground" ];
+  };
+
+  # Test gates — the Kernel suites that previously had no runner in the
+  # pipeline: the node-env unit suite (vitest) and the Worker-boundary suite
+  # (@cloudflare/vitest-plugin inside real workerd against D1). The worker
+  # suite MUST run under Node (bun's ws breaks the plugin's WebSocket pool) —
+  # mirroring init-playground/Justfile `test-unit` / `test-worker`.
+  tasks."test:unit" = {
+    exec = "cd init-playground && bun run test";
+    after = [ "deps:install-playground" ];
+  };
+
+  tasks."test:worker" = {
+    exec = "cd init-playground && node node_modules/vitest/vitest.mjs run --config vitest.worker.config.ts --no-file-parallelism";
     after = [ "deps:install-playground" ];
   };
 
