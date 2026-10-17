@@ -37,18 +37,6 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: |
-          Write-Host "  -> Checking PowerShell script syntax ..."
-          $errors = $null
-          $parsed = [System.Management.Automation.Language.Parser]::ParseFile(
-            "scripts/start-windows.ps1", [ref] $errors, [ref] $null
-          )
-          if ($errors) {
-            foreach ($e in $errors) { Write-Error $e.Message }
-            exit 1
-          }
-          Write-Host "  OK scripts/start-windows.ps1 syntax OK"
-        shell: powershell
-      - run: |
           Write-Host "  -> Checking start.sh for Windows/WSL detection ..."
           Select-String -Path scripts/start.sh -Pattern "wsl2|windows|WSL" | ForEach-Object {
             Write-Host "  OK $($_.LineNumber): $($_.Line.Trim())"

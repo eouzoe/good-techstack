@@ -34,15 +34,10 @@ devenv.local.nix
 *.tsbuildinfo
 
 # ── Generated (TanStack Router) ──
-apps/frontend/src/routeTree.gen.ts
 .tanstack/
 
 # ── Agent instructions (not committed) ──
 AGENTS.md
-
-# wrangler generates this on env build (deps:gen-types)
-apps/backend/worker-configuration.d.ts
-**/worker-configuration.d.ts
 
 # Local dev DB snapshots (seed caching)
 *.snapshot.db
